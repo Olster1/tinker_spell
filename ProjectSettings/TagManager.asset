@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Sword
+  - Enemy
+  - Amber
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - WorldGeometry
+  - Sword_hitboxes
+  - Amber
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Sky
+    uniqueID: 1552306799
+    locked: 0
+  - name: BackgroundScenery
+    uniqueID: 524023341
+    locked: 0
+  - name: WorldObject
+    uniqueID: 4254472457
+    locked: 0
+  - name: Amber
+    uniqueID: 3612926345
+    locked: 0
+  - name: ForeGround
+    uniqueID: 2267829271
+    locked: 0

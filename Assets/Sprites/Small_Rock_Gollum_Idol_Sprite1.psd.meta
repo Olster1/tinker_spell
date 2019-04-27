@@ -1,0 +1,246 @@
+fileFormatVersion: 2
+guid: b4d4bddaebaf948dc9df4c650d25b247
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Small_Rock_Gollum_Idol_Sprite1_0
+    21300002: Small_Rock_Gollum_Idol_Sprite1_1
+    21300004: Small_Rock_Gollum_Idol_Sprite1_2
+    21300006: Small_Rock_Gollum_Idol_Sprite1_3
+    21300008: Small_Rock_Gollum_Idol_Sprite1_4
+    21300010: Small_Rock_Gollum_Idol_Sprite1_5
+    21300012: Small_Rock_Gollum_Idol_Sprite1_6
+  externalObjects: {}
+  serializedVersion: 7
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Small_Rock_Gollum_Idol_Sprite1_0
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 1586
+        width: 938
+        height: 802
+      alignment: 9
+      pivot: {x: 0.41980717, y: 0.3554278}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ab3a267dc1db4df8862cb735cd0dda1
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small_Rock_Gollum_Idol_Sprite1_1
+      rect:
+        serializedVersion: 2
+        x: 1141
+        y: 1597
+        width: 854
+        height: 785
+      alignment: 9
+      pivot: {x: 0.40742996, y: 0.33886907}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3516c2ef762ab4e4a86f6f5c7f20225c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small_Rock_Gollum_Idol_Sprite1_2
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 1592
+        width: 922
+        height: 790
+      alignment: 9
+      pivot: {x: 0.4256899, y: 0.3065323}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6adb8c3f0c5c49348036f10a186abe0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small_Rock_Gollum_Idol_Sprite1_3
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 770
+        width: 1007
+        height: 648
+      alignment: 9
+      pivot: {x: 0.45289692, y: 0.4593342}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48e5e348541d04751b7553229729ec01
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small_Rock_Gollum_Idol_Sprite1_4
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 754
+        width: 859
+        height: 769
+      alignment: 9
+      pivot: {x: 0.42637497, y: 0.41090485}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db23e301926524cae9cd824c72e5023c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small_Rock_Gollum_Idol_Sprite1_5
+      rect:
+        serializedVersion: 2
+        x: 2027
+        y: 759
+        width: 954
+        height: 764
+      alignment: 9
+      pivot: {x: 0.4005603, y: 0.36893162}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8983e3f981124c949d99a2202a9f7d6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Small_Rock_Gollum_Idol_Sprite1_6
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 16
+        width: 1018
+        height: 701
+      alignment: 9
+      pivot: {x: 0.47411433, y: 0.3797071}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02d76249e709d45509589ee2c17f37d6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: a4114c1b7ce2e4d5482d2c7e609ecfd7
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
