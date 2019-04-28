@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1ff173e0e97c348e3849897ec19da0a8
+guid: 5af32d9b4a8674e3cab2b6edce4f7b22
 TextureImporter:
   fileIDToRecycleName:
-    21300000: amber_0
-    21300002: amber_1
-    21300004: amber_2
+    21300000: amber2_0
+    21300002: amber2_1
+    21300004: amber2_2
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -87,13 +87,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: amber_0
+      name: amber2_0
       rect:
         serializedVersion: 2
-        x: 197
-        y: 126
-        width: 556
-        height: 344
+        x: 185
+        y: 143
+        width: 555
+        height: 312
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -101,19 +101,39 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7bc793c5854934e90a52528450a6167b
+      spriteID: b7f2cade6596b41f09a5a8d012194615
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: amber_1
+      name: amber2_1
       rect:
         serializedVersion: 2
-        x: 770
-        y: 136
+        x: 773
+        y: 148
+        width: 316
+        height: 302
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46f2ed16f726e4de3ab40d84544233ef
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: amber2_2
+      rect:
+        serializedVersion: 2
+        x: 1104
+        y: 111
         width: 327
-        height: 334
+        height: 339
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -121,27 +141,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a111043323c1a4958aca31bbbb41c7c1
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: amber_2
-      rect:
-        serializedVersion: 2
-        x: 1114
-        y: 133
-        width: 372
-        height: 337
-      alignment: 9
-      pivot: {x: 0.47298768, y: 0.45527336}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9e1978624e3bd4842b5f41d775f60f30
+      spriteID: c23facf83d9c24c29a3949edc3729fab
       vertices: []
       indices: 
       edges: []
@@ -149,7 +149,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 8a37a679821c94ad1bffd9cf8ea57735
+    spriteID: 9b0bce471d50c44d2af57a6dffda2335
     vertices: []
     indices: 
     edges: []
