@@ -11,9 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
-    private bool spaceWasDown;
-    private bool aWasDown;
-    private bool jumpWasDown;
+    
     private AudioSource[] audioComponents;
     public float raySize;
     public float speedMargin;
@@ -33,8 +31,6 @@ public class PlayerMovement : MonoBehaviour
         boxCollider = gameObject.GetComponent<BoxCollider2D>();
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         audioComponents =  GetComponents<AudioSource>();
-        spaceWasDown = false;
-        aWasDown = false;
         jumpTimer = new Timer(1.0f);
         jumpTimer.turnOff();
     }
@@ -100,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
         //   audioComponents[1].Play();
         //} 
         
-        if((Input.GetButton("Jump") && isGrounded && !jumpWasDown)) {
+        if((Input.GetButtonDown("Jump") && isGrounded)) {
             if (!jumpTimer.isOn())
             {
                 animator.SetTrigger("jump");
@@ -111,7 +107,6 @@ public class PlayerMovement : MonoBehaviour
             }
             
         }
-        jumpWasDown = Input.GetButton("Jump");  
 
         bool isFallingAnim = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_falling");
         if(!isGrounded && isFallingAnim) {

@@ -14,8 +14,6 @@ public class swordAttack : MonoBehaviour
         ATTACK_SIDE_RIGHT,
         ATTACK_IDLE,
     }
-    private bool fire1wasDown;
-    private bool fire2wasDown;
     private Timer attackTimer;
     private BoxCollider2D sword;
     private Animator animator;
@@ -58,7 +56,7 @@ public class swordAttack : MonoBehaviour
     {
         bool isInAttackAnimation = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack2") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack1") || animator.GetBool("attack1") || animator.GetBool("attack2");
         
-        if (Input.GetButton("Fire1") && !fire1wasDown && !Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN) && !isInAttackAnimation)
+        if (Input.GetButtonDown("Fire1") && !Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN) && !isInAttackAnimation)
         {
             appliedAttackForce = false;
             float xMove = Input.GetAxis("Horizontal");
@@ -84,8 +82,6 @@ public class swordAttack : MonoBehaviour
                 attackType = AttackTypes.ATTACK_IDLE;
             }
         }
-
-        fire1wasDown = Input.GetButton("Fire1");
 
         if(attackTimer.isOn()) {
             bool isFinished = attackTimer.updateTimer(Time.deltaTime);

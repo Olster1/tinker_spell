@@ -1298,8 +1298,8 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 110
-  orthographic: 1
+  field of view: 75
+  orthographic: 0
   orthographic size: 6
   m_Depth: -1
   m_CullingMask:
@@ -1795,7 +1795,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 799832252}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 9.3, z: -6}
+  m_LocalPosition: {x: 4, y: 10.01, z: -1}
   m_LocalScale: {x: 1.273512, y: 1.767744, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -4460,7 +4460,7 @@ PrefabInstance:
     - target: {fileID: 2096936578304428464, guid: 50c145f759a4b46dfab0ec0229f3bc89,
         type: 3}
       propertyPath: m_GravityScale
-      value: 30
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 2096936578304428464, guid: 50c145f759a4b46dfab0ec0229f3bc89,
         type: 3}
@@ -4490,7 +4490,7 @@ PrefabInstance:
     - target: {fileID: 2096936578304428467, guid: 50c145f759a4b46dfab0ec0229f3bc89,
         type: 3}
       propertyPath: jumpAccel
-      value: 550
+      value: 750
       objectReference: {fileID: 0}
     - target: {fileID: 2096936578304428467, guid: 50c145f759a4b46dfab0ec0229f3bc89,
         type: 3}

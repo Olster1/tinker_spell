@@ -25,6 +25,10 @@ public class CameraFollowPlayer : MonoBehaviour
         //cameraTransform.position = playerPos;
         cameraVelocity = new Vector2();
 
+        Camera cam = gameObject.GetComponent<Camera>();
+        //this is to fix the sorting when using the perspective camera mode
+        cam.transparencySortMode = TransparencySortMode.Orthographic;
+
     }
 
     // Update is called once per frame
