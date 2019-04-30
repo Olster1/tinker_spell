@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
-    
+
     private AudioSource[] audioComponents;
     public float raySize;
     public float speedMargin;
