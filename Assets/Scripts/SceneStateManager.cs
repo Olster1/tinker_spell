@@ -21,9 +21,12 @@ public class SceneStateManager : MonoBehaviour
 
     public GameObject[] levelObjects;
     public GameObject[] spawnPointObjs;
+    public float[] cameraZ;
     public LevelStateId stateToLoad;
     public GameObject player;
     public GameObject spell;
+    public GameObject camera;
+    public float offsetCam;
 
     //TODO: Might want this to so we don't loop through all the levels!!!
     // public LevelStateId lastActiveScene;
@@ -55,5 +58,7 @@ public class SceneStateManager : MonoBehaviour
 
         Vector3 spellOffset = new Vector3(0, 1, 0);
         spell.transform.position = spawnPoint.transform.position + spellOffset;
+        Vector3 camPos = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y + offsetCam, cameraZ[(int)stateToLoad]);
+        camera.transform.position = camPos;
     }
 }
