@@ -1,15 +1,13 @@
 fileFormatVersion: 2
-guid: b70f0cb8721ae4e788ba137d105192ce
+guid: 938e0790bc71f4f9ea79ce2b269b43c9
 TextureImporter:
   fileIDToRecycleName:
-    21300000: attack sprite_0
-    21300002: attack sprite_1
-    21300004: attack sprite_2
-    21300006: attack sprite_3
-    21300008: attack sprite_4
-    21300010: attack sprite_5
-    21300012: attack sprite_6
-    21300014: attack sprite_7
+    21300000: tinker_attack_sideways_0
+    21300002: tinker_attack_sideways_1
+    21300004: tinker_attack_sideways_2
+    21300006: tinker_attack_sideways_3
+    21300008: tinker_attack_sideways_4
+    21300010: tinker_attack_sideways_5
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -53,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 180
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -92,161 +90,121 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: attack sprite_0
+      name: tinker_attack_sideways_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1235
-        height: 1684
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 22
+        y: 116
+        width: 764
+        height: 702
+      alignment: 9
+      pivot: {x: 0.545144, y: 0.4196077}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 08342bfc899f14f5caa28618cae315bc
+      spriteID: d53311829c2b74b0ba5db93859e531e4
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack sprite_1
+      name: tinker_attack_sideways_1
       rect:
         serializedVersion: 2
-        x: 1249
-        y: 0
-        width: 1114
-        height: 1703
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 804
+        y: 186
+        width: 676
+        height: 668
+      alignment: 9
+      pivot: {x: 0.57792187, y: 0.3554325}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: df7f92b05cdf94a548beadd0cb5d18c0
+      spriteID: 6df0b72094812411cbbf6cba1fdc1a8b
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack sprite_2
+      name: tinker_attack_sideways_2
       rect:
         serializedVersion: 2
-        x: 2377
-        y: 0
-        width: 931
-        height: 1703
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1489
+        y: 107
+        width: 491
+        height: 764
+      alignment: 9
+      pivot: {x: 0.58940095, y: 0.41956255}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8e459c3edb8324f308c8bc0befc4d957
+      spriteID: 3675340fd7c8443eeaadc20be59f3abb
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack sprite_3
+      name: tinker_attack_sideways_3
       rect:
         serializedVersion: 2
-        x: 3308
-        y: 0
-        width: 1523
-        height: 1703
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1998
+        y: 116
+        width: 1185
+        height: 702
+      alignment: 9
+      pivot: {x: 0.32315093, y: 0.4353159}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 49e7c1105cff343ff9b59a119786f2f2
+      spriteID: 891ded22e8a354c8eb94a0611e4da3c2
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack sprite_4
+      name: tinker_attack_sideways_4
       rect:
         serializedVersion: 2
-        x: 4789
-        y: 0
-        width: 1396
-        height: 1703
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 113, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dab143a39484b4582b687e3d694f7378
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: attack sprite_5
-      rect:
-        serializedVersion: 2
-        x: 6214
-        y: 0
-        width: 987
-        height: 1703
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 3200
+        y: 76
+        width: 1176
+        height: 711
+      alignment: 9
+      pivot: {x: 0.27764893, y: 0.45976633}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b62354b13ad5d4b18b58fddcff85759b
+      spriteID: 5dc15cefab5a64a8fa6b305dd4418ca6
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack sprite_6
+      name: tinker_attack_sideways_5
       rect:
         serializedVersion: 2
-        x: 7173
-        y: 0
-        width: 931
-        height: 1703
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 4402
+        y: 83
+        width: 1186
+        height: 746
+      alignment: 9
+      pivot: {x: 0.21513359, y: 0.40585327}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5f5079700e1aa4369b902b73f97051d4
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: attack sprite_7
-      rect:
-        serializedVersion: 2
-        x: 8033
-        y: 5
-        width: 967
-        height: 1698
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2686b215b1300497d9e276db3738b638
+      spriteID: c6fe18139d7004fbbb53292eacd16204
       vertices: []
       indices: 
       edges: []
@@ -254,7 +212,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 1c169ca4a6d034581a79319f845aae2e
+    spriteID: 97e20eec6f62e4dab82ed54c2540a7dc
     vertices: []
     indices: 
     edges: []

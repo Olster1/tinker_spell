@@ -280,7 +280,10 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: attack1
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1102999742494159504}
   m_Solo: 0
@@ -961,7 +964,33 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: f1c96976002154d4398567300230cb6b, type: 2}
+  m_Motion: {fileID: 7400000, guid: 9cdbdea67bd364cc684cebce5c796413, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1102 &1102258628167906948
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Tinker_run
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 026979d14ebc34007aa248b5d7d4e6f1, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -1137,7 +1166,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: ee50307cc64344afd8fe6b5b1e9cda4b, type: 2}
+  m_Motion: {fileID: 7400000, guid: bf1c004d42a0a4692a9d577d6e65c297, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -1160,7 +1189,7 @@ AnimatorStateMachine:
     m_Position: {x: 624, y: 624, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102999742494159504}
-    m_Position: {x: 384, y: 264, z: 0}
+    m_Position: {x: 756, y: 216, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102718813111175622}
     m_Position: {x: -168, y: 240, z: 0}
@@ -1173,6 +1202,9 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 1102312815562818282}
     m_Position: {x: 312, y: 960, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 1102258628167906948}
+    m_Position: {x: 347, y: 1025, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

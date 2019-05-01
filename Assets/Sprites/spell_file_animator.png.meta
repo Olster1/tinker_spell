@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: 7354355b7b0ee4617a8ea2ba52058145
+guid: 4ab1837f519b04a5fa44e2aac5ed5a7d
 TextureImporter:
   fileIDToRecycleName:
-    21300000: fire sprite sheet_0
-    21300002: fire sprite sheet_1
-    21300004: fire sprite sheet_2
-    21300006: fire sprite sheet_3
-    21300008: fire sprite sheet_4
-    21300010: fire sprite sheet_5
-    21300012: fire sprite sheet_6
-    21300014: fire sprite sheet_7
+    21300000: spell_file_animator_0
+    21300002: spell_file_animator_1
+    21300004: spell_file_animator_2
+    21300006: spell_file_animator_3
+    21300008: spell_file_animator_4
+    21300010: spell_file_animator_5
+    21300012: spell_file_animator_6
+    21300014: spell_file_animator_7
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -92,161 +92,161 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: fire sprite sheet_0
+      name: spell_file_animator_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 705
-        height: 1080
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 189
+        y: 207
+        width: 473
+        height: 768
+      alignment: 9
+      pivot: {x: 0.50011885, y: 0.34836653}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4f38d66cf7a4d4f359376878582ace4e
+      spriteID: 13b1d117b7e464062899e42fd37c9eba
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: fire sprite sheet_1
+      name: spell_file_animator_1
       rect:
         serializedVersion: 2
-        x: 694
-        y: 0
-        width: 570
-        height: 1080
+        x: 715
+        y: 417
+        width: 543
+        height: 575
       alignment: 9
-      pivot: {x: 0.49999988, y: 0.49004138}
+      pivot: {x: 0.32163078, y: 0.2101605}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4175aeca72ab0477fb9a2d02737d7196
+      spriteID: 75f2283d2d7034b3cb278f31ebb6222b
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: fire sprite sheet_2
+      name: spell_file_animator_2
       rect:
         serializedVersion: 2
-        x: 1264
-        y: 0
-        width: 646
-        height: 1080
+        x: 1306
+        y: 218
+        width: 537
+        height: 672
       alignment: 9
-      pivot: {x: 0.26691127, y: 0.5099587}
+      pivot: {x: 0.27951783, y: 0.47610128}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d508d4ee291ac4a3fab2037865087c6d
+      spriteID: a881fefcc5e6c41ddaa475bd060f4e01
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: fire sprite sheet_3
+      name: spell_file_animator_3
       rect:
         serializedVersion: 2
-        x: 1899
-        y: 0
-        width: 1000
-        height: 1080
+        x: 2026
+        y: 127
+        width: 849
+        height: 784
       alignment: 9
-      pivot: {x: 0.43546778, y: 0.55975205}
+      pivot: {x: 0.4112559, y: 0.5276809}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 786e44eac48c344b0af62be85d67e67f
+      spriteID: 36ad3485bde3948118323336a1e88532
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: fire sprite sheet_4
+      name: spell_file_animator_4
       rect:
         serializedVersion: 2
-        x: 2931
-        y: 0
-        width: 1108
-        height: 1080
+        x: 2916
+        y: 78
+        width: 1086
+        height: 822
       alignment: 9
-      pivot: {x: 0.47087896, y: 0.5099587}
+      pivot: {x: 0.44564882, y: 0.59845394}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0feaca46a0412405cb037b1ee797359e
+      spriteID: 4ec8713b55f564e31a58d6c2d489eece
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: fire sprite sheet_5
+      name: spell_file_animator_5
       rect:
         serializedVersion: 2
-        x: 4007
-        y: 0
-        width: 1151
-        height: 1080
+        x: 4088
+        y: 89
+        width: 1128
+        height: 843
       alignment: 9
-      pivot: {x: 0.57475454, y: 0.5398347}
+      pivot: {x: 0.5083146, y: 0.6111336}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d735a59b01b034af28a3930032d77603
+      spriteID: 389da2e9ce3f948a3a17a72d366ecc1a
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: fire sprite sheet_6
+      name: spell_file_animator_6
       rect:
         serializedVersion: 2
-        x: 5233
-        y: 0
-        width: 817
-        height: 1080
+        x: 5224
+        y: 42
+        width: 794
+        height: 897
       alignment: 9
-      pivot: {x: 0.5789868, y: 0.46016535}
+      pivot: {x: 0.70243686, y: 0.5092877}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 67931a50772194bd9a2f210e406850f2
+      spriteID: fb40fa115353747ea97b0a88efa1b01d
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: fire sprite sheet_7
+      name: spell_file_animator_7
       rect:
         serializedVersion: 2
-        x: 6018
-        y: 0
-        width: 845
-        height: 1080
+        x: 6080
+        y: 93
+        width: 712
+        height: 913
       alignment: 9
-      pivot: {x: 0.6018254, y: 0.4800827}
+      pivot: {x: 0.56479394, y: 0.47213006}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 81445e5c881fd449e813941cda42d498
+      spriteID: 7fb79b9de5d404f7eb0c52596ebc9fa0
       vertices: []
       indices: 
       edges: []
@@ -254,7 +254,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 32579f73f089f4d3398cad6a1c9288ee
+    spriteID: 99cb5097674d74b5eb2295bcbae06b2b
     vertices: []
     indices: 
     edges: []

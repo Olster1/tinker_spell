@@ -1,13 +1,15 @@
 fileFormatVersion: 2
-guid: f823aca977fe540dbbb1f3f9a422171d
+guid: 1d3c5d39024bb4822909fba3bdb8f3f2
 TextureImporter:
   fileIDToRecycleName:
-    21300000: attack 2 sprite_0
-    21300002: attack 2 sprite_1
-    21300004: attack 2 sprite_2
-    21300006: attack 2 sprite_3
-    21300008: attack 2 sprite_4
-    21300010: attack 2 sprite_5
+    21300000: tinker_uppercut_0
+    21300002: tinker_uppercut_1
+    21300004: tinker_uppercut_2
+    21300006: tinker_uppercut_3
+    21300008: tinker_uppercut_4
+    21300010: tinker_uppercut_5
+    21300012: tinker_uppercut_6
+    21300014: tinker_uppercut_7
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -51,7 +53,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 200
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -90,121 +92,161 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: attack 2 sprite_0
+      name: tinker_uppercut_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1263
-        height: 1339
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 470
+        y: 180
+        width: 772
+        height: 608
+      alignment: 9
+      pivot: {x: 0.52019674, y: 0.4743559}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 83bfcef7ff9994d4cbafe8d10e784ac4
+      spriteID: da8bb411b5f1b4cad89f18825dd05226
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack 2 sprite_1
+      name: tinker_uppercut_1
       rect:
         serializedVersion: 2
-        x: 1249
-        y: 0
-        width: 1142
-        height: 1339
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1225
+        y: 92
+        width: 670
+        height: 768
+      alignment: 9
+      pivot: {x: 0.58535075, y: 0.46808872}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c1049817e30734fc082acdd4b6a73fb3
+      spriteID: 7250e1b0942dc43f8b662851a5700048
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack 2 sprite_2
+      name: tinker_uppercut_2
       rect:
         serializedVersion: 2
-        x: 2377
-        y: 0
-        width: 804
-        height: 1339
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1960
+        y: 92
+        width: 523
+        height: 882
+      alignment: 9
+      pivot: {x: 0.5717017, y: 0.430839}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2754f8e4b87b3492e84d7b3ea00caebe
+      spriteID: 33f46cc3b283d4bc09af020c9d77f487
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack 2 sprite_3
+      name: tinker_uppercut_3
       rect:
         serializedVersion: 2
-        x: 3188
-        y: 0
-        width: 1945
-        height: 1339
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 2492
+        y: 84
+        width: 969
+        height: 905
+      alignment: 9
+      pivot: {x: 0.49948403, y: 0.479558}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 585287b19f2aa4c4ab11f1751e50600c
+      spriteID: 41951e2d722854323931dc6375063212
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack 2 sprite_4
+      name: tinker_uppercut_4
       rect:
         serializedVersion: 2
-        x: 5107
-        y: 0
-        width: 1851
-        height: 1339
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 3442
+        y: 111
+        width: 960
+        height: 850
+      alignment: 9
+      pivot: {x: 0.52812505, y: 0.49999997}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 310d67920815e4a93b7311f2a95646bb
+      spriteID: 5b00c7a69f38b405a884fe6d2a74f9aa
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: attack 2 sprite_5
+      name: tinker_uppercut_5
       rect:
         serializedVersion: 2
-        x: 6975
-        y: 0
-        width: 1910
-        height: 1339
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 4347
+        y: 148
+        width: 658
+        height: 886
+      alignment: 9
+      pivot: {x: 0.5, y: 0.53047407}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5f3ceec20262e41f7b778645f8209da3
+      spriteID: f4afea5afa871449583f9c6e56d936a6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tinker_uppercut_6
+      rect:
+        serializedVersion: 2
+        x: 4996
+        y: 303
+        width: 497
+        height: 777
+      alignment: 9
+      pivot: {x: 0.5915493, y: 0.44015443}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 396d23ed9cba0404fba0a1e97a8a1151
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tinker_uppercut_7
+      rect:
+        serializedVersion: 2
+        x: 5471
+        y: 221
+        width: 653
+        height: 832
+      alignment: 9
+      pivot: {x: 0.4563553, y: 0.45552886}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 287f6f0cb89764fa2948a18b3d2d1671
       vertices: []
       indices: 
       edges: []
@@ -212,7 +254,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: a21d0722562d0464ca74061719d22bf0
+    spriteID: 6b5ea66f991404c8da3ec448372e211c
     vertices: []
     indices: 
     edges: []
