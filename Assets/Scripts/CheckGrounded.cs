@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CheckGrounded : MonoBehaviour
 {
-    private int groundedCount;
+    [HideInInspector] public int groundedCount;
     
     // Start is called before the first frame update
     private Animator parentAnimator;

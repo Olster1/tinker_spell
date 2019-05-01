@@ -23,6 +23,10 @@ public class PlayerMovement : MonoBehaviour
     private bool readyingJump;
     public float waitPercentToJump;
     public float landingRaySize;
+    [HideInInspector] public bool canControlPlayer;
+    [HideInInspector] public Timer autoMoveTimer;
+    [HideInInspector] public Vector2 autoMoveDirection;
+    public float autoMoveTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +37,8 @@ public class PlayerMovement : MonoBehaviour
         audioComponents =  GetComponents<AudioSource>();
         jumpTimer = new Timer(1.0f);
         jumpTimer.turnOff();
+        autoMoveTimer = new Timer(autoMoveTime);
+        canControlPlayer = true;
     }
 
     public void flipSpriteXToNormal() {
@@ -85,18 +91,19 @@ public class PlayerMovement : MonoBehaviour
             float absVel = Mathf.Min(Mathf.Abs(rigidBody.velocity.x), maxVal);
             
             
-            animator.speed = Mathf.Max((1.0f - (absVel / maxVal)) * 1.0f, 0.5f);
+            animator.speed = Mathf.Max((1.0f - (absVel / maxVal)) * 1.0f, 0.9f);
+            // animator.speed = 0.6f;
             
         } else if(isIdle) {
             animator.speed = 0.0f;
             
-        }
-        //if (Mathf.Abs(rigidBody.velocity.x) > 0.1f && !audioComponents[1].isPlaying)
-        //{
-        //   audioComponents[1].Play();
-        //} 
+        } 
+        if (Mathf.Abs(rigidBody.velocity.x) > 0.1f && !audioComponents[1].isPlaying)
+        {
+          audioComponents[1].Play();
+        } 
         
-        if((Input.GetButtonDown("Jump") && isGrounded)) {
+        if((Input.GetButtonDown("Jump") && isGrounded && canControlPlayer)) {
             if (!jumpTimer.isOn())
             {
                 animator.SetTrigger("jump");
@@ -137,7 +144,17 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         Vector2 movementForce = new Vector2(0, 0);
-        movementForce.x = Input.GetAxis("Horizontal");
+        if(canControlPlayer) {
+            movementForce.x = Input.GetAxis("Horizontal");
+        } else if(autoMoveTimer.isOn()) {
+            bool finished = autoMoveTimer.updateTimer(Time.fixedDeltaTime);
+            //the automovedirection should only be between -1 && 1
+            movementForce = autoMoveDirection;
+            if(finished) {
+                autoMoveTimer.turnOff();
+            }
+        }
+
         float thisJmpAccel = jumpAccel;
         
         //NOTE(ollie): This is the jump timer so you get a nice jump. We propotion out the jump force over the jump

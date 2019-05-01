@@ -18,6 +18,7 @@ public class SpellAi : MonoBehaviour
 	public Vector3 offset;
 	public float circleSize;
 	private Vector2 startOffset;
+    private PlayerMovement playerMovement;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +28,7 @@ public class SpellAi : MonoBehaviour
         thisSpriteRenderer =  gameObject.GetComponent<SpriteRenderer>();
         thisCollider = gameObject.GetComponent<BoxCollider2D>();
         startOffset = thisCollider.offset;
+        playerMovement = playerObj.GetComponent<PlayerMovement>();
         velocity = new Vector2(0, 0);
     }
 
@@ -53,7 +55,7 @@ public class SpellAi : MonoBehaviour
         thisAnimator.SetFloat("run_speed", velocity.magnitude);
 
         bool isInFireAnimation = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("spell_fire_twirl");
-        if (Input.GetButton("Fire1") && Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN) && !isInFireAnimation)
+        if (Input.GetButton("Fire1") && Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN) && !isInFireAnimation && playerMovement.canControlPlayer)
         {
             thisAnimator.SetTrigger("fire_twirl");
             

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public enum LevelStateId {
     LEVEL_PORTAL_ROOM,
@@ -24,9 +25,11 @@ public class SceneStateManager : MonoBehaviour
     public float[] cameraZ;
     public LevelStateId stateToLoad;
     public GameObject player;
+    private PlayerMovement playerMovement;
     public GameObject spell;
     public GameObject camera;
     public float offsetCam;
+    public CheckGrounded playerGroundedScript;
 
     //TODO: Might want this to so we don't loop through all the levels!!!
     // public LevelStateId lastActiveScene;
@@ -35,6 +38,8 @@ public class SceneStateManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {	
+        playerMovement = player.GetComponent<PlayerMovement>();
+        Assert.IsNotNull(playerMovement);
         ChangeScene();
     }
 
@@ -42,6 +47,14 @@ public class SceneStateManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void UnPausePlayer() {
+        playerMovement.canControlPlayer = true;
+    }
+
+    void PausePlayer() {
+        playerMovement.canControlPlayer = false;
     }
 
     void ChangeScene() {
@@ -55,6 +68,10 @@ public class SceneStateManager : MonoBehaviour
         levelObjects[(int)stateToLoad].SetActive(true);    
         GameObject spawnPoint = spawnPointObjs[(int)stateToLoad];
         player.transform.position = spawnPoint.transform.position;
+
+        //clear grounded count to get rid of any unresolved counts
+        playerGroundedScript.groundedCount = 0;
+        //
 
         Vector3 spellOffset = new Vector3(0, 1, 0);
         spell.transform.position = spawnPoint.transform.position + spellOffset;

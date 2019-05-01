@@ -26,6 +26,7 @@ public class swordAttack : MonoBehaviour
     private Vector2 forceToAdd;
     public float attackForce;
     private bool appliedAttackForce;
+    private PlayerMovement playerMovement;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +34,7 @@ public class swordAttack : MonoBehaviour
         thisTrans = gameObject.GetComponent<Transform>();
         animator = gameObject.transform.parent.gameObject.GetComponent<Animator>();
         thisRigidBody = gameObject.transform.parent.gameObject.GetComponent<Rigidbody2D>();
+        playerMovement = gameObject.transform.parent.gameObject.GetComponent<PlayerMovement>();
         attackTimer = new Timer(attackTime);
         sword.enabled = false;
         thisTrans.localScale = new Vector3(0, thisTrans.localScale.y, thisTrans.localScale.z);
@@ -56,7 +58,7 @@ public class swordAttack : MonoBehaviour
     {
         bool isInAttackAnimation = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack2") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack1") || animator.GetBool("attack1") || animator.GetBool("attack2");
         
-        if (Input.GetButtonDown("Fire1") && !Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN) && !isInAttackAnimation)
+        if (Input.GetButtonDown("Fire1") && !Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN) && !isInAttackAnimation && playerMovement.canControlPlayer)
         {
             appliedAttackForce = false;
             float xMove = Input.GetAxis("Horizontal");
