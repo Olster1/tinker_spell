@@ -25,6 +25,7 @@ public class swordAttack : MonoBehaviour
     public AudioClip attackSound;
     private Vector2 forceToAdd;
     public float attackForce;
+    public float attackForceUp;
     private bool appliedAttackForce;
     private PlayerMovement playerMovement;
     // Start is called before the first frame update
@@ -88,7 +89,7 @@ public class swordAttack : MonoBehaviour
         if(attackTimer.isOn()) {
             bool isFinished = attackTimer.updateTimer(Time.deltaTime);
             float tWarped = attackTimer.tAt / attackTimer.period;
-            if(tWarped > 0.3f) {
+            if(tWarped > 0.5f) {
                 sword.enabled = true;
             } 
             if(tWarped > 0.8f) {
@@ -121,7 +122,7 @@ public class swordAttack : MonoBehaviour
                 } break;
                 case AttackTypes.ATTACK_UP: {
                     if(!appliedAttackForce && sword.enabled) {
-                        forceToAdd.y += attackForce;
+                        forceToAdd.y += attackForceUp;
                         // Debug.Log("adding UP force");
                         appliedAttackForce = true;
                     }

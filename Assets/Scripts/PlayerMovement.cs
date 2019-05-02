@@ -84,20 +84,20 @@ public class PlayerMovement : MonoBehaviour
         
         bool running = animator.GetCurrentAnimatorStateInfo(0).IsName("player_run");
         
-        animator.speed = 1.0f;
-        if (running)
-        {
-            float maxVal = 18.0f;
-            float absVel = Mathf.Min(Mathf.Abs(rigidBody.velocity.x), maxVal);
+        // animator.speed = 1.0f;
+        // if (running)
+        // {
+        //     float maxVal = 18.0f;
+        //     float absVel = Mathf.Min(Mathf.Abs(rigidBody.velocity.x), maxVal);
             
             
-            animator.speed = Mathf.Max((1.0f - (absVel / maxVal)) * 1.0f, 0.9f);
-            // animator.speed = 0.6f;
+        //     animator.speed = Mathf.Max((1.0f - (absVel / maxVal)) * 1.0f, 0.9f);
+        //     // animator.speed = 0.6f;
             
-        } else if(isIdle) {
-            animator.speed = 0.0f;
+        // } else if(isIdle) {
+        //     animator.speed = 0.0f;
             
-        } 
+        // } 
         if (Mathf.Abs(rigidBody.velocity.x) > 0.1f && !audioComponents[1].isPlaying)
         {
           audioComponents[1].Play();
