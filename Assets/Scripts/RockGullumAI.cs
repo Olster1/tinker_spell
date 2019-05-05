@@ -25,6 +25,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private Timer fadeInTimer;
     [HideInInspector] public Timer redHurtTimer;
     private Vector4 startTint;
+    public GameObject damageNumbersObject;
 
     private bool applyForceForHit;
     private Vector3 directionOfForce;
@@ -32,6 +33,13 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     public float attackForceScale;
     private bool isDying;
     public float rayCastSize;
+
+    public GameObject healthBar;
+    private GameObject healthInnerBar;
+    private SpriteRenderer healthBarSpriteRenderer;
+    private float startScale;
+
+    private Color startColor;
 
     public enum Ai_State {
         AI_NULL,
@@ -78,6 +86,14 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         health = startHealth;
         startTint = spRenderer.color;
 
+        healthInnerBar = healthBar.transform.Find("health_bar").gameObject;
+        //for color
+        healthBarSpriteRenderer = healthInnerBar.GetComponent<SpriteRenderer>();
+        //
+        startColor = healthBarSpriteRenderer.color;
+
+        startScale = healthInnerBar.transform.localScale.x;
+        
     }
 
     public void flipGollumSprite() {
@@ -97,23 +113,46 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         health = startHealth;
         thisTransform.position = startP;
         isDying = false;
+        Vector3 tempScale = healthInnerBar.transform.localScale;
+        tempScale.x = startScale;
+        healthInnerBar.transform.localScale = tempScale;
+        healthBarSpriteRenderer.color = startColor;
         
     }
 
-    public void wasHit() {
+    public void wasHit(int damage, string type) {
         bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
        if (!isHit) //only the sword can hit the rock gollums
        {
+           GameObject damageNumObj = Instantiate(damageNumbersObject,  transform.position, Quaternion.identity);
+           DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
+           damageNum.initializeObject(damage, type);
+
+
            thisAnimator.SetTrigger("WasHit");
-           this.health--;
+           this.health -= damage;
            this.redHurtTimer.turnOn();
+
+           float healthAsPercent = ((float)health / (float)startHealth);
+           healthAsPercent = Mathf.Max(0, healthAsPercent);
+           Vector3 tempScale = healthInnerBar.transform.localScale;
+           tempScale.x = startScale * healthAsPercent;
+           healthInnerBar.transform.localScale = tempScale;
+           Color originalColor = healthBarSpriteRenderer.color;
+           if(healthAsPercent < 0.6f && healthAsPercent > 0.3f) {
+            originalColor = new Vector4(1, 1, 0, 1);
+           } else if(healthAsPercent < 0.3f) {
+            originalColor = Color.red;
+           }
+           
+           healthBarSpriteRenderer.color = originalColor;
 
            applyForceForHit = true;
            directionOfForce = forceScale * Vector3.Normalize(thisTransform.position - playerTransform.position);
 
            //Instantiate(hitParticleSystem);
 
-           if (this.health == 0)
+           if (this.health < 0)
            {
                 thisAnimator.SetTrigger("isDead");
                //  thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_die");

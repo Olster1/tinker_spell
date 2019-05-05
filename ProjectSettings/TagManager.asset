@@ -56,6 +56,9 @@ TagManager:
   - name: Amber
     uniqueID: 3612926345
     locked: 0
+  - name: enemy_ui_info
+    uniqueID: 1435275499
+    locked: 0
   - name: ForeGround
     uniqueID: 2267829271
     locked: 0

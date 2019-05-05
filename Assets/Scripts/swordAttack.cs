@@ -49,7 +49,7 @@ public class swordAttack : MonoBehaviour
         if(gm.tag == "Enemy" && !other.isTrigger) {
             IHitBox hb = (IHitBox)gm.GetComponent(typeof(IHitBox));
             if(hb != null) {
-                hb.wasHit();
+                hb.wasHit(27, "mellee");
             }
 
         }

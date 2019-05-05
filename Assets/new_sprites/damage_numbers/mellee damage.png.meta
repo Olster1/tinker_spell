@@ -1,20 +1,22 @@
 fileFormatVersion: 2
-guid: 4ab1837f519b04a5fa44e2aac5ed5a7d
+guid: a6d68e916747748b587d2e4c77202c54
 TextureImporter:
   fileIDToRecycleName:
-    21300000: spell_file_animator_0
-    21300002: spell_file_animator_1
-    21300004: spell_file_animator_2
-    21300006: spell_file_animator_3
-    21300008: spell_file_animator_4
-    21300010: spell_file_animator_5
-    21300012: spell_file_animator_6
-    21300014: spell_file_animator_7
+    21300000: mellee damage_0
+    21300002: mellee damage_1
+    21300004: mellee damage_2
+    21300006: mellee damage_3
+    21300008: mellee damage_4
+    21300010: mellee damage_5
+    21300012: mellee damage_6
+    21300014: mellee damage_7
+    21300016: mellee damage_8
+    21300018: mellee damage_9
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -49,7 +51,7 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 7
+  spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -69,10 +71,10 @@ TextureImporter:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
-    resizeAlgorithm: 1
+    resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 100
+    textureCompression: 2
+    compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
@@ -80,10 +82,10 @@ TextureImporter:
   - serializedVersion: 2
     buildTarget: Standalone
     maxTextureSize: 2048
-    resizeAlgorithm: 1
+    resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 100
+    textureCompression: 2
+    compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
@@ -92,161 +94,201 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: spell_file_animator_0
+      name: mellee damage_0
       rect:
         serializedVersion: 2
-        x: 189
-        y: 207
-        width: 473
-        height: 768
+        x: 53
+        y: 781
+        width: 180
+        height: 252
       alignment: 9
-      pivot: {x: 0.50011885, y: 0.34836653}
+      pivot: {x: 0.51671636, y: 0.50000024}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 13b1d117b7e464062899e42fd37c9eba
+      spriteID: e24aca78c9cb1484184fa3230681750f
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spell_file_animator_1
+      name: mellee damage_1
       rect:
         serializedVersion: 2
-        x: 715
-        y: 417
-        width: 543
-        height: 575
-      alignment: 9
-      pivot: {x: 0.32163078, y: 0.2101605}
+        x: 236
+        y: 778
+        width: 145
+        height: 243
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 75f2283d2d7034b3cb278f31ebb6222b
+      spriteID: df9bd6558f430414898796452e1edfbc
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spell_file_animator_2
+      name: mellee damage_2
       rect:
         serializedVersion: 2
-        x: 1306
-        y: 218
-        width: 537
-        height: 672
-      alignment: 9
-      pivot: {x: 0.27951783, y: 0.47610128}
+        x: 414
+        y: 781
+        width: 156
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a881fefcc5e6c41ddaa475bd060f4e01
+      spriteID: 1e19d1a0e420a4a3a93dee38498ae952
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spell_file_animator_3
+      name: mellee damage_3
       rect:
         serializedVersion: 2
-        x: 2026
-        y: 127
-        width: 849
-        height: 784
-      alignment: 9
-      pivot: {x: 0.4112559, y: 0.5276809}
+        x: 591
+        y: 781
+        width: 148
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 36ad3485bde3948118323336a1e88532
+      spriteID: 5db8cc5ede4764341a4f3325d953a0fb
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spell_file_animator_4
+      name: mellee damage_4
       rect:
         serializedVersion: 2
-        x: 2916
-        y: 78
-        width: 1086
-        height: 822
-      alignment: 9
-      pivot: {x: 0.44564882, y: 0.59845394}
+        x: 751
+        y: 781
+        width: 156
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4ec8713b55f564e31a58d6c2d489eece
+      spriteID: babc43128c30d439397dc2f9a33f6fbe
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spell_file_animator_5
+      name: mellee damage_5
       rect:
         serializedVersion: 2
-        x: 4088
-        y: 89
-        width: 1128
-        height: 843
+        x: 928
+        y: 778
+        width: 154
+        height: 234
       alignment: 9
-      pivot: {x: 0.5083146, y: 0.6111336}
+      pivot: {x: 0.48119393, y: 0.4876179}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 389da2e9ce3f948a3a17a72d366ecc1a
+      spriteID: 75e74de613fec4cdab3a4597b73efcc5
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spell_file_animator_6
+      name: mellee damage_6
       rect:
         serializedVersion: 2
-        x: 5224
-        y: 42
-        width: 794
-        height: 897
-      alignment: 9
-      pivot: {x: 0.70243686, y: 0.5092877}
+        x: 1076
+        y: 778
+        width: 201
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fb40fa115353747ea97b0a88efa1b01d
+      spriteID: c177e2c01768a4d8196d303114fa097d
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: spell_file_animator_7
+      name: mellee damage_7
       rect:
         serializedVersion: 2
-        x: 6080
-        y: 93
-        width: 712
-        height: 913
-      alignment: 9
-      pivot: {x: 0.56479394, y: 0.47213006}
+        x: 1314
+        y: 781
+        width: 177
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7fb79b9de5d404f7eb0c52596ebc9fa0
+      spriteID: e119597f4c00e4654909e4b59ff4f624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mellee damage_8
+      rect:
+        serializedVersion: 2
+        x: 1503
+        y: 778
+        width: 187
+        height: 231
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cdc2480a7f0564fccb8ad5439070726e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mellee damage_9
+      rect:
+        serializedVersion: 2
+        x: 1693
+        y: 781
+        width: 186
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5cf8df49d20c4a9e949b7a6f3a73de7
       vertices: []
       indices: 
       edges: []
@@ -254,7 +296,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 99cb5097674d74b5eb2295bcbae06b2b
+    spriteID: bd02bc1fafe794ac9b4279d24ab3a02f
     vertices: []
     indices: 
     edges: []

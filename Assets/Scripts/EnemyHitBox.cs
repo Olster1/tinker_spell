@@ -31,7 +31,7 @@ public class EnemyHitBox : MonoBehaviour, IHitBox
         
     }
 
-    public void wasHit() {
+    public void wasHit(int damage, string type) {
 
     }
 

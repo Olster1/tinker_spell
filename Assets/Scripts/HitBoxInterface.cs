@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IHitBox
 {
-    void wasHit();
+    void wasHit(int damage, string type);
 }
