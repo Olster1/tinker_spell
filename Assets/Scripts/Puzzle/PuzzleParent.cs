@@ -16,13 +16,36 @@ public class PuzzleParent : MonoBehaviour
         puzzleSoFar = new int[16];
     }
 
-    public solvePuzzle() {
-    	int indexToStart = puzzleAt + 1;
-    	if(indexToStart >= puzzle.Length) {
-    		indexToStart = 0;
+    int wrapIndex(int inVal) {
+    	int outVal = inVal;
+
+    	if(outVal >= puzzleCount) {
+    		outVal = 0;
     	}
-    	for()
-    	animator.SetTrigger(triggerName);
+    	return outVal;
+
+    }
+
+    public void solvePuzzle() {
+    	// int[] puzzleToCheck = new int[puzzle.Length];
+
+    	// int startPuzzleIndex = wrapIndex(puzzleAt + 1);
+    	// int offset = 0;
+    	// while(startPuzzleIndex != puzzleAt) {
+    	// 	for(int i = 0; i < puzzle.Length; ++i) {
+    	// 		puzzleToCheck[i] = puzzleSoFar[wrapIndex(i + startPuzzleIndex)];
+    	// 	}
+	    // 	bool found = true;
+	    // 	for(int i = 0; i < puzzle.Length; ++i) {
+	    // 		int val1 = puzzle[i];
+	    // 		int val2 = puzzleToCheck[i];
+	    // 		if(val2 != val1) {
+	    // 			found = false;
+	    // 			break;
+	    // 		}
+	    // 	}
+	    // 	offset++;
+	    // }
     }
 
     public void addValue(int valueToAdd) {
