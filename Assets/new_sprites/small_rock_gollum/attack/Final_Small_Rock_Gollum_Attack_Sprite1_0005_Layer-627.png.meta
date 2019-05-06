@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: eb3c0e0315d1c4055a3b8887d2a6b4d8
+guid: b9bc411ce3796487c81b11ec004ee898
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Final_Small_Rock_Gollum_Attack_Sprite1_0000_Layer-622_0
-    21300002: Final_Small_Rock_Gollum_Attack_Sprite1_0000_Layer-622_1
+    21300000: Final_Small_Rock_Gollum_Attack_Sprite1_0005_Layer-627_0
+    21300002: Final_Small_Rock_Gollum_Attack_Sprite1_0005_Layer-627_1
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -86,41 +86,41 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Final_Small_Rock_Gollum_Attack_Sprite1_0000_Layer-622_0
+      name: Final_Small_Rock_Gollum_Attack_Sprite1_0005_Layer-627_0
       rect:
         serializedVersion: 2
-        x: 232
+        x: 0
         y: 0
-        width: 992
-        height: 919
+        width: 1702
+        height: 930
       alignment: 9
-      pivot: {x: 0.38822764, y: 0.6528836}
+      pivot: {x: 0.5211314, y: 0.6451613}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d17583c2a07684811a619be380252bb5
+      spriteID: 0eafd7fddd9374cd783038d215c61aed
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Final_Small_Rock_Gollum_Attack_Sprite1_0000_Layer-622_1
+      name: Final_Small_Rock_Gollum_Attack_Sprite1_0005_Layer-627_1
       rect:
         serializedVersion: 2
-        x: 2241
+        x: 2032
         y: 0
-        width: 974
-        height: 885
+        width: 1663
+        height: 934
       alignment: 9
-      pivot: {x: 0.40041068, y: 0.6779661}
+      pivot: {x: 0.51052314, y: 0.6423983}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d789fc99086c24f9996408139e3e000d
+      spriteID: ddd1c2bf042eb4b239187e1b5e108138
       vertices: []
       indices: 
       edges: []
@@ -128,7 +128,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 6ae5c35010a9b4b9c84b7f8acd007c24
+    spriteID: fe26b1547cc764bb58a0c4c13c202c58
     vertices: []
     indices: 
     edges: []
