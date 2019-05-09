@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public Timer autoMoveTimer;
     [HideInInspector] public Vector2 autoMoveDirection;
     public float autoMoveTime;
+    public swordAttack sword;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +45,10 @@ public class PlayerMovement : MonoBehaviour
     public void flipSpriteXToNormal() {
         spriteRenderer.flipX = false;
         
+    }
+
+    void downwardStrike() {
+        sword.downwardStrike();
     }
 
     public void flipSprite() {

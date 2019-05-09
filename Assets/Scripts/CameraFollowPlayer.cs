@@ -14,6 +14,7 @@ public class CameraFollowPlayer : MonoBehaviour
     public float xForce;
     public float yForce;
     public float yOffsetFromPlayer;
+    private Rigidbody2D rigidBody;
     // Start is called before the first frame update
 
     void Start()
@@ -24,6 +25,8 @@ public class CameraFollowPlayer : MonoBehaviour
         Vector3 playerPos = new Vector3(playerTransform.position.x, playerTransform.position.y + yOffsetFromPlayer, cameraTransform.position.z);
         //cameraTransform.position = playerPos;
         cameraVelocity = new Vector2();
+
+        rigidBody = gameObject.GetComponent<Rigidbody2D>();
 
         Camera cam = gameObject.GetComponent<Camera>();
         //this is to fix the sorting when using the perspective camera mode
@@ -53,11 +56,15 @@ public class CameraFollowPlayer : MonoBehaviour
                 forceAccel.y = Mathf.Sign(difference.y) * yForce;
             }
 
-            Vector2 newCamPos = Time.fixedDeltaTime * Time.fixedDeltaTime * forceAccel + Time.fixedDeltaTime * cameraVelocity + new Vector2(cameraTransform.position.x, cameraTransform.position.y);
-            cameraVelocity += Time.deltaTime * forceAccel;
-            cameraTransform.position = new Vector3(newCamPos.x, newCamPos.y, cameraTransform.position.z);
-            cameraVelocity-= 0.4f * cameraVelocity;
+            rigidBody.AddForce(forceAccel);
+
+            // Vector2 newCamPos = Time.fixedDeltaTime * Time.fixedDeltaTime * forceAccel + Time.fixedDeltaTime * cameraVelocity + new Vector2(cameraTransform.position.x, cameraTransform.position.y);
+            // cameraVelocity += Time.fixedDeltaTime * forceAccel;
+            // cameraTransform.position = new Vector3(newCamPos.x, newCamPos.y, cameraTransform.position.z);
+            // cameraVelocity-= 0.4f * cameraVelocity;
 
         }
     }
+
+
 }

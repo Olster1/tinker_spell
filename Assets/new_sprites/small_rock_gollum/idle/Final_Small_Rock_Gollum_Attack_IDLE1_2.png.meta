@@ -1,12 +1,15 @@
 fileFormatVersion: 2
 guid: eacbddf218d9d468582983562076c805
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Final_Small_Rock_Gollum_Attack_IDLE1_2_0
+    21300002: Final_Small_Rock_Gollum_Attack_IDLE1_2_1
+    21300004: Final_Small_Rock_Gollum_Attack_IDLE1_2_2
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 0
+    enableMipMap: 1
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -40,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -60,7 +63,18 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 1024
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -71,7 +85,67 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Final_Small_Rock_Gollum_Attack_IDLE1_2_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1000
+        height: 789
+      alignment: 9
+      pivot: {x: 0.42709723, y: 0.76045626}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6cf2857cfe9248e8b69f82fdb7fd34a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Small_Rock_Gollum_Attack_IDLE1_2_1
+      rect:
+        serializedVersion: 2
+        x: 1903
+        y: 0
+        width: 1054
+        height: 847
+      alignment: 9
+      pivot: {x: 0.3975332, y: 0.70838255}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06fca3cf251e74510b007db6ad28320b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Small_Rock_Gollum_Attack_IDLE1_2_2
+      rect:
+        serializedVersion: 2
+        x: 3645
+        y: 0
+        width: 889
+        height: 811
+      alignment: 9
+      pivot: {x: 0.37907764, y: 0.7398274}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98fe4178df42b4f5aa924e3b8f2270eb
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class PuzzleParent : MonoBehaviour
 {
@@ -27,25 +28,46 @@ public class PuzzleParent : MonoBehaviour
     }
 
     public void solvePuzzle() {
-    	// int[] puzzleToCheck = new int[puzzle.Length];
+        int indexAt = wrapIndex(puzzleAt + 1);
+        
+        bool solvedPuzzle = false;
+        bool stillPossible = true;
+        while(stillPossible) {
+            bool found = true;
+            for(int i = 0; i < puzzle.Length; i++) {
+                int tempIndex = wrapIndex(indexAt + i);
+                if(tempIndex == puzzleAt) {
+                    //not enought to fill the puzzle
+                    Assert.IsTrue(!solvedPuzzle);
+                    stillPossible = false;
+                    break;
+                } else {
+                    int val1 = puzzle[i];
+                    int val2 = puzzleSoFar[tempIndex];
+                    if(val2 != val1) {
+                        found = false;
+                        break;
+                    }
+                }
+            }
+            if(stillPossible && found) {
+                solvedPuzzle = true;
+                stillPossible = false;
+            }
+            
+            if((indexAt + 1) == puzzleAt) {
+                //shouldn't ever get here
+                Assert.IsTrue(false);
+                stillPossible = false;
+            } else {
+                //increment index
+                indexAt = wrapIndex(indexAt + 1);
+            }
+        }
 
-    	// int startPuzzleIndex = wrapIndex(puzzleAt + 1);
-    	// int offset = 0;
-    	// while(startPuzzleIndex != puzzleAt) {
-    	// 	for(int i = 0; i < puzzle.Length; ++i) {
-    	// 		puzzleToCheck[i] = puzzleSoFar[wrapIndex(i + startPuzzleIndex)];
-    	// 	}
-	    // 	bool found = true;
-	    // 	for(int i = 0; i < puzzle.Length; ++i) {
-	    // 		int val1 = puzzle[i];
-	    // 		int val2 = puzzleToCheck[i];
-	    // 		if(val2 != val1) {
-	    // 			found = false;
-	    // 			break;
-	    // 		}
-	    // 	}
-	    // 	offset++;
-	    // }
+        if(solvedPuzzle) {
+            Debug.Log("solved puzzle");
+        }
     }
 
     public void addValue(int valueToAdd) {

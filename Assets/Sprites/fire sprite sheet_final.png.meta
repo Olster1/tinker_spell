@@ -1,14 +1,12 @@
 fileFormatVersion: 2
-guid: 44987344cef624f04b13ec21e252cb51
+guid: dcb177b8fbc004991abd63603ba951cb
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: Final_Small_Rock_Gollum_Walk1_0
-    21300002: Final_Small_Rock_Gollum_Walk1_1
+  fileIDToRecycleName: {}
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -42,7 +40,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -62,18 +60,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 1024
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: Standalone
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -84,51 +71,11 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: Final_Small_Rock_Gollum_Walk1_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 888
-        height: 802
-      alignment: 9
-      pivot: {x: 0.35008803, y: 0.74812967}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1a24b2bb9e37f462ba2edf128a58d4f8
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Final_Small_Rock_Gollum_Walk1_1
-      rect:
-        serializedVersion: 2
-        x: 1466
-        y: 0
-        width: 955
-        height: 806
-      alignment: 9
-      pivot: {x: 0.4, y: 0.7444169}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4b008b89bd52c4d8e98475a0bfcce719
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 0011e7526d0c448d284ff45c4f7a9cce
+    spriteID: d65658ab4bd024e76bfa1dae4e0031c2
     vertices: []
     indices: 
     edges: []

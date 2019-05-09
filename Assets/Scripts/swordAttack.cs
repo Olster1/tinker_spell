@@ -12,6 +12,7 @@ public class swordAttack : MonoBehaviour
         ATTACK_UP,
         ATTACK_SIDE_LEFT,
         ATTACK_SIDE_RIGHT,
+        ATTACK_DOWNWARD,
         ATTACK_IDLE,
     }
     private Timer attackTimer;
@@ -25,6 +26,7 @@ public class swordAttack : MonoBehaviour
     public AudioClip attackSound;
     private Vector2 forceToAdd;
     public float attackForce;
+    public float downwardAttackForce;
     public float attackForceUp;
     private bool appliedAttackForce;
     private PlayerMovement playerMovement;
@@ -43,21 +45,26 @@ public class swordAttack : MonoBehaviour
         forceToAdd = new Vector2(0, 0);
     }
 
+    public void downwardStrike() {
+        Vector2 directionAttack = new Vector2(Mathf.Sign(thisRigidBody.velocity.x)*0.707f, -0.707f);
+        forceToAdd += downwardAttackForce*directionAttack;
+        appliedAttackForce = true;
+    }
+
       void OnTriggerEnter2D(Collider2D other) {
         GameObject gm = other.gameObject;
 
-        if(gm.tag == "Enemy" && !other.isTrigger) {
-            IHitBox hb = (IHitBox)gm.GetComponent(typeof(IHitBox));
-            if(hb != null) {
-                hb.wasHit(27, "mellee");
-            }
-
+        IHitBox hb = (IHitBox)gm.GetComponent(typeof(IHitBox));
+        if(hb != null) {
+            hb.wasHit(27, "mellee");
         }
       }
     // Update is called once per frame
     void Update()
     {
+
         bool isInAttackAnimation = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack2") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack1") || animator.GetBool("attack1") || animator.GetBool("attack2");
+        bool isFallingAnim = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_falling");
         
         if (Input.GetButtonDown("Fire1") && !Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN) && !isInAttackAnimation && playerMovement.canControlPlayer)
         {
@@ -68,7 +75,10 @@ public class swordAttack : MonoBehaviour
             bool isVertical = Mathf.Abs(yMove) > Mathf.Abs(xMove);
             audiosrc.PlayOneShot(attackSound);
             attackTimer.turnOn();
-            if (isVertical) {
+            if(!playerMovement.isGrounded) {
+                animator.SetTrigger("downward_dash");
+                attackType = AttackTypes.ATTACK_DOWNWARD;
+            } else if (isVertical) {
                 animator.SetTrigger("attack1");
                 attackType = AttackTypes.ATTACK_UP;
                 

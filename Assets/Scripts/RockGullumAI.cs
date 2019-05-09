@@ -27,10 +27,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private Vector4 startTint;
     public GameObject damageNumbersObject;
 
-    private bool applyForceForHit;
-    private Vector3 directionOfForce;
-    public float forceScale;
-    public float attackForceScale;
     private bool isDying;
     public float rayCastSize;
 
@@ -38,6 +34,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private GameObject healthInnerBar;
     private SpriteRenderer healthBarSpriteRenderer;
     private float startScale;
+    private int physicsLayerMask;
 
     private Color startColor;
 
@@ -62,6 +59,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private Ai_SubState subAiState;
 
     private void getRandomAiSubState() {
+        Debug.Log("Got random state");
         subAiState = (Ai_SubState)((int)Random.Range(0, (int)(Ai_SubState.AI_SUB_COUNT)));
     }
 
@@ -93,6 +91,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         startColor = healthBarSpriteRenderer.color;
 
         startScale = healthInnerBar.transform.localScale.x;
+
+        physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);
         
     }
 
@@ -147,9 +147,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
            
            healthBarSpriteRenderer.color = originalColor;
 
-           applyForceForHit = true;
-           directionOfForce = forceScale * Vector3.Normalize(thisTransform.position - playerTransform.position);
-
            //Instantiate(hitParticleSystem);
 
            if (this.health < 0)
@@ -164,21 +161,27 @@ public class RockGullumAI : MonoBehaviour, IHitBox
        }
     }
 
+    public void applyAttackForce() {
+        Vector2 diffVec = playerTransform.position - thisTransform.position;
+        ForceToAdd += attackForce * Mathf.Sign(diffVec.x) * Vector2.right;
+        // Debug.Log("applying attack force");
+    }
+
     private void Update()
     {
-        if(redHurtTimer.isOn()) {
-            bool finished = redHurtTimer.updateTimer(Time.deltaTime);
-            float canVal = redHurtTimer.getCanoncial();
-            canVal = Mathf.Sin(canVal*Mathf.PI);
-            float redValAlpha = Mathf.Lerp(1, 0, canVal);
-            spRenderer.color = new Vector4(1, redValAlpha, redValAlpha, 1);
-            if(finished) {
-                if(!deathTimer.isOn()) {
-                    spRenderer.color = Color.white;
-                }
-                redHurtTimer.turnOff();
-            }
-        }
+        // if(redHurtTimer.isOn()) {
+        //     bool finished = redHurtTimer.updateTimer(Time.deltaTime);
+        //     float canVal = redHurtTimer.getCanoncial();
+        //     canVal = Mathf.Sin(canVal*Mathf.PI);
+        //     float redValAlpha = Mathf.Lerp(1, 0, canVal);
+        //     spRenderer.color = new Vector4(1, redValAlpha, redValAlpha, 1);
+        //     if(finished) {
+        //         if(!deathTimer.isOn()) {
+        //             spRenderer.color = Color.white;
+        //         }
+        //         redHurtTimer.turnOff();
+        //     }
+        // }
         if(fadeInTimer.isOn()) {
             
             bool finished = fadeInTimer.updateTimer(Time.deltaTime);
@@ -213,7 +216,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             }
             else
             {
-                ForceToAdd += attackForce * Mathf.Sign(diffVec.x) * Vector2.right;
                 aiState = Ai_State.AI_FIND;
             }
         }
@@ -224,10 +226,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             {
                 aiState = Ai_State.AI_ATTACK;
                 thisAnimator.SetTrigger("IsAttacking");
-                applyForceForHit = true;
-                directionOfForce = attackForceScale*Vector3.Normalize(playerTransform.position - thisTransform.position);
-
-
             }
             else if (Vector2.SqrMagnitude(diffVec) < partolDistance)
             {
@@ -259,6 +257,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                 Vector2 colSize = thisCollider.size;
                 Vector3 colOffset = thisCollider.offset;
                 float raySize = 0.5f*colSize.x + rayCastSize;
+
                 switch(subAiState) {
 
                     case Ai_SubState.AI_SUB_IDLE: {
@@ -268,11 +267,13 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                         ForceToAdd += accelForce * Vector2.left;
                             
                         //NOTE(ollie): Do we want to use layers instead so we are using just one raycast?? Not sure if this would be faster
-                        RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, Vector2.left, raySize);
-                        Debug.DrawLine(thisCollider.bounds.center, transform.position + colOffset + raySize*Vector3.left);
+                        RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, Vector2.left, raySize, physicsLayerMask);
+                        // Debug.DrawLine(thisCollider.bounds.center, thisCollider.bounds.center + colOffset + raySize*Vector3.left);
                         for(int i = 0; i < hits.Length; ++i) {
                             RaycastHit2D hit = hits[i];
+                            
                             if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
+                                Debug.Log(hit.collider.gameObject.name);
                                 subAiState = Ai_SubState.AI_SUB_RIGHT;
                                 break;
                             }
@@ -283,11 +284,13 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                     case Ai_SubState.AI_SUB_RIGHT: {
                         ForceToAdd += accelForce * Vector2.right;
                         //NOTE(ollie): Do we want to use layers instead so we are using just one raycast?? Not sure if this would be faster
-                        RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, Vector2.right, raySize);
-                        Debug.DrawLine(thisCollider.bounds.center, transform.position + colOffset + raySize*Vector3.right);
+                        RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, Vector2.right, raySize, physicsLayerMask);
+                        // Debug.DrawLine(thisCollider.bounds.center, transform.position + colOffset + raySize*Vector3.right);
                         for(int i = 0; i < hits.Length; ++i) {
                             RaycastHit2D hit = hits[i];
+                            
                             if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
+                                Debug.Log(hit.collider.gameObject.name);
                                 subAiState = Ai_SubState.AI_SUB_LEFT;
                                 break;
                             }
@@ -339,12 +342,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (applyForceForHit) {
-            Vector2 forceVec = new Vector2(directionOfForce.x, directionOfForce.y);
-            thisRigidbody.AddForce(forceVec);
-            applyForceForHit = false;
-        }
-
         thisRigidbody.AddForce(ForceToAdd);
         ForceToAdd.x = 0;
         ForceToAdd.y = 0;
