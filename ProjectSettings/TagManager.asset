@@ -47,6 +47,9 @@ TagManager:
   - name: Sky
     uniqueID: 1552306799
     locked: 0
+  - name: faraway1
+    uniqueID: 1573956147
+    locked: 0
   - name: BackgroundScenery
     uniqueID: 524023341
     locked: 0

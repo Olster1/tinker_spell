@@ -342,6 +342,9 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     // Update is called once per frame
     void FixedUpdate()
     {
+        if(Mathf.Sign(thisRigidbody.velocity.x) != Mathf.Sign(ForceToAdd.x)) {
+            thisAnimator.SetTrigger("turn_around");
+        }
         thisRigidbody.AddForce(ForceToAdd);
         ForceToAdd.x = 0;
         ForceToAdd.y = 0;
