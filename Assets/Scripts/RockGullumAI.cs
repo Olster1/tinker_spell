@@ -25,6 +25,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private Timer fadeInTimer;
     [HideInInspector] public Timer redHurtTimer;
     private Vector4 startTint;
+    public GameObject amber;
     public GameObject damageNumbersObject;
 
     private bool isDying;
@@ -36,6 +37,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private float startScale;
     private int physicsLayerMask;
     private Timer timerForPatrol;
+
+    private float lastFrameVelocityX;
 
     private Color startColor;
 
@@ -97,7 +100,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         startScale = healthInnerBar.transform.localScale.x;
 
         physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);
-        
+        lastFrameVelocityX = thisRigidbody.velocity.x;
     }
 
     public void flipGollumSprite() {
@@ -121,6 +124,17 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         // tempScale.x = startScale;
         // healthInnerBar.transform.localScale = tempScale;
         // healthBarSpriteRenderer.color = startColor;
+
+        for(int i = 0; i < 6; ++i) {
+            GameObject objAmber = Instantiate(amber, transform.position,  Quaternion.identity);
+            Rigidbody2D amberRb = objAmber.GetComponent<Rigidbody2D>();
+            //TODO(oolie): probably a better way so we an't calling sin and cos???
+            float randomAngle = Mathf.Lerp(0.25f*Mathf.PI, 0.75f*Mathf.PI, Random.Range(0.0f, 1.0f));
+            Vector2 newForce = new Vector3(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle));
+            amberRb.bodyType = RigidbodyType2D.Dynamic;
+            amberRb.AddForce(1700*newForce);
+        }
+
         Destroy(gameObject);
         
     }
@@ -350,13 +364,19 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         //         // spRenderer.color = startTint;
         //     }
         // }
+
+
+        if(Mathf.Sign(thisRigidbody.velocity.x) != Mathf.Sign(lastFrameVelocityX)) {
+            Debug.Log(thisRigidbody.velocity.x);
+            Debug.Log(lastFrameVelocityX);
+            thisAnimator.SetTrigger("turn_around");
+        }
+        lastFrameVelocityX = thisRigidbody.velocity.x;
     }
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(Mathf.Sign(thisRigidbody.velocity.x) != Mathf.Sign(ForceToAdd.x)) {
-            thisAnimator.SetTrigger("turn_around");
-        }
+        
         thisRigidbody.AddForce(ForceToAdd);
         ForceToAdd.x = 0;
         ForceToAdd.y = 0;

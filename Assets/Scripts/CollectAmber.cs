@@ -14,6 +14,7 @@ public class CollectAmber : MonoBehaviour
     private BoxCollider2D col;
     private SpriteRenderer spRender;
     private bool gravityAffected;
+    private Rigidbody2D amberRb;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,13 +25,16 @@ public class CollectAmber : MonoBehaviour
         audioSrc = gameObject.GetComponent<AudioSource>();
         col = gameObject.GetComponent<BoxCollider2D>();
         spRender = gameObject.GetComponent<SpriteRenderer>();
-        gravityAffected = true;
+        amberRb = gameObject.transform.parent.GetComponent<Rigidbody2D>();
+        gravityAffected = (amberRb.bodyType == RigidbodyType2D.Dynamic);
     }
 
     // Update is called once per frame
     void Update()
     {
+        gravityAffected = (amberRb.bodyType == RigidbodyType2D.Dynamic);
         if(!gravityAffected) {
+
             tAt += Time.deltaTime;
 
             thisTrans.position = new Vector3(thisTrans.position.x, startY + Mathf.Sin(tAt), thisTrans.position.z);

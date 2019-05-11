@@ -105,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
         // } 
         if (Mathf.Abs(rigidBody.velocity.x) > 0.1f && !audioComponents[1].isPlaying)
         {
-          audioComponents[1].Play();
+          // audioComponents[1].Play();
         } 
         
         if((Input.GetButtonDown("Jump") && isGrounded && canControlPlayer)) {
