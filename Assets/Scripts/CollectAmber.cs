@@ -13,6 +13,7 @@ public class CollectAmber : MonoBehaviour
     private AudioSource audioSrc;
     private BoxCollider2D col;
     private SpriteRenderer spRender;
+    private bool gravityAffected;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,14 +24,17 @@ public class CollectAmber : MonoBehaviour
         audioSrc = gameObject.GetComponent<AudioSource>();
         col = gameObject.GetComponent<BoxCollider2D>();
         spRender = gameObject.GetComponent<SpriteRenderer>();
+        gravityAffected = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        tAt += Time.deltaTime;
+        if(!gravityAffected) {
+            tAt += Time.deltaTime;
 
-        thisTrans.position = new Vector3(thisTrans.position.x, startY + Mathf.Sin(tAt), thisTrans.position.z);
+            thisTrans.position = new Vector3(thisTrans.position.x, startY + Mathf.Sin(tAt), thisTrans.position.z);
+        }
 
         if(fadeTimer.isOn()) {
             bool finished = fadeTimer.updateTimer(Time.deltaTime);
@@ -45,11 +49,13 @@ public class CollectAmber : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
+        Debug.Log("on enter");
         if (other.gameObject.tag == "Player") {
             GameManager.amberCount++;
             col.enabled = false;
             audioSrc.Play();
             fadeTimer.turnOn();
+            Debug.Log("collected");
         }
 
     }

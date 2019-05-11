@@ -35,6 +35,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private SpriteRenderer healthBarSpriteRenderer;
     private float startScale;
     private int physicsLayerMask;
+    private Timer timerForPatrol;
 
     private Color startColor;
 
@@ -84,6 +85,9 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         health = startHealth;
         startTint = spRenderer.color;
 
+        timerForPatrol = new Timer(walkTimer.period);
+        timerForPatrol.turnOff();
+
         healthInnerBar = healthBar.transform.Find("health_bar").gameObject;
         //for color
         healthBarSpriteRenderer = healthInnerBar.GetComponent<SpriteRenderer>();
@@ -109,14 +113,15 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     }
 
     public void BeginFadeInTimer() {
-        fadeInTimer.turnOn();
-        health = startHealth;
-        thisTransform.position = startP;
-        isDying = false;
-        Vector3 tempScale = healthInnerBar.transform.localScale;
-        tempScale.x = startScale;
-        healthInnerBar.transform.localScale = tempScale;
-        healthBarSpriteRenderer.color = startColor;
+        // fadeInTimer.turnOn();
+        // health = startHealth;
+        // thisTransform.position = startP;
+        // isDying = false;
+        // Vector3 tempScale = healthInnerBar.transform.localScale;
+        // tempScale.x = startScale;
+        // healthInnerBar.transform.localScale = tempScale;
+        // healthBarSpriteRenderer.color = startColor;
+        Destroy(gameObject);
         
     }
 
@@ -124,7 +129,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
        if (!isHit) //only the sword can hit the rock gollums
        {
-           GameObject damageNumObj = Instantiate(damageNumbersObject,  transform.position, Quaternion.identity);
+           GameObject damageNumObj = Instantiate(damageNumbersObject,  transform);
            DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
            damageNum.initializeObject(damage, type);
 
@@ -216,7 +221,10 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             }
             else
             {
-                aiState = Ai_State.AI_FIND;
+                aiState = Ai_State.AI_PATROL;
+                walkTimer.isOn();
+                timerForPatrol.turnOn();
+                subAiState = (diffVec.x > 0) ? Ai_SubState.AI_SUB_LEFT : Ai_SubState.AI_SUB_RIGHT;
             }
         }
         else if (aiState == Ai_State.AI_FIND)
@@ -238,7 +246,11 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         }
         else if (aiState == Ai_State.AI_PATROL)
         {
-            if (Vector2.SqrMagnitude(diffVec) < partolDistance)
+            bool finishedForPatrol = timerForPatrol.updateTimer(Time.deltaTime);
+            if(finishedForPatrol) {
+                timerForPatrol.turnOff();
+            }
+            if (Vector2.SqrMagnitude(diffVec) < partolDistance && !timerForPatrol.isOn())
             {
                 aiState = Ai_State.AI_FIND;
             } else {
