@@ -336,6 +336,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
 
         thisAnimator.SetFloat("WalkSpeed", thisRigidbody.velocity.x);
 
+        bool lastframFlip = spRenderer.flipX;
         if (thisRigidbody.velocity.x > 0)
         {
             spRenderer.flipX = true;
@@ -344,6 +345,10 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         if (thisRigidbody.velocity.x < 0)
         {
             spRenderer.flipX = false;
+        }
+
+        if(lastframFlip != spRenderer.flipX) {
+            thisAnimator.SetTrigger("turn_around");
         }
 
 
@@ -366,12 +371,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         // }
 
 
-        if(Mathf.Sign(thisRigidbody.velocity.x) != Mathf.Sign(lastFrameVelocityX)) {
-            Debug.Log(thisRigidbody.velocity.x);
-            Debug.Log(lastFrameVelocityX);
-            thisAnimator.SetTrigger("turn_around");
-        }
-        lastFrameVelocityX = thisRigidbody.velocity.x;
+        
     }
     // Update is called once per frame
     void FixedUpdate()

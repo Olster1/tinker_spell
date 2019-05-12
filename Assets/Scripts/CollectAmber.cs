@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EasyGameManager;
+
 using Timer_namespace;
 
 public class CollectAmber : MonoBehaviour
@@ -15,9 +15,12 @@ public class CollectAmber : MonoBehaviour
     private SpriteRenderer spRender;
     private bool gravityAffected;
     private Rigidbody2D amberRb;
+    private worldTUI createAmberUIObject;
     // Start is called before the first frame update
     void Start()
     {
+        GameObject amberUI = GameObject.Find("AmberUI");
+        createAmberUIObject = amberUI.GetComponent<worldTUI>();
         thisTrans = gameObject.GetComponent<Transform>();
         startY = thisTrans.position.y;
         fadeTimer = new Timer(0.5f);
@@ -55,11 +58,12 @@ public class CollectAmber : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         Debug.Log("on enter");
         if (other.gameObject.tag == "Player") {
-            GameManager.amberCount++;
+            
             col.enabled = false;
             audioSrc.Play();
             fadeTimer.turnOn();
-            Debug.Log("collected");
+            createAmberUIObject.createAmberUI(gameObject.transform.position);
+            
         }
 
     }

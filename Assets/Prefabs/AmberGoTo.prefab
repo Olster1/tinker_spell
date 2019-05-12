@@ -11,8 +11,7 @@ GameObject:
   - component: {fileID: 9068572612202850282}
   - component: {fileID: 3661572541040608985}
   - component: {fileID: 3003517344381342068}
-  - component: {fileID: 3662529486798969252}
-  - component: {fileID: 892054648840887987}
+  - component: {fileID: 4826256237978300977}
   m_Layer: 5
   m_Name: AmberGoTo
   m_TagString: Untagged
@@ -76,26 +75,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!95 &3662529486798969252
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4443828570990173822}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 897ec69ccb5d941909da3849d17bfee5, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &892054648840887987
+--- !u!114 &4826256237978300977
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,6 +84,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4443828570990173822}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 010062a715f9f4cc4923c2760b1ab099, type: 3}
+  m_Script: {fileID: 11500000, guid: ddc2aaadf13d94d23925ee38c570a65c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  finalPos: {x: 101, y: -71}

@@ -72,6 +72,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7af032b1c43634df5bf583d6d94effd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  createAmberUIObject: {fileID: 1245464277469925100, guid: 0ce91c70e4e404e4290d1fa8516280b8,
+    type: 3}
 --- !u!82 &3088311293396911542
 AudioSource:
   m_ObjectHideFlags: 0
