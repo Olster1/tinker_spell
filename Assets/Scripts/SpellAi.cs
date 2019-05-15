@@ -93,7 +93,7 @@ public class SpellAi : MonoBehaviour
 		if(gm.tag == "Enemy" && !other.isTrigger && isAttacking) {
 			IHitBox hb = (IHitBox)gm.GetComponent(typeof(IHitBox));
 			if(hb != null) {
-				hb.wasHit(1, "mellee");
+				hb.wasHit(1, "mellee", EnemyType.ENEMY_GOOD, transform.position);
 			}
 
 	    }

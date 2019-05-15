@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -40494839
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 0e34d716869f840b695dd93e35f895fb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -129,10 +129,11 @@ MonoBehaviour:
   attackDistance: 50
   health: 3
   startHealth: 100
+  amber: {fileID: 0}
   damageNumbersObject: {fileID: 4352203236051628151, guid: 3d07795d9ae794617bd1de79b6065cc0,
     type: 3}
-  forceScale: 5500
-  attackForceScale: 2000
+  genericAttackObject: {fileID: 6368268402639536057, guid: b9589d6f131aa4c59a0216c8079786f3,
+    type: 3}
   rayCastSize: 1
   healthBar: {fileID: 8212999913690830142}
 --- !u!50 &2850328975263803224

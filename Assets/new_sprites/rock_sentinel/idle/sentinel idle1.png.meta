@@ -1,9 +1,10 @@
 fileFormatVersion: 2
-guid: 0d967f71da6ef4b5982c4e62e67891f9
+guid: db5ab5183eb8f47bf9ac4ca610a399c0
 TextureImporter:
   fileIDToRecycleName:
-    21300000: sentinal_Idle_Sprite_Sheet1_0
-    21300002: sentinal_Idle_Sprite_Sheet1_1
+    21300000: sentinel idle1_0
+    21300002: sentinel idle1_1
+    21300004: sentinel idle1_2
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -62,7 +63,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -73,7 +74,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   - serializedVersion: 2
     buildTarget: Standalone
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -86,41 +87,61 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sentinal_Idle_Sprite_Sheet1_0
+      name: sentinel idle1_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 22
         y: 0
-        width: 1516
-        height: 1715
+        width: 1764
+        height: 1659
       alignment: 9
-      pivot: {x: 0.280242, y: 0.49562684}
+      pivot: {x: 0.5313694, y: 0.5123568}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6dae0ebd8ec1d4d1b955d870152fefca
+      spriteID: 829ae0ad5660c428691ba2601f8e9619
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sentinal_Idle_Sprite_Sheet1_1
+      name: sentinel idle1_1
       rect:
         serializedVersion: 2
-        x: 1947
+        x: 1861
         y: 0
-        width: 1486
-        height: 1671
+        width: 1679
+        height: 1643
       alignment: 9
-      pivot: {x: 0.24831763, y: 0.5086774}
+      pivot: {x: 0.5080405, y: 0.5173463}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0d6401b933ede485cb23de1d643299ec
+      spriteID: dc44e9432fbe945fe85fa2b872dfb570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sentinel idle1_2
+      rect:
+        serializedVersion: 2
+        x: 3740
+        y: 0
+        width: 1726
+        height: 1766
+      alignment: 9
+      pivot: {x: 0.50695246, y: 0.4813137}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da5b7fad5b88548b9ab8ad6fd716997b
       vertices: []
       indices: 
       edges: []
@@ -128,7 +149,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: f6c12639768be4dcb8a9231c07b79305
+    spriteID: 90c089941573f4699a2ca9e73a21593b
     vertices: []
     indices: 
     edges: []

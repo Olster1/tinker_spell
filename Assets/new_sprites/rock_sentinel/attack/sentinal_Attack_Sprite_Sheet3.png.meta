@@ -1,9 +1,10 @@
 fileFormatVersion: 2
-guid: 0d967f71da6ef4b5982c4e62e67891f9
+guid: bd524dcd7de6247b9bad88d15653212d
 TextureImporter:
   fileIDToRecycleName:
-    21300000: sentinal_Idle_Sprite_Sheet1_0
-    21300002: sentinal_Idle_Sprite_Sheet1_1
+    21300000: sentinal_Attack_Sprite_Sheet3_0
+    21300002: sentinal_Attack_Sprite_Sheet3_1
+    21300004: sentinal_Attack_Sprite_Sheet3_2
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -62,7 +63,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -73,7 +74,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   - serializedVersion: 2
     buildTarget: Standalone
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -86,41 +87,61 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sentinal_Idle_Sprite_Sheet1_0
+      name: sentinal_Attack_Sprite_Sheet3_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 147
         y: 0
-        width: 1516
-        height: 1715
+        width: 1451
+        height: 2340
       alignment: 9
-      pivot: {x: 0.280242, y: 0.49562684}
+      pivot: {x: 0.33101684, y: 0.36324787}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6dae0ebd8ec1d4d1b955d870152fefca
+      spriteID: d4ee809d189b6412cb9195806ce37352
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sentinal_Idle_Sprite_Sheet1_1
+      name: sentinal_Attack_Sprite_Sheet3_1
       rect:
         serializedVersion: 2
-        x: 1947
+        x: 2017
         y: 0
-        width: 1486
-        height: 1671
+        width: 1905
+        height: 2229
       alignment: 9
-      pivot: {x: 0.24831763, y: 0.5086774}
+      pivot: {x: 0.53700787, y: 0.38133693}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0d6401b933ede485cb23de1d643299ec
+      spriteID: d8015f3baa49d432d9598dd7e05ce731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sentinal_Attack_Sprite_Sheet3_2
+      rect:
+        serializedVersion: 2
+        x: 4471
+        y: 33
+        width: 1885
+        height: 1734
+      alignment: 9
+      pivot: {x: 0.56657827, y: 0.49019608}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7b9adeca4882470baafa934e1f54a85
       vertices: []
       indices: 
       edges: []
@@ -128,7 +149,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: f6c12639768be4dcb8a9231c07b79305
+    spriteID: a79e48074e57249b6a7548891a1b10ac
     vertices: []
     indices: 
     edges: []

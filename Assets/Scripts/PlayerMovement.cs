@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Timer_namespace;
+using EasyGameManager;
+using UnityEngine.SceneManagement;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IHitBox
 {
     private Rigidbody2D rigidBody;
     public float jumpAccel;
@@ -28,6 +30,9 @@ public class PlayerMovement : MonoBehaviour
     [HideInInspector] public Vector2 autoMoveDirection;
     public float autoMoveTime;
     public swordAttack sword;
+    private Vector2 forceToAdd;
+
+    public GameObject damageNumbersObject;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +45,39 @@ public class PlayerMovement : MonoBehaviour
         jumpTimer.turnOff();
         autoMoveTimer = new Timer(autoMoveTime);
         canControlPlayer = true;
+        forceToAdd = new Vector2();
     }
+
+    public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
+        // bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
+       if (enemyType == EnemyType.ENEMY_EVIL) 
+       {
+           GameObject damageNumObj = Instantiate(damageNumbersObject,  transform);
+           DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
+           damageNum.initializeObject(damage, type);
+
+           Vector2 dir = (Vector2)transform.position - position;
+           dir.Normalize();
+           forceToAdd = 1000*dir;
+           // thisAnimator.SetTrigger("WasHit");
+           GameManager.playerHealth -= damage;
+           
+           //Instantiate(hitParticleSystem);
+
+           if (GameManager.playerHealth < 0)
+           {
+            GameManager.playerHealth = 100;
+             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+               //  thisAnimator.SetTrigger("isDead");
+               // //  thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_die");
+               // // this.deathTimer = new Timer_namespace.Timer(1.0f);
+               // // this.deathTimer.turnOn();
+               //  isDying = true;
+
+           }
+       }
+    }
+
 
     public void flipSpriteXToNormal() {
         spriteRenderer.flipX = false;
@@ -184,7 +221,9 @@ public class PlayerMovement : MonoBehaviour
          
         movementForce.x *= moveAccel;
         movementForce.y *= thisJmpAccel;
-        rigidBody.AddForce(movementForce);
+        rigidBody.AddForce(movementForce + forceToAdd);
+        forceToAdd.x = 0;
+        forceToAdd.y = 0;
         
     }
 }

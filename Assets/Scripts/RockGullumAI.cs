@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Timer_namespace;
+using EasyAttackObjectCreator;
 
 public class RockGullumAI : MonoBehaviour, IHitBox
 {
@@ -27,6 +28,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private Vector4 startTint;
     public GameObject amber;
     public GameObject damageNumbersObject;
+    public GameObject genericAttackObject;
 
     private bool isDying;
     public float rayCastSize;
@@ -63,7 +65,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private Ai_SubState subAiState;
 
     private void getRandomAiSubState() {
-        Debug.Log("Got random state");
         subAiState = (Ai_SubState)((int)Random.Range(0, (int)(Ai_SubState.AI_SUB_COUNT)));
     }
 
@@ -139,9 +140,9 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         
     }
 
-    public void wasHit(int damage, string type) {
+    public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
         bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
-       if (!isHit) //only the sword can hit the rock gollums
+       if (!isHit && enemyType == EnemyType.ENEMY_GOOD) 
        {
            GameObject damageNumObj = Instantiate(damageNumbersObject,  transform);
            DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
@@ -184,6 +185,17 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         Vector2 diffVec = playerTransform.position - thisTransform.position;
         ForceToAdd += attackForce * Mathf.Sign(diffVec.x) * Vector2.right;
         // Debug.Log("applying attack force");
+    }
+
+    public void CreateAttackObject() {
+        Vector2 diffVec = playerTransform.position - thisTransform.position;
+        GameObject attackObj = Instantiate(genericAttackObject, transform);
+
+        Vector2 startPos = new Vector2(1, 0);
+        Vector2 directionOfAttack = Mathf.Sign(diffVec.x)*Vector2.right;
+        AttackObjectCreator.initAttackObject(attackObj, startPos + 4*directionOfAttack, startPos + 4*directionOfAttack, 
+                    EnemyType.ENEMY_EVIL, 0.5f, 12, 16);
+
     }
 
     private void Update()
@@ -246,6 +258,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             //spRenderer.color = Color.blue;
             if (Vector2.SqrMagnitude(diffVec) < attackDistance)
             {
+                
+                
                 aiState = Ai_State.AI_ATTACK;
                 thisAnimator.SetTrigger("IsAttacking");
             }

@@ -12,8 +12,10 @@ public class PuzzleChild : MonoBehaviour, IHitBox
         
     }
 
-    public void wasHit(int damage, string type) {
-    	puzzleParent.addValue(puzzleValue);
+    public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
+        if(enemyType == EnemyType.ENEMY_GOOD) {
+    	   puzzleParent.addValue(puzzleValue);
+        }
     }
 
 

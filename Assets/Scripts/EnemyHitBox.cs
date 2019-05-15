@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHitBox : MonoBehaviour, IHitBox
+public class EnemyHitBox : MonoBehaviour
 {
     private BoxCollider2D hitBox;
     private Animator animator;
@@ -31,9 +31,6 @@ public class EnemyHitBox : MonoBehaviour, IHitBox
         
     }
 
-    public void wasHit(int damage, string type) {
-
-    }
 
     private void FixedUpdate()
     {

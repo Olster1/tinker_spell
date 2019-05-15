@@ -57,7 +57,7 @@ public class swordAttack : MonoBehaviour
         IHitBox hb = (IHitBox)gm.GetComponent(typeof(IHitBox));
         if(hb != null) {
             int attackDamage = (int)Mathf.Lerp(25, 28, Random.Range(0.0f, 1.0f));
-            hb.wasHit(attackDamage, "mellee");
+            hb.wasHit(attackDamage, "mellee", EnemyType.ENEMY_GOOD, thisRigidBody.position);
         }
       }
     // Update is called once per frame
