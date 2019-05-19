@@ -68,7 +68,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -79,7 +79,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   - serializedVersion: 2
     buildTarget: Standalone
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -120,7 +120,7 @@ TextureImporter:
         width: 670
         height: 768
       alignment: 9
-      pivot: {x: 0.58535075, y: 0.46808872}
+      pivot: {x: 0.58535075, y: 0.46875}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -140,7 +140,7 @@ TextureImporter:
         width: 523
         height: 882
       alignment: 9
-      pivot: {x: 0.5717017, y: 0.430839}
+      pivot: {x: 0.5717017, y: 0.40816328}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -160,7 +160,7 @@ TextureImporter:
         width: 969
         height: 905
       alignment: 9
-      pivot: {x: 0.49948403, y: 0.479558}
+      pivot: {x: 0.49948403, y: 0.39779004}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

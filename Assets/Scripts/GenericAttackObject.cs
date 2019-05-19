@@ -20,7 +20,7 @@ public class GenericAttackObject : MonoBehaviour
 	public float period;
 	private Timer attackTimer;
 	public EnemyType type;
-  public List<int> idList;
+    public List<int> idList;
 
     // Start is called before the first frame update
     void Start() {	

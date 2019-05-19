@@ -19,6 +19,7 @@ public class SpellAi : MonoBehaviour
 	public float circleSize;
 	private Vector2 startOffset;
     private PlayerMovement playerMovement;
+    public float diffSize;
     // Start is called before the first frame update
     void Start()
     {
@@ -104,7 +105,7 @@ public class SpellAi : MonoBehaviour
     	float dt = Time.fixedDeltaTime;
     	Vector3 diffPos = (playerTransform.position + offset) - thisTransform.position;
     	Vector2 diffPos2 = Vector3.Normalize(diffPos);
-        if(diffPos.magnitude > 3) {
+        if(diffPos.magnitude > diffSize) {
             velocity += accelPower*diffPos2*dt;
         }
         velocity -= dragFactor*velocity;

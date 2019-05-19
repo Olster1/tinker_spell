@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Timer_namespace;
 using EasyAttackObjectCreator;
+using EasyForceUpdator;
 
 public class RockGullumAI : MonoBehaviour, IHitBox
 {
@@ -33,6 +34,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private bool isDying;
     public float rayCastSize;
 
+    public float knockBackForce;
     public GameObject healthBar;
     private GameObject healthInnerBar;
     private SpriteRenderer healthBarSpriteRenderer;
@@ -43,6 +45,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private float lastFrameVelocityX;
 
     private Color startColor;
+
+    private ForceUpdator forceUpdator;
 
     public enum Ai_State {
         AI_NULL,
@@ -102,6 +106,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
 
         physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);
         lastFrameVelocityX = thisRigidbody.velocity.x;
+
+        forceUpdator = new ForceUpdator();
     }
 
     public void flipGollumSprite() {
@@ -148,6 +154,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
            DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
            damageNum.initializeObject(damage, type);
 
+           ForceToAddStruct force = new ForceToAddStruct(0.2f, knockBackForce*((Vector2)transform.position - position));
+           forceUpdator.AddForce(force);
 
            thisAnimator.SetTrigger("WasHit");
            this.health -= damage;
@@ -183,7 +191,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
 
     public void applyAttackForce() {
         Vector2 diffVec = playerTransform.position - thisTransform.position;
-        ForceToAdd += attackForce * Mathf.Sign(diffVec.x) * Vector2.right;
+        ForceToAddStruct force = new ForceToAddStruct(0.2f, attackForce * Mathf.Sign(diffVec.x) * Vector2.right);
+        forceUpdator.AddForce(force);
         // Debug.Log("applying attack force");
     }
 
@@ -197,6 +206,28 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                     EnemyType.ENEMY_EVIL, 0.5f, 12, 16);
 
     }
+
+    public void endAttack() {
+        Vector2 diffVec = playerTransform.position - thisTransform.position;
+        aiState = Ai_State.AI_PATROL;
+        walkTimer.isOn();
+        timerForPatrol.turnOn();
+        subAiState = (diffVec.x > 0) ? Ai_SubState.AI_SUB_LEFT : Ai_SubState.AI_SUB_RIGHT;
+    }
+
+    public void CreateSentinelAttackObject() {
+        Vector2 diffVec = playerTransform.position - thisTransform.position;
+        GameObject attackObj = Instantiate(genericAttackObject, transform);
+
+        Vector2 directionOfAttack = Mathf.Sign(diffVec.x)*Vector2.right;
+        Vector2 startPos = new Vector2(1, 0) + 4*directionOfAttack;
+        Vector2 endPos = startPos + new Vector2(0, -2);
+        
+        AttackObjectCreator.initAttackObject(attackObj, startPos, endPos, 
+                    EnemyType.ENEMY_EVIL,0.5f, 22, 36);
+
+    }
+
 
     private void Update()
     {
@@ -232,6 +263,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         // bool isDying = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_die");
 
         Vector2 diffVec = playerTransform.position - thisTransform.position;
+        spRenderer.color = Color.white;
         if(isDying) {
             
         } else if (isHit)
@@ -240,26 +272,16 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         }
         else if (aiState == Ai_State.AI_ATTACK)
         {
-            //spRenderer.color = Color.red;
-            if (isAttacking)
-            {
-
-            }
-            else
-            {
-                aiState = Ai_State.AI_PATROL;
-                walkTimer.isOn();
-                timerForPatrol.turnOn();
-                subAiState = (diffVec.x > 0) ? Ai_SubState.AI_SUB_LEFT : Ai_SubState.AI_SUB_RIGHT;
-            }
+            spRenderer.color = Color.red;
+                
         }
         else if (aiState == Ai_State.AI_FIND)
         {
+            spRenderer.color = Color.blue;
             //spRenderer.color = Color.blue;
+            Debug.Log("Diff Vec: " + Vector2.SqrMagnitude(diffVec));
             if (Vector2.SqrMagnitude(diffVec) < attackDistance)
             {
-                
-                
                 aiState = Ai_State.AI_ATTACK;
                 thisAnimator.SetTrigger("IsAttacking");
             }
@@ -274,6 +296,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         }
         else if (aiState == Ai_State.AI_PATROL)
         {
+            spRenderer.color = Color.yellow;
             bool finishedForPatrol = timerForPatrol.updateTimer(Time.deltaTime);
             if(finishedForPatrol) {
                 timerForPatrol.turnOff();
@@ -390,8 +413,9 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     // Update is called once per frame
     void FixedUpdate()
     {
+        Vector2 f = forceUpdator.update();        
         
-        thisRigidbody.AddForce(ForceToAdd);
+        thisRigidbody.AddForce(ForceToAdd + f);
         ForceToAdd.x = 0;
         ForceToAdd.y = 0;
     }

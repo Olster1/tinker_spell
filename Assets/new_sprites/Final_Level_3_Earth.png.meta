@@ -1,0 +1,414 @@
+fileFormatVersion: 2
+guid: 2b25e260db5b9428ab99ce22ab6b0292
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: Final_Level_3_Earth_0
+    21300002: Final_Level_3_Earth_1
+    21300004: Final_Level_3_Earth_2
+    21300006: Final_Level_3_Earth_3
+    21300008: Final_Level_3_Earth_4
+    21300010: Final_Level_3_Earth_5
+    21300012: Final_Level_3_Earth_6
+    21300014: Final_Level_3_Earth_7
+    21300016: Final_Level_3_Earth_8
+    21300018: Final_Level_3_Earth_9
+    21300020: Final_Level_3_Earth_10
+    21300022: Final_Level_3_Earth_11
+    21300024: Final_Level_3_Earth_12
+    21300026: Final_Level_3_Earth_13
+    21300028: Final_Level_3_Earth_14
+  externalObjects: {}
+  serializedVersion: 7
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 848
+        height: 702
+      alignment: 9
+      pivot: {x: 0.5194081, y: 0.56980056}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 561c3369c9bc34f8783a7361b84af11f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1227
+        height: 492
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 926438f5d33ea48f68f91c0e6a4779a8
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_2
+      rect:
+        serializedVersion: 2
+        x: 972
+        y: 0
+        width: 1065
+        height: 677
+      alignment: 9
+      pivot: {x: 0.3380282, y: 0.59084195}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43a59a0fbcdce4597be4705c8ddc185c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_3
+      rect:
+        serializedVersion: 2
+        x: 2113
+        y: 0
+        width: 1453
+        height: 821
+      alignment: 9
+      pivot: {x: 0.23675156, y: 0.48721072}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ca4005e16b1d423fb1e427d9715025a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_4
+      rect:
+        serializedVersion: 2
+        x: 3685
+        y: 0
+        width: 1683
+        height: 1010
+      alignment: 9
+      pivot: {x: 0.21865715, y: 0.3960396}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 022a2b162f3834a68aceef994158b01d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_5
+      rect:
+        serializedVersion: 2
+        x: 5390
+        y: 6
+        width: 1703
+        height: 1128
+      alignment: 9
+      pivot: {x: 0.22431004, y: 0.35460994}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f0d1ada1101f40bd870296f55779a92
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_6
+      rect:
+        serializedVersion: 2
+        x: 7202
+        y: 0
+        width: 1875
+        height: 1244
+      alignment: 9
+      pivot: {x: 0.19253333, y: 0.3215434}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe072174e11b84b08a6dd94898e21cd2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_7
+      rect:
+        serializedVersion: 2
+        x: 9107
+        y: 0
+        width: 1667
+        height: 1301
+      alignment: 9
+      pivot: {x: 0.19736052, y: 0.3074558}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: afa1ebdd2c1984c9c8945869773f846f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_8
+      rect:
+        serializedVersion: 2
+        x: 10824
+        y: 0
+        width: 1767
+        height: 1265
+      alignment: 9
+      pivot: {x: 0.23712507, y: 0.31620553}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f98f8377287e843b8a4a32c981c39791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_9
+      rect:
+        serializedVersion: 2
+        x: 12797
+        y: 0
+        width: 1763
+        height: 1273
+      alignment: 9
+      pivot: {x: 0.2274532, y: 0.31421837}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43b0ae99d633243c09bf115268eb9c47
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_10
+      rect:
+        serializedVersion: 2
+        x: 14726
+        y: 0
+        width: 1771
+        height: 1293
+      alignment: 9
+      pivot: {x: 0.22868435, y: 0.3093581}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e72170ad9de44d6dbf0906a32b0e4d4
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_11
+      rect:
+        serializedVersion: 2
+        x: 16617
+        y: 0
+        width: 1779
+        height: 1248
+      alignment: 9
+      pivot: {x: 0.23889825, y: 0.32051283}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32059ec68fb9e479b8ee9e5f66fa3819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_12
+      rect:
+        serializedVersion: 2
+        x: 18672
+        y: 0
+        width: 1779
+        height: 1265
+      alignment: 9
+      pivot: {x: 0.20517144, y: 0.31620553}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56f23f595d9ab45d8813ba15e4791938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_13
+      rect:
+        serializedVersion: 2
+        x: 20668
+        y: 0
+        width: 1806
+        height: 1269
+      alignment: 9
+      pivot: {x: 0.24473976, y: 0.31520882}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ac2151fdd9ca46fa8faac5c0610287a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Final_Level_3_Earth_14
+      rect:
+        serializedVersion: 2
+        x: 22719
+        y: 0
+        width: 1899
+        height: 1248
+      alignment: 9
+      pivot: {x: 0.17324908, y: 0.32051283}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d68c4e665960441b2ae89fabf59658ba
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5659119d5f45b4c2bbc7c8752645c9f6
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
