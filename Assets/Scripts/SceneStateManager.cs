@@ -6,6 +6,7 @@ using UnityEngine.Assertions;
 public enum LevelStateId {
     LEVEL_PORTAL_ROOM,
     LEVEL_1,
+    LEVEL_SKILL_TREE,
 
 
     ///////EVERTHING MUST BE ABOVE THIS!!!//////
@@ -29,7 +30,8 @@ public class SceneStateManager : MonoBehaviour
     public GameObject spell;
     public GameObject camera;
     public float offsetCam;
-    public CheckGrounded playerGroundedScript;
+    // public CheckGrounded playerGroundedScript;
+    [HideInInspector] public bool useSpawnPoint;
 
     //TODO: Might want this to so we don't loop through all the levels!!!
     // public LevelStateId lastActiveScene;
@@ -40,6 +42,7 @@ public class SceneStateManager : MonoBehaviour
     {	
         playerMovement = player.GetComponent<PlayerMovement>();
         Assert.IsNotNull(playerMovement);
+        useSpawnPoint = true;
         ChangeScene();
     }
 
@@ -67,15 +70,30 @@ public class SceneStateManager : MonoBehaviour
         //turn off the last scene
         levelObjects[(int)stateToLoad].SetActive(true);    
         GameObject spawnPoint = spawnPointObjs[(int)stateToLoad];
-        player.transform.position = spawnPoint.transform.position;
 
-        //clear grounded count to get rid of any unresolved counts
-        playerGroundedScript.groundedCount = 0;
-        //
 
-        Vector3 spellOffset = new Vector3(0, 1, 0);
-        spell.transform.position = spawnPoint.transform.position + spellOffset;
-        Vector3 camPos = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y + offsetCam, cameraZ[(int)stateToLoad]);
-        camera.transform.position = camPos;
+        if(spawnPoint == null) {
+            // player.GetComponent<PlayerMovement>().canControlPlayer = false;
+            spell.SetActive(false);
+            player.SetActive(false);
+        } else {
+            // player.GetComponent<PlayerMovement>().canControlPlayer = true;
+            spell.SetActive(true);
+            player.SetActive(true);
+        }
+
+        // //clear grounded count to get rid of any unresolved counts
+        // playerGroundedScript.groundedCount = 0;
+        // //
+        if(spawnPoint != null && useSpawnPoint) {
+            player.transform.position = spawnPoint.transform.position;
+
+            Vector3 spellOffset = new Vector3(0, 1, 0);
+            spell.transform.position = spawnPoint.transform.position + spellOffset;
+            Vector3 camPos = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y + offsetCam, cameraZ[(int)stateToLoad]);
+            camera.transform.position = camPos;
+        } 
+
+        useSpawnPoint = true;
     }
 }

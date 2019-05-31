@@ -4,18 +4,24 @@ using UnityEngine;
 using Timer_namespace;
 using EasyGameManager;
 using UnityEngine.SceneManagement;
+using UnityEngine.Assertions;
 using EasyAttackObjectCreator;
 using ConfigControls_namespace;
 using EasyForceUpdator;
 
 public class PlayerMovement : MonoBehaviour, IHitBox
 {
+
+    public enum IdleAnimation {
+        ANIMATION_IDLE1, 
+        ANIMATION_IDLE2, 
+    }
+
     private Rigidbody2D rigidBody;
     public float jumpAccel;
     public float moveAccel;
     private Animator animator;
     private BoxCollider2D boxCollider;
-    private BoxCollider2D jumpBoxCollider;
     private SpriteRenderer spriteRenderer;
 
     private AudioSource[] audioComponents;
@@ -33,7 +39,16 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     [HideInInspector] public Timer autoMoveTimer;
     [HideInInspector] public Vector2 autoMoveDirection;
     public float autoMoveTime;
+
+    public float jumpRaySize;
+
+    public AnimationClip[] idleAnimations;
+    private Timer idleAnimationTimer;
+    private bool swapAnimation;
+    private IdleAnimation toSwapTo;
     
+    private int physicsLayerMask;
+
     public float attackForceUp;
     public float downwardAttackForce;
 
@@ -48,8 +63,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
     private ForceUpdator forceUpdator;
 
-        
-
     public Vector2 earthOffset;
     // Start is called before the first frame update
     void Start()
@@ -57,7 +70,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
         animator = gameObject.GetComponent<Animator>();
         boxCollider = gameObject.GetComponent<BoxCollider2D>();
-        jumpBoxCollider = transform.GetChild(0).gameObject.GetComponent<BoxCollider2D>();
 
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         audioComponents =  GetComponents<AudioSource>();
@@ -66,9 +78,14 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         autoMoveTimer = new Timer(autoMoveTime);
         canControlPlayer = true;
 
+        idleAnimationTimer = new Timer(10.0f);
+
         forceUpdator = new ForceUpdator();
 
-        
+        physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);
+
+        swapAnimation = false;
+        toSwapTo = IdleAnimation.ANIMATION_IDLE1;
     }
 
     public void CreateUpwardAttackObject() {
@@ -82,6 +99,35 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         AttackObjectCreator.initAttackObject(attackObj, localStartPos, localStartPos, 
                     EnemyType.ENEMY_GOOD, 0.5f, 22, 36);
 
+    }
+
+    public void checkSwap() {
+        if(swapAnimation) {
+            Assert.IsTrue((int)toSwapTo < idleAnimations.Length);
+            AnimationClip newAnimation = idleAnimations[(int)toSwapTo];
+            AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
+            Assert.IsTrue(info.IsName("player_idle"));
+
+
+            // animator.("player_idle") = newAnimation;
+        }
+    }
+
+    public bool CastGroundedRay(Vector3 colliderOffset) {
+        Vector3 bottomCenter = boxCollider.bounds.center + new Vector3(0, -0.5f*boxCollider.size.y, 0);
+        
+        RaycastHit2D[] hits = Physics2D.RaycastAll(bottomCenter + colliderOffset, Vector2.down, jumpRaySize, physicsLayerMask);
+        for(int i = 0; i < hits.Length; ++i) {
+            RaycastHit2D hit = hits[i];
+            Debug.Log("1st: " + (hit.collider.gameObject != gameObject));
+            Debug.Log("2nd: " + (!hit.collider.isTrigger));
+            if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
+                isGrounded = true;
+                Debug.Log("isGrounded is true");
+                break;
+            } 
+        }
+        return isGrounded;
     }
 
     public void CreateSidewardAttack() {
@@ -99,11 +145,25 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
     }
 
+    public void scaleUp() {
+        Vector3 tempScale = transform.localScale;
+        tempScale.x = 1.5f;
+        tempScale.y = 1.5f;
+        transform.localScale = tempScale;
+    }
+
+    public void scaleDown() {
+        Vector3 tempScale = transform.localScale;
+        tempScale.x = 1.0f;
+        tempScale.y = 1.0f;
+        transform.localScale = tempScale;
+    }
+
     public void downwardStrike() {
         float signOfMovement = Mathf.Sign(rigidBody.velocity.x);
         Vector2 directionAttack = new Vector2(signOfMovement*0.707f, -0.707f);
 
-        ForceToAddStruct force = new ForceToAddStruct(0.35f, downwardAttackForce*directionAttack);
+        ForceToAddStruct force = new ForceToAddStruct(0.1f, downwardAttackForce*directionAttack);
         forceUpdator.AddForce(force);
 
         GameObject attackObj = Instantiate(genericAttackObject, transform);
@@ -111,14 +171,12 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         Vector2 startPos = (Vector2)boxCollider.bounds.center + new Vector2(signOfMovement*0.5f*boxCollider.size.x + signOfMovement*0.1f, 0.5f*boxCollider.size.y + 0.1f);        
         Vector2 localStartPos = (Vector2)transform.InverseTransformPoint(startPos);
         AttackObjectCreator.initAttackObject(attackObj, localStartPos, localStartPos, 
-                    EnemyType.ENEMY_GOOD, 0.5f, 22, 36);
+                    EnemyType.ENEMY_GOOD, 1.0f, 22, 36);
 
         originalBoxSize = boxCollider.size;
 
         originalBoxOffset = boxCollider.offset;
         
-        originalJumpOffset = jumpBoxCollider.offset;
-
 
         Vector2 tempSize = boxCollider.size;
         tempSize.y = 2;
@@ -128,9 +186,9 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         tempOffset.y = 1;
         boxCollider.offset = tempOffset;
 
-        tempOffset = jumpBoxCollider.offset;
-        tempOffset.y = -1;
-        jumpBoxCollider.offset = tempOffset;
+        // tempOffset = jumpBoxCollider.offset;
+        // tempOffset.y = -1;
+        // jumpBoxCollider.offset = tempOffset;
 
     }
 
@@ -139,7 +197,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
         boxCollider.offset = originalBoxOffset;
         
-        jumpBoxCollider.offset = originalJumpOffset;
+        // jumpBoxCollider.offset = originalJumpOffset;
+        Vector3 tempPos = transform.position;
+        tempPos.y += 2;
+        transform.position = tempPos;
 
 
     }
@@ -202,17 +263,41 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     }
 
     void Update() {
+        isGrounded = false;
+        Vector3 halfCollider = new Vector3(0.5f*boxCollider.size.x, 0, 0);
+        if(!CastGroundedRay(new Vector3(0, 0, 0))) {
+            if(!CastGroundedRay(-halfCollider)) {
+                if(!CastGroundedRay(halfCollider)) {
+                }       
+            }                
+        }
+
+        animator.SetBool("grounded", isGrounded);
+        
 
         bool isInAttackAnimation = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack2") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack1") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_downward_dash") || animator.GetBool("attack1") || animator.GetBool("attack2") || animator.GetBool("downward_dash");
         bool isFallingAnim = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_falling");
         
         if (!Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN) && !isInAttackAnimation && canControlPlayer)
         {
-            if(Input.GetButtonDown("Fire2") && isGrounded) {
-                Instantiate(earthAttackObject, transform.position - new Vector3(earthOffset.x, earthOffset.y, 0),  Quaternion.identity);
+            float xMove = Input.GetAxis("Horizontal");
+            float yMove = Input.GetAxis("Vertical");
+            if(Input.GetButtonDown("Fire2") && isGrounded && GameManager.hasEarth1) {
+                float xDir = Mathf.Sign(xMove);
+                GameObject earthObj = Instantiate(earthAttackObject, transform.position - new Vector3(xDir*earthOffset.x, earthOffset.y, 0),  Quaternion.identity);
+                earthObj.GetComponent<SpriteRenderer>().flipX = Mathf.Sign(xMove) < 0;
+
+                if(xDir < 0) {
+                    earthObj.GetComponent<EarthAttack>().rePosBoxes();    
+                }
+                
+                GenericAttackObject earthAttack = earthObj.transform.GetChild(0).gameObject.GetComponent<GenericAttackObject>();
+                earthAttack.startPos.x *= xDir;
+                earthAttack.endPos.x *= xDir;
+                earthAttack.attackType = "earth";
+                
             } else if(Input.GetButtonDown("Fire1")) {
-                float xMove = Input.GetAxis("Horizontal");
-                float yMove = Input.GetAxis("Vertical");
+                
                 bool isHorizontal = xMove != 0.0f;
                 bool isVertical = Mathf.Abs(yMove) > Mathf.Abs(xMove);
                 // audiosrc.PlayOneShot(attackSound);
@@ -246,10 +331,32 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             {
                 spriteRenderer.flipX = true;
             }
+            idleAnimationTimer.tAt = 0;
+        } else {
+            bool fin = idleAnimationTimer.updateTimer(Time.deltaTime);
+            float canVal = idleAnimationTimer.getCanoncial();
+
+            if(canVal < 0.5f) {
+                // if() {
+                    swapAnimation = true;
+                    toSwapTo = IdleAnimation.ANIMATION_IDLE1;
+                // }
+
+            } else if(canVal >= 0.5f) {
+                // if() {
+                    swapAnimation = true;
+                    toSwapTo = IdleAnimation.ANIMATION_IDLE2;
+                // }
+            }
+
+            if(fin) {
+                idleAnimationTimer.turnOn(); //basically reset the timer
+            }
         }
         animator.SetFloat("run_speed", rigidBody.velocity.x);
         
         bool running = animator.GetCurrentAnimatorStateInfo(0).IsName("player_run");
+        bool isJumping = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_jump");
         
         // animator.speed = 1.0f;
         // if (running)
@@ -269,6 +376,12 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         {
           // audioComponents[1].Play();
         } 
+
+
+        if(isGrounded && !isJumping && !animator.GetBool("jump")) {
+            //can't jump
+            jumpTimer.turnOff();
+        }
         
         if((Input.GetButtonDown("Jump") && isGrounded && canControlPlayer)) {
             if (!jumpTimer.isOn())
@@ -278,17 +391,27 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 jumpTimer.turnOn();
                 readyingJump = true;
                 
+            } else {
+                Assert.IsTrue(false);
             }
             
+        } else {
+            // Debug.Log("couldn't jump");
+        }
+
+        if(isGrounded) {
+            animator.ResetTrigger("landing");
         }
 
         if(!isGrounded && isFallingAnim) {
             bool isAboutToLand = false;
-            
-            RaycastHit2D[] hits = Physics2D.RaycastAll(boxCollider.bounds.center, Vector2.down, 0.5f*boxCollider.size.y + landingRaySize);
+                
+            Vector2 rayDir = rigidBody.velocity;
+            rayDir.Normalize();
+            RaycastHit2D[] hits = Physics2D.RaycastAll(boxCollider.bounds.center, rayDir, 0.5f*boxCollider.size.y + landingRaySize, physicsLayerMask);
             for(int i = 0; i < hits.Length; ++i) {
-                RaycastHit2D hit = hits[i];
-                if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger && hit.collider.gameObject.transform.parent != gameObject) {
+                RaycastHit2D landingHit = hits[i];
+                if(landingHit && landingHit.collider.gameObject != gameObject && !landingHit.collider.isTrigger && landingHit.collider.gameObject.transform.parent != gameObject) {
                     isAboutToLand = true;
                     break;
                 }
@@ -310,16 +433,18 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     void FixedUpdate()
     {
         Vector2 movementForce = new Vector2(0, 0);
-        if(canControlPlayer) {
-            movementForce.x = Input.GetAxis("Horizontal");
-        } else if(autoMoveTimer.isOn()) {
+        
+
+        if(autoMoveTimer.isOn()) {
             bool finished = autoMoveTimer.updateTimer(Time.fixedDeltaTime);
             //the automovedirection should only be between -1 && 1
             movementForce = autoMoveDirection;
             if(finished) {
                 autoMoveTimer.turnOff();
             }
-        }
+        } else if(canControlPlayer) {
+            movementForce.x = Input.GetAxis("Horizontal");
+        } 
 
         float thisJmpAccel = jumpAccel;
         

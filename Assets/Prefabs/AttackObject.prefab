@@ -99,6 +99,8 @@ MonoBehaviour:
   endPos: {x: 0, y: 0}
   period: 0
   type: 1
+  idList: 
+  attackType: 
 --- !u!61 &1581182870525807483
 BoxCollider2D:
   m_ObjectHideFlags: 0

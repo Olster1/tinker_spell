@@ -21,12 +21,16 @@ public class GenericAttackObject : MonoBehaviour
 	private Timer attackTimer;
 	public EnemyType type;
     public List<int> idList;
+    public string attackType;
 
     // Start is called before the first frame update
     void Start() {	
         attackTimer = new Timer(period);
         attackTimer.turnOn();
         idList = new List<int>();
+        if(attackType == null) {
+            attackType = "mellee";
+        }
     }
 
     // Update is called once per frame
@@ -45,12 +49,13 @@ public class GenericAttackObject : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) {
       GameObject gm = other.gameObject;
       int id = gm.GetInstanceID();
+      Debug.Log(gm.name);
       if(!idList.Contains(id)) {
         idList.Add(id);
         IHitBox hb = (IHitBox)gm.GetComponent(typeof(IHitBox));
         if(hb != null) {
             int attackDamage = (int)Mathf.Lerp(minDamage, maxDamage, Random.Range(0.0f, 1.0f));
-            hb.wasHit(attackDamage, "mellee", type, transform.position);
+            hb.wasHit(attackDamage, attackType, type, transform.position);
         }
       }
     }

@@ -1,0 +1,225 @@
+fileFormatVersion: 2
+guid: 2d6c80cafc2b54256bb6387b3c7132f6
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: sentinal_Attack_Sprite_Sheet copy_0
+    21300002: sentinal_Attack_Sprite_Sheet copy_1
+    21300004: sentinal_Attack_Sprite_Sheet copy_2
+    21300006: sentinal_Attack_Sprite_Sheet copy_3
+    21300008: sentinal_Attack_Sprite_Sheet copy_4
+    21300010: sentinal_Attack_Sprite_Sheet copy_5
+  externalObjects: {}
+  serializedVersion: 7
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: sentinal_Attack_Sprite_Sheet copy_0
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 0
+        width: 1979
+        height: 2011
+      alignment: 9
+      pivot: {x: 0.4641684, y: 0.42267528}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df94a9f2b8a0143c49d6fc0dbc24d2ba
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sentinal_Attack_Sprite_Sheet copy_1
+      rect:
+        serializedVersion: 2
+        x: 2882
+        y: 0
+        width: 1557
+        height: 2159
+      alignment: 9
+      pivot: {x: 0.3879255, y: 0.39370078}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75605023af2ba4d6ba820cd3c01d8536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sentinal_Attack_Sprite_Sheet copy_2
+      rect:
+        serializedVersion: 2
+        x: 5278
+        y: 0
+        width: 1496
+        height: 2333
+      alignment: 9
+      pivot: {x: 0.40441176, y: 0.36433777}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d568c54a87a2a4349a60d8b0e979208b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sentinal_Attack_Sprite_Sheet copy_3
+      rect:
+        serializedVersion: 2
+        x: 7837
+        y: 0
+        width: 1178
+        height: 2374
+      alignment: 9
+      pivot: {x: 0.2393888, y: 0.3580455}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91e230bf8ff6540989f22b41ac0889eb
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sentinal_Attack_Sprite_Sheet copy_4
+      rect:
+        serializedVersion: 2
+        x: 9660
+        y: 0
+        width: 1772
+        height: 2231
+      alignment: 9
+      pivot: {x: 0.48871332, y: 0.38099506}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17e8a78a0cdaa4502b65519e16496436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sentinal_Attack_Sprite_Sheet copy_5
+      rect:
+        serializedVersion: 2
+        x: 12005
+        y: 0
+        width: 1854
+        height: 1944
+      alignment: 9
+      pivot: {x: 0.5496224, y: 0.4372428}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d93cebda0f6db49d6bf9a04944760722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5a4ecdec56104464fa106707e22a6bc0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

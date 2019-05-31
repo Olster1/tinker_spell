@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Timer_namespace;
 
 public class CameraFollowPlayer : MonoBehaviour
 {
@@ -15,7 +16,14 @@ public class CameraFollowPlayer : MonoBehaviour
     public float yForce;
     public float yOffsetFromPlayer;
     private Rigidbody2D rigidBody;
+    [HideInInspector] public Timer moveUpTimer;
+    [HideInInspector] public Timer moveDownTimer;
+    [HideInInspector] public Vector3 startMovePos;
     // Start is called before the first frame update
+
+    public Animator animator;
+    [HideInInspector] public LevelStateId levelToLoad;
+    public SceneStateManager manager;
 
     void Start()
     {
@@ -31,18 +39,43 @@ public class CameraFollowPlayer : MonoBehaviour
         Camera cam = gameObject.GetComponent<Camera>();
         //this is to fix the sorting when using the perspective camera mode
         cam.transparencySortMode = TransparencySortMode.Orthographic;
+        moveUpTimer = new Timer(0.4f);
+        moveUpTimer.turnOff();
+
+        moveDownTimer = new Timer(0.4f);
+        moveDownTimer.turnOff();
 
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
+        if(moveUpTimer.isOn()) {
+            followPlayer = false;
+            bool isFin = moveUpTimer.updateTimer(Time.deltaTime);
+            transform.position = Vector3.Lerp(startMovePos, startMovePos + 3.0f*Vector3.up, moveUpTimer.getCanoncial());
+            if(isFin) {
+                moveUpTimer.turnOff();
+                manager.stateToLoad = levelToLoad;
+                animator.SetTrigger("FadeIn");
 
+            }
+        }
+
+        if(moveDownTimer.isOn()) {
+            followPlayer = false;
+            bool isFin = moveDownTimer.updateTimer(Time.deltaTime);
+            transform.position = Vector3.Lerp(startMovePos + 3.0f*Vector3.up, startMovePos, moveDownTimer.getCanoncial());
+            
+            if(isFin) {
+                followPlayer = true;
+                moveDownTimer.turnOff();
+            }
+        }
     }
 
     private void FixedUpdate()
     {
-        if (followPlayer)
+        if (followPlayer && !(moveUpTimer.isOn() || moveDownTimer.isOn()))
         {
             Vector2 forceAccel = new Vector2();
             Vector3 newPos = new Vector3(playerTransform.position.x, playerTransform.position.y + yOffsetFromPlayer, cameraTransform.position.z);

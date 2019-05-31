@@ -1,0 +1,456 @@
+fileFormatVersion: 2
+guid: c877d4cc2e21b4f9883afc78d77f2afb
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: FuelCapsuleSpriteSheetsV2-14_0
+    21300002: FuelCapsuleSpriteSheetsV2-14_1
+    21300004: FuelCapsuleSpriteSheetsV2-14_2
+    21300006: FuelCapsuleSpriteSheetsV2-14_3
+    21300008: FuelCapsuleSpriteSheetsV2-14_4
+    21300010: FuelCapsuleSpriteSheetsV2-14_5
+    21300012: FuelCapsuleSpriteSheetsV2-14_6
+    21300014: FuelCapsuleSpriteSheetsV2-14_7
+    21300016: FuelCapsuleSpriteSheetsV2-14_8
+    21300018: FuelCapsuleSpriteSheetsV2-14_9
+    21300020: FuelCapsuleSpriteSheetsV2-14_10
+    21300022: FuelCapsuleSpriteSheetsV2-14_11
+    21300024: FuelCapsuleSpriteSheetsV2-14_12
+    21300026: FuelCapsuleSpriteSheetsV2-14_13
+    21300028: FuelCapsuleSpriteSheetsV2-14_14
+    21300030: FuelCapsuleSpriteSheetsV2-14_15
+    21300032: FuelCapsuleSpriteSheetsV2-14_16
+  externalObjects: {}
+  serializedVersion: 7
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1306
+        width: 442
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f15f3142ffcfe4a88a3c0169a86dba0b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_1
+      rect:
+        serializedVersion: 2
+        x: 445
+        y: 1306
+        width: 433
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28850b26ec118440195a8e668cbb0409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_2
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 1306
+        width: 436
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af2be6ed6ec90428f9a9cb8b22b8e0d5
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_3
+      rect:
+        serializedVersion: 2
+        x: 1318
+        y: 1577
+        width: 37
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff6c0aa8672d045bc832646f3ab6b30d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_4
+      rect:
+        serializedVersion: 2
+        x: 1347
+        y: 1306
+        width: 433
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5db5434693a304856ba63bf666240dbf
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_5
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 871
+        width: 433
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b8820fbbc6c74139ad50073813dc69d
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_6
+      rect:
+        serializedVersion: 2
+        x: 436
+        y: 871
+        width: 448
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5881fc995979d423e9615faf9fcd952a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_7
+      rect:
+        serializedVersion: 2
+        x: 886
+        y: 871
+        width: 460
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d6dd8e4c8acc4c69a28625bd6b3efe0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_8
+      rect:
+        serializedVersion: 2
+        x: 1348
+        y: 871
+        width: 450
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ff101fb711624d0b86b0c015712d40f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_9
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 436
+        width: 459
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95589003fbed247a7bb4d81a38b502c2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_10
+      rect:
+        serializedVersion: 2
+        x: 462
+        y: 436
+        width: 451
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36e8301198f424dd999baacd1b03b58b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_11
+      rect:
+        serializedVersion: 2
+        x: 915
+        y: 436
+        width: 433
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 411391a893b6d49d2875de027f098024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_12
+      rect:
+        serializedVersion: 2
+        x: 1350
+        y: 436
+        width: 433
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 879a6292ab5e544e78aa61e59f50690e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_13
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 447
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe47ab994c1aa45be8e5a72b869675d7
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_14
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 1
+        width: 433
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd528a970a06d45b0a7bd5f10cd74b99
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_15
+      rect:
+        serializedVersion: 2
+        x: 885
+        y: 1
+        width: 433
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 545369b37cd6f4e52b6287e704b913ba
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FuelCapsuleSpriteSheetsV2-14_16
+      rect:
+        serializedVersion: 2
+        x: 1320
+        y: 1
+        width: 439
+        height: 433
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f7f520e2d14d46bf8ff7078e7e450a1
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 84719931a80894ea29d76140f54b74f4
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

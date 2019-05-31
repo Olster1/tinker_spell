@@ -72,8 +72,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7af032b1c43634df5bf583d6d94effd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createAmberUIObject: {fileID: 1245464277469925100, guid: 0ce91c70e4e404e4290d1fa8516280b8,
-    type: 3}
+  amberSprite: {fileID: 21300002, guid: 5af32d9b4a8674e3cab2b6edce4f7b22, type: 3}
+  manaSprite: {fileID: 21300002, guid: 6bf84285a1d9e419eb533d9ba09a7f37, type: 3}
+  healthSprite: {fileID: 21300000, guid: 6bf84285a1d9e419eb533d9ba09a7f37, type: 3}
+  sentinelHeadSprite: {fileID: 21300000, guid: 612661f24cbe248a1a0e1dc853558f96, type: 3}
+  type: 1
 --- !u!82 &3088311293396911542
 AudioSource:
   m_ObjectHideFlags: 0
@@ -228,6 +231,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2440433001012684277}
   - component: {fileID: 2440433001012684276}
+  - component: {fileID: 2459027942317072229}
   - component: {fileID: 6184927998314676438}
   m_Layer: 12
   m_Name: Amber
@@ -277,6 +281,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2459027942317072229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2440433001012684273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd1f96f2b4bf244f1ba7fa8aa05517bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  body: {fileID: 6184927998314676438}
 --- !u!50 &6184927998314676438
 Rigidbody2D:
   serializedVersion: 4
@@ -289,10 +306,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 5
+  m_Mass: 10
+  m_LinearDrag: 10
   m_AngularDrag: 0.05
-  m_GravityScale: 10
+  m_GravityScale: 15
   m_Material: {fileID: 6200000, guid: e6fe19c920f864aab8e4a62343fbd51b, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1

@@ -21,8 +21,8 @@ TagManager:
   - Amber
   - Camera
   - AmberRigidBody
-  - 
-  - 
+  - EnemyAiCollision
+  - EnemyLayer
   - 
   - 
   - 

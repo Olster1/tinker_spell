@@ -619,6 +619,58 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1102 &1102682270034660740
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: sentinel_attack
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 905203c17b3cb49819c8d927201f7c0b, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1102 &1102724571866173640
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: sentinel_attack_new
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: 4e3b57681c5284e98a49545cc6db0860, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &1102742600502478798
 AnimatorState:
   serializedVersion: 5
@@ -725,16 +777,22 @@ AnimatorStateMachine:
     m_Position: {x: -192, y: 180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102122215703457942}
-    m_Position: {x: 396, y: 0, z: 0}
+    m_Position: {x: 576, y: -240, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102881294317786634}
-    m_Position: {x: 516, y: 96, z: 0}
+    m_Position: {x: 696, y: 96, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102615917118215560}
     m_Position: {x: 168, y: 60, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102399305390851076}
     m_Position: {x: 324, y: 708, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 1102682270034660740}
+    m_Position: {x: 359, y: 773, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 1102724571866173640}
+    m_Position: {x: 394, y: 838, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

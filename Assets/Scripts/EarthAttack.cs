@@ -16,6 +16,24 @@ public class EarthAttack : MonoBehaviour
         sp = gameObject.GetComponent<SpriteRenderer>();
     }
 
+    public void rePosBoxes() {
+        Vector2 tempOffset = box1.offset;
+        tempOffset.x *= -1;
+        box1.offset = tempOffset;
+
+        tempOffset = box2.offset;
+        tempOffset.x *= -1;
+        box2.offset = tempOffset;
+
+        tempOffset = box3.offset;
+        tempOffset.x *= -1;
+        box3.offset = tempOffset;
+
+        tempOffset = box4.offset;
+        tempOffset.x *= -1;
+        box4.offset = tempOffset;
+
+    }
     // Update is called once per frame
     void Update()
     {
@@ -23,18 +41,18 @@ public class EarthAttack : MonoBehaviour
     }
 
     public void activateBox1() {
-        box1.enabled = true;
+        //box1.enabled = true;
     }
 
     public void activateBox2() {
-        box2.enabled = true;
+        // box2.enabled = true;
     }
 
     public void activateBox3() {
-        box3.enabled = true;
+        // box3.enabled = true;
     }
     public void activateBox4() {
-        box4.enabled = true;
+        // box4.enabled = true;
     }
 
     public void alpha75() {

@@ -10,6 +10,7 @@ public class animationForAmberGoTo : MonoBehaviour
 	private Vector2 startPos;
 	private RectTransform UI_Element;
 	private Timer timer;
+    public AmberType type;
 
     // Start is called before the first frame update
     void Start()
@@ -19,10 +20,11 @@ public class animationForAmberGoTo : MonoBehaviour
         timer.turnOn();
     }
 
-    public void SetStartPos(Vector2 pos) {
+    public void SetStartPos(Vector2 pos, AmberType type) {
     	UI_Element = gameObject.GetComponent<RectTransform>();
     	UI_Element.anchoredPosition = pos;
     	startPos = pos;
+        this.type = type;
 
     }
 
@@ -34,7 +36,25 @@ public class animationForAmberGoTo : MonoBehaviour
     		float canVal = timer.getCanoncial();
     		UI_Element.anchoredPosition = Vector2.Lerp(startPos, finalPos, canVal);
     		if(fin) {
-    			GameManager.amberCount++;
+                switch(type) {
+                    case AmberType.AMBER_AMBER: {
+                        GameManager.amberCount++;
+                    } break;
+                    case AmberType.AMBER_MANA: {
+                        GameManager.manaCount += 2;
+                    } break;
+                    case AmberType.AMBER_HEALTH: {
+                        GameManager.playerHealth += 2;
+                    } break;
+                    case AmberType.AMBER_SENTINEL_HEAD: {
+                        
+                    } break;
+                    default: {
+
+                    } break;
+                }
+
+    			
     			Destroy(gameObject);
     		}	
     	}

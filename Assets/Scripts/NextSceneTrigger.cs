@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class NextSceneTrigger : MonoBehaviour
@@ -9,6 +10,10 @@ public class NextSceneTrigger : MonoBehaviour
 	public LevelStateId levelToLoad;
 	public SceneStateManager manager;
     public Vector2 autoMoveDirection;
+    public bool withText;
+    public string textToShow;
+    public Text textUI;
+
 	
     // Start is called before the first frame update
     void Start()
@@ -26,7 +31,14 @@ public class NextSceneTrigger : MonoBehaviour
         GameObject gm = other.gameObject;
 
         if(gm.name == "Player") {
- 			animator.SetTrigger("FadeIn");
+            if(!withText) {
+                animator.SetTrigger("FadeIn");
+            } else {
+                textUI.text = textToShow;
+                animator.SetTrigger("FadeIn");
+                animator.SetTrigger("FadeWithText");
+            }
+ 			
  			manager.stateToLoad = levelToLoad;
             PlayerMovement playerMovement = gm.GetComponent<PlayerMovement>();
             playerMovement.autoMoveDirection = autoMoveDirection;

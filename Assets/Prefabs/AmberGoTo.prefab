@@ -87,4 +87,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddc2aaadf13d94d23925ee38c570a65c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  finalPos: {x: 101, y: -71}
+  finalPos: {x: 99, y: -176}
+  type: 0

@@ -8,6 +8,7 @@ public class DamageNumber : MonoBehaviour
 {
 	public SpriteRenderer[] spriteRenderers;
 	public Sprite[] spriteNumbersMellee;
+    public Sprite[] spriteNumbersEarth;
 	private Timer aliveTimer;
 	public float aliveTime;
 	private int numberToDisplay;
@@ -25,8 +26,8 @@ public class DamageNumber : MonoBehaviour
     //did this because i think start func is called on instaiate() call, but the number to display isn't set
     public void initializeObject(int damage, string type) {
     	numberToDisplay = damage;
-    	Debug.Log("number to display: "  + numberToDisplay);
-    	type = type;
+    	
+    	this.type = type;
 
     	aliveTimer = new Timer(aliveTime);         
     	aliveTimer.turnOn();
@@ -39,7 +40,7 @@ public class DamageNumber : MonoBehaviour
     		int exponent = i;
     		int retrievedNumber = numberToDisplay % (int)(Mathf.Pow(10, exponent + 1));
     		retrievedNumber = retrievedNumber / (int)(Mathf.Pow(10, exponent));
-    		Debug.Log("number found to be: " + retrievedNumber);
+    		
     		if(retrievedNumber == 0) {
     			if(!hadSigNum) {
     				renderer.enabled = false;
@@ -50,7 +51,16 @@ public class DamageNumber : MonoBehaviour
     			hadSigNum = true;
     		}
     		Assert.IsTrue(retrievedNumber >= 0 && retrievedNumber < 10);
-    		renderer.sprite = spriteNumbersMellee[retrievedNumber];
+            if(type.Equals("mellee")) {
+                renderer.sprite = spriteNumbersMellee[retrievedNumber];
+            } else if (type.Equals("earth")) {
+                renderer.sprite = spriteNumbersMellee[retrievedNumber];
+                // renderer.sprite = spriteNumbersEarth[retrievedNumber];
+            } else {
+                renderer.sprite = spriteNumbersMellee[retrievedNumber];
+            }
+
+    		
     		startColor = renderer.color;
 
     	}

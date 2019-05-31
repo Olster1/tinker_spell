@@ -1,11 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
+using EasyGameManager;
 
 using Timer_namespace;
 
+
+public enum AmberType {
+    AMBER_HEALTH,
+    AMBER_AMBER,
+    AMBER_MANA,
+    AMBER_SENTINEL_HEAD
+}
+
 public class CollectAmber : MonoBehaviour
 {
+
+    
     private Transform thisTrans;
     private float tAt;
     private float startY;
@@ -16,6 +28,14 @@ public class CollectAmber : MonoBehaviour
     private bool gravityAffected;
     private Rigidbody2D amberRb;
     private worldTUI createAmberUIObject;
+
+    public Sprite amberSprite;
+    public Sprite manaSprite;
+    public Sprite healthSprite;
+    public Sprite sentinelHeadSprite;
+    
+
+    public AmberType type;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +49,27 @@ public class CollectAmber : MonoBehaviour
         col = gameObject.GetComponent<BoxCollider2D>();
         spRender = gameObject.GetComponent<SpriteRenderer>();
         amberRb = gameObject.transform.parent.GetComponent<Rigidbody2D>();
+        Assert.IsTrue(amberRb != null);
         gravityAffected = (amberRb.bodyType == RigidbodyType2D.Dynamic);
+
+        switch(type) {
+            case AmberType.AMBER_AMBER: {
+                spRender.sprite = amberSprite;
+            } break;
+            case AmberType.AMBER_MANA: {
+                spRender.sprite = manaSprite;
+            } break;
+            case AmberType.AMBER_HEALTH: {
+                spRender.sprite = healthSprite;
+            } break;
+            case AmberType.AMBER_SENTINEL_HEAD: {
+                spRender.sprite = sentinelHeadSprite;
+            } break;
+            default: {
+
+            } break;
+        }
+        
     }
 
     // Update is called once per frame
@@ -56,13 +96,32 @@ public class CollectAmber : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("on enter");
         if (other.gameObject.tag == "Player") {
             
             col.enabled = false;
             audioSrc.Play();
             fadeTimer.turnOn();
-            createAmberUIObject.createAmberUI(gameObject.transform.position);
+
+            switch(type) {
+                case AmberType.AMBER_AMBER: {
+                    createAmberUIObject.createAmberUI(gameObject.transform.position);
+                } break;
+                case AmberType.AMBER_MANA: {
+                    createAmberUIObject.createManaUI(gameObject.transform.position, transform.localScale);
+                } break;
+                case AmberType.AMBER_HEALTH: {
+                    createAmberUIObject.createHealthUI(gameObject.transform.position, transform.localScale);
+                } break;
+                case AmberType.AMBER_SENTINEL_HEAD: {
+                    GameManager.senintelHeadCount++;
+                    createAmberUIObject.createSentinelHeadUI(gameObject.transform.position);
+                } break;
+                default: {
+
+                } break;
+            }
+
+            
             
         }
 
