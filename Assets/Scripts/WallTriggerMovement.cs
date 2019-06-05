@@ -5,6 +5,10 @@ using UnityEngine;
 public class WallTriggerMovement : MonoBehaviour, IHitBox
 {
 	public Animator animator;
+  public BoxCollider2D box;
+  public SpriteRenderer spRender;
+  public GameObject childObject;
+  public AudioSource audioSrc;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,15 +22,21 @@ public class WallTriggerMovement : MonoBehaviour, IHitBox
     }
 
     public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
-        Debug.Log("Was Hit");
+        // Debug.Log("Was Hit");
        if (enemyType == EnemyType.ENEMY_GOOD) 
        {	
-       		Debug.Log("is GOOD");
-       		Debug.Log(type);
+       		// Debug.Log("is GOOD");
+       		// Debug.Log(type);
            if(type.Equals("earth")) {
-           		Debug.Log("was Earth");
-           		animator.SetTrigger("open");
-           }
-       }
+           		// Debug.Log("was Earth");
+           		// animator.SetTrigger("open");
+              box.enabled = false;
+              spRender.enabled = false;
+              childObject.SetActive(true);
+              audioSrc.Play();
+           } else {
+             // spRender.1
+          }
+       } 
     }
 }

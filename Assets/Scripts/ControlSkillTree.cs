@@ -12,6 +12,7 @@ public class ControlSkillTree : MonoBehaviour
 	public LevelStateId lastLevelToLoad;
     public CameraFollowPlayer cam;
     public PlayerMovement playerMovement;
+    public AudioSource selectSound;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,7 @@ public class ControlSkillTree : MonoBehaviour
 	        		GameManager.senintelHeadCount--;
 
 	        		GameManager.hasEarth1 = true;
+                    selectSound.Play();
 
 	        		earthEmblem1.SetTrigger("FadeIn");
 	        	// }

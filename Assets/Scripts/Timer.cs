@@ -5,10 +5,12 @@ namespace Timer_namespace
     {
         public float period;
         public float tAt;
+        public bool paused;
         public Timer(float period)
         {
             this.period = period;
             tAt = -1;
+            paused = false;
         }
 
         public void turnOn() {

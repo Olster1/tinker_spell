@@ -15,7 +15,8 @@ public class SpellAi : MonoBehaviour
 	private Animator thisAnimator;
 	private SpriteRenderer thisSpriteRenderer;
     private SpriteRenderer playerSpriteRenderer;
-	private BoxCollider2D thisCollider;
+	public BoxCollider2D triggerCollider;
+    public BoxCollider2D rbCol;
 	public float speedMargin;
 	public Vector3 offset;
     private Vector3 beginOffset;
@@ -26,6 +27,12 @@ public class SpellAi : MonoBehaviour
     private Timer centerTimer;
     private Vector3 startPos;
     private Vector3 endPos;
+    [HideInInspector] public bool controllingSpell;
+    private Vector2 movementForce;
+    public float moveAccel;
+    public CameraFollowPlayer cam;
+
+    public Rigidbody2D rigidBody;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,13 +41,15 @@ public class SpellAi : MonoBehaviour
         thisAnimator =  gameObject.GetComponent<Animator>();
         thisSpriteRenderer =  gameObject.GetComponent<SpriteRenderer>();
         playerSpriteRenderer = playerObj.GetComponent<SpriteRenderer>();
-        thisCollider = gameObject.GetComponent<BoxCollider2D>();
-        startOffset = thisCollider.offset;
+        
+        startOffset = triggerCollider.offset;
         playerMovement = playerObj.GetComponent<PlayerMovement>();
         velocity = new Vector2(0, 0);
         centerTimer = new Timer(0.3f);
         centerTimer.turnOff();
         beginOffset = offset;
+        controllingSpell = false;
+        movementForce = new Vector2(0, 0);
     }
 
     public void flipSprite() {
@@ -93,6 +102,23 @@ public class SpellAi : MonoBehaviour
     void Update()
     {
         thisAnimator.SetFloat("run_speed", velocity.magnitude);
+
+        if(Input.GetButtonDown("Fire3")) {
+            //This may need some work!!
+            playerMovement.canControlPlayer = !playerMovement.canControlPlayer;
+            controllingSpell = !playerMovement.canControlPlayer;
+
+            if(controllingSpell) {
+                cam.changeEntityToFollow(gameObject);
+                rigidBody.simulated = true;
+                rbCol.enabled = true;
+            } else {
+                cam.changeEntityToFollow(playerObj);
+                rigidBody.simulated = false;
+                rbCol.enabled = false;
+            }
+        }
+
 
         bool isInFireAnimation = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("spell_fire_twirl");
         if (Input.GetButton("Fire1") && Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN) && !isInFireAnimation && playerMovement.canControlPlayer)
@@ -165,6 +191,7 @@ public class SpellAi : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(!controllingSpell) {
         // if(!centerTimer.isOn()) {
         	float dt = Time.fixedDeltaTime;
         	Vector3 diffPos = (playerTransform.position + offset) - thisTransform.position;
@@ -175,5 +202,13 @@ public class SpellAi : MonoBehaviour
             velocity -= dragFactor*velocity;
             thisTransform.position = new Vector3(thisTransform.position.x + dt*velocity.x, thisTransform.position.y + dt*velocity.y, thisTransform.position.z);
         // }
+        } else {
+            float xMove = Input.GetAxis("Horizontal");
+            float yMove = Input.GetAxis("Vertical");
+            movementForce.x = xMove * moveAccel;
+            movementForce.y = yMove * moveAccel;
+            rigidBody.AddForce(movementForce);
+            velocity = rigidBody.velocity;
+        }
     }
 }

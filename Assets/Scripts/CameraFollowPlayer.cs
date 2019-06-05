@@ -11,7 +11,7 @@ public class CameraFollowPlayer : MonoBehaviour
     private bool followPlayer;
     public float xDiff;
     public float yDiff;
-    private Vector2 cameraVelocity;
+    // private Vector2 cameraVelocity;
     public float xForce;
     public float yForce;
     public float yOffsetFromPlayer;
@@ -32,7 +32,7 @@ public class CameraFollowPlayer : MonoBehaviour
         cameraTransform = gameObject.GetComponent<Transform>();
         Vector3 playerPos = new Vector3(playerTransform.position.x, playerTransform.position.y + yOffsetFromPlayer, cameraTransform.position.z);
         //cameraTransform.position = playerPos;
-        cameraVelocity = new Vector2();
+        // cameraVelocity = new Vector2();
 
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
 
@@ -45,6 +45,11 @@ public class CameraFollowPlayer : MonoBehaviour
         moveDownTimer = new Timer(0.4f);
         moveDownTimer.turnOff();
 
+    }
+
+    public void changeEntityToFollow(GameObject obj) {
+        playerToFollow = obj;
+        playerTransform = playerToFollow.GetComponent<Transform>();
     }
 
     // Update is called once per frame

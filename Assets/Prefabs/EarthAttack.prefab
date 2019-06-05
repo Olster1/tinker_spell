@@ -129,6 +129,9 @@ MonoBehaviour:
   box2: {fileID: 2346835685287033595}
   box3: {fileID: 3072427380762081008}
   box4: {fileID: 832470735764421541}
+  earthAudio: {fileID: 8300000, guid: b3a72afa189944efd85c7a8e6246fd97, type: 3}
+  soundObj: {fileID: 8593230256217857721, guid: e09f4c25475894b44a4f1b8f18b2f872,
+    type: 3}
 --- !u!95 &3868236852534701639
 Animator:
   serializedVersion: 3

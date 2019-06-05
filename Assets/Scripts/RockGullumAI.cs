@@ -32,6 +32,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     public GameObject genericAttackObject;
     private bool finishedAttack;
 
+    public AudioSource rockHitSound;
+
     public bool isSentinel;
 
     public Vector2 earthOffset;
@@ -201,6 +203,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
            thisAnimator.SetTrigger("WasHit");
            this.health -= damage;
            this.redHurtTimer.turnOn();
+
+           rockHitSound.Play();
 
            float healthAsPercent = ((float)health / (float)startHealth);
            healthAsPercent = Mathf.Max(0, healthAsPercent);

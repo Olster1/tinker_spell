@@ -24,15 +24,17 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
 
-    private AudioSource[] audioComponents;
+    public AudioSource landingSoundSource;
+    public AudioSource regularAttackSound;
+    public AudioSource uppercutAttackSound;
+    public AudioSource jumpAudioSrc;
+
     public float raySize;
     public float speedMargin;
     [HideInInspector] public bool isGrounded;
-    public AudioClip attackSound1;
-    public AudioClip attackSound2;
-    public AudioClip jumpSound;
+
     private Timer jumpTimer;
-    private bool readyingJump;
+    // private bool readyingJump;
     public float waitPercentToJump;
     public float landingRaySize;
     [HideInInspector] public bool canControlPlayer;
@@ -72,7 +74,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         boxCollider = gameObject.GetComponent<BoxCollider2D>();
 
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        audioComponents =  GetComponents<AudioSource>();
         jumpTimer = new Timer(1.0f);
         jumpTimer.turnOff();
         autoMoveTimer = new Timer(autoMoveTime);
@@ -119,11 +120,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         RaycastHit2D[] hits = Physics2D.RaycastAll(bottomCenter + colliderOffset, Vector2.down, jumpRaySize, physicsLayerMask);
         for(int i = 0; i < hits.Length; ++i) {
             RaycastHit2D hit = hits[i];
-            Debug.Log("1st: " + (hit.collider.gameObject != gameObject));
-            Debug.Log("2nd: " + (!hit.collider.isTrigger));
             if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
                 isGrounded = true;
-                Debug.Log("isGrounded is true");
                 break;
             } 
         }
@@ -263,6 +261,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     }
 
     void Update() {
+
+        bool isJumping = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_jump");
+
+        bool lastFameGrounded = isGrounded;
         isGrounded = false;
         Vector3 halfCollider = new Vector3(0.5f*boxCollider.size.x, 0, 0);
         if(!CastGroundedRay(new Vector3(0, 0, 0))) {
@@ -274,6 +276,9 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
         animator.SetBool("grounded", isGrounded);
         
+        if(lastFameGrounded != isGrounded && !isJumping) {
+            landingSoundSource.Play();
+        }
 
         bool isInAttackAnimation = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack2") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack1") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_downward_dash") || animator.GetBool("attack1") || animator.GetBool("attack2") || animator.GetBool("downward_dash");
         bool isFallingAnim = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_falling");
@@ -286,7 +291,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 float xDir = Mathf.Sign(xMove);
                 GameObject earthObj = Instantiate(earthAttackObject, transform.position - new Vector3(xDir*earthOffset.x, earthOffset.y, 0),  Quaternion.identity);
                 earthObj.GetComponent<SpriteRenderer>().flipX = Mathf.Sign(xMove) < 0;
-
+                
                 if(xDir < 0) {
                     earthObj.GetComponent<EarthAttack>().rePosBoxes();    
                 }
@@ -305,12 +310,16 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                     animator.SetTrigger("downward_dash");
                 } else if(!isGrounded) {
                     animator.SetTrigger("attack1"); 
+                    uppercutAttackSound.Play();
                 } else if (isVertical) {
                     animator.SetTrigger("attack1");
+                    uppercutAttackSound.Play();
                 } else if(isHorizontal) {
+                    regularAttackSound.Play();
                     animator.SetTrigger("attack2");
                 } else {
                     animator.SetTrigger("attack1"); //don't yet have stationary attack
+                    uppercutAttackSound.Play();
                 }
             }
         }
@@ -356,7 +365,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         animator.SetFloat("run_speed", rigidBody.velocity.x);
         
         bool running = animator.GetCurrentAnimatorStateInfo(0).IsName("player_run");
-        bool isJumping = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_jump");
+        
         
         // animator.speed = 1.0f;
         // if (running)
@@ -372,13 +381,13 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         //     animator.speed = 0.0f;
             
         // } 
-        if (Mathf.Abs(rigidBody.velocity.x) > 0.1f && !audioComponents[1].isPlaying)
+        if (Mathf.Abs(rigidBody.velocity.x) > 0.1f)
         {
           // audioComponents[1].Play();
         } 
 
 
-        if(isGrounded && !isJumping && !animator.GetBool("jump")) {
+        if(isGrounded && !isJumping && !animator.GetBool("jump") && rigidBody.velocity.y <= 0) {
             //can't jump
             jumpTimer.turnOff();
         }
@@ -387,9 +396,9 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             if (!jumpTimer.isOn())
             {
                 animator.SetTrigger("jump");
-                audioComponents[0].PlayOneShot(jumpSound);
+                jumpAudioSrc.Play();
                 jumpTimer.turnOn();
-                readyingJump = true;
+                // readyingJump = true;
                 
             } else {
                 Assert.IsTrue(false);
@@ -435,8 +444,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         Vector2 movementForce = new Vector2(0, 0);
         
 
-        if(autoMoveTimer.isOn()) {
+        if(autoMoveTimer.isOn() && !autoMoveTimer.paused) {
+
             bool finished = autoMoveTimer.updateTimer(Time.fixedDeltaTime);
+            Debug.Log("auto move timer ON " + autoMoveTimer.tAt);
             //the automovedirection should only be between -1 && 1
             movementForce = autoMoveDirection;
             if(finished) {

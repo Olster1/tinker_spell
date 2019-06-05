@@ -10,10 +10,16 @@ public class EarthAttack : MonoBehaviour
     public BoxCollider2D box2;
     public BoxCollider2D box3;
     public BoxCollider2D box4;
+
+    public AudioClip earthAudio;
+    public GameObject soundObj;
     // Start is called before the first frame update
     void Start()
     {
         sp = gameObject.GetComponent<SpriteRenderer>();
+
+        GameObject sound = Instantiate(soundObj, transform.position,  Quaternion.identity);
+        sound.GetComponent<DestroyOnSoundEnd>().AddClip(earthAudio);
     }
 
     public void rePosBoxes() {

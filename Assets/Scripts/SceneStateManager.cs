@@ -23,13 +23,15 @@ public class SceneStateManager : MonoBehaviour
 
     public GameObject[] levelObjects;
     public GameObject[] spawnPointObjs;
+    public Vector2[] offsetCams;
+    public bool[] yStuck;
     public float[] cameraZ;
     public LevelStateId stateToLoad;
     public GameObject player;
     private PlayerMovement playerMovement;
     public GameObject spell;
     public GameObject camera;
-    public float offsetCam;
+    
     // public CheckGrounded playerGroundedScript;
     [HideInInspector] public bool useSpawnPoint;
 
@@ -42,6 +44,12 @@ public class SceneStateManager : MonoBehaviour
     {	
         playerMovement = player.GetComponent<PlayerMovement>();
         Assert.IsNotNull(playerMovement);
+
+        int len = levelObjects.Length;
+        Assert.IsTrue(spawnPointObjs.Length == len);
+        Assert.IsTrue(offsetCams.Length == len);
+        Assert.IsTrue(yStuck.Length == len);
+        
         useSpawnPoint = true;
         ChangeScene();
     }
@@ -58,6 +66,14 @@ public class SceneStateManager : MonoBehaviour
 
     void PausePlayer() {
         playerMovement.canControlPlayer = false;
+    }
+
+    void PauseAutoMoveTimer() {
+        playerMovement.autoMoveTimer.paused = true;
+    }
+
+    void UnPauseAutoMoveTimer() {
+        playerMovement.autoMoveTimer.paused = false;
     }
 
     void ChangeScene() {
@@ -85,12 +101,16 @@ public class SceneStateManager : MonoBehaviour
         // //clear grounded count to get rid of any unresolved counts
         // playerGroundedScript.groundedCount = 0;
         // //
+        
+        // camera. yStuck[(int)stateToLoad];
         if(spawnPoint != null && useSpawnPoint) {
             player.transform.position = spawnPoint.transform.position;
 
+            Vector2 offsetCam = offsetCams[(int)stateToLoad];
             Vector3 spellOffset = new Vector3(0, 1, 0);
             spell.transform.position = spawnPoint.transform.position + spellOffset;
-            Vector3 camPos = new Vector3(spawnPoint.transform.position.x, spawnPoint.transform.position.y + offsetCam, cameraZ[(int)stateToLoad]);
+            Vector3 camPos = new Vector3(spawnPoint.transform.position.x + offsetCam.x, spawnPoint.transform.position.y + offsetCam.y, cameraZ[(int)stateToLoad]);
+            Debug.Log("setting cam pos. Offset is " + offsetCam);
             camera.transform.position = camPos;
         } 
 

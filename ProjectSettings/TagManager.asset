@@ -23,7 +23,7 @@ TagManager:
   - AmberRigidBody
   - EnemyAiCollision
   - EnemyLayer
-  - 
+  - rock_physics
   - 
   - 
   - 
@@ -55,6 +55,12 @@ TagManager:
     locked: 0
   - name: WorldObject
     uniqueID: 4254472457
+    locked: 0
+  - name: Enemies
+    uniqueID: 3877936351
+    locked: 0
+  - name: PlayerAndSpell
+    uniqueID: 4005085291
     locked: 0
   - name: Amber
     uniqueID: 3612926345
