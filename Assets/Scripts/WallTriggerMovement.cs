@@ -5,6 +5,7 @@ using UnityEngine;
 public class WallTriggerMovement : MonoBehaviour, IHitBox
 {
 	public Animator animator;
+  public Animator whiteWallAnimator;
   public BoxCollider2D box;
   public SpriteRenderer spRender;
   public GameObject childObject;
@@ -22,7 +23,8 @@ public class WallTriggerMovement : MonoBehaviour, IHitBox
     }
 
     public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
-        // Debug.Log("Was Hit");
+        Debug.Log("Was Hit");
+      
        if (enemyType == EnemyType.ENEMY_GOOD) 
        {	
        		// Debug.Log("is GOOD");
@@ -35,6 +37,8 @@ public class WallTriggerMovement : MonoBehaviour, IHitBox
               childObject.SetActive(true);
               audioSrc.Play();
            } else {
+            whiteWallAnimator.SetTrigger("goWhite");
+            Debug.Log("went White");
              // spRender.1
           }
        } 
