@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
     public float jumpRaySize;
 
-    public AnimationClip[] idleAnimations;
+    public AnimatorOverrideController[] idleAnimations;
     private Timer idleAnimationTimer;
     private bool swapAnimation;
     private IdleAnimation toSwapTo;
@@ -104,13 +104,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
     public void checkSwap() {
         if(swapAnimation) {
+            Debug.Log("Swapped animation");
             Assert.IsTrue((int)toSwapTo < idleAnimations.Length);
-            AnimationClip newAnimation = idleAnimations[(int)toSwapTo];
-            AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
-            Assert.IsTrue(info.IsName("player_idle"));
-
-
-            // animator.("player_idle") = newAnimation;
+            AnimatorOverrideController newController = idleAnimations[(int)toSwapTo];
+            animator.runtimeAnimatorController = newController;
         }
     }
 
@@ -224,16 +221,17 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
            if (GameManager.playerHealth < 0)
            {
-            GameManager.playerHealth = 100;
-             // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-               //  thisAnimator.SetTrigger("isDead");
-               // //  thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_die");
-               // // this.deathTimer = new Timer_namespace.Timer(1.0f);
-               // // this.deathTimer.turnOn();
-               //  isDying = true;
+                GameManager.playerHealth = 100;
+             
 
            }
        }
+    }
+
+    public void Die() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        // thisAnimator.SetTrigger("isDead");
+      //  thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_die");
     }
 
 
@@ -347,11 +345,13 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
             if(canVal < 0.5f) {
                 // if() {
+                    Debug.Log("idle at " + canVal);
                     swapAnimation = true;
                     toSwapTo = IdleAnimation.ANIMATION_IDLE1;
                 // }
 
             } else if(canVal >= 0.5f) {
+                Debug.Log("second idle at " + canVal);
                 // if() {
                     swapAnimation = true;
                     toSwapTo = IdleAnimation.ANIMATION_IDLE2;

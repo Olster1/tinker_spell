@@ -1,0 +1,13 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: tinkerIdle1
+  m_Controller: {fileID: 9100000, guid: a44c512589abe48d887a9253381ee259, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 95303d15ca33b4242bdfc417d2892901, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: b307d54f3da9e40ca9d4aca9025698a2, type: 2}
