@@ -76,9 +76,9 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         AI_SUB_COUNT,
     }
 
-    private Ai_State aiState;
+    public Ai_State aiState;
 
-    private Ai_SubState subAiState;
+    public Ai_SubState subAiState;
 
     private void getRandomAiSubState() {
         subAiState = (Ai_SubState)((int)Random.Range(0, (int)(Ai_SubState.AI_SUB_COUNT)));
@@ -347,6 +347,72 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
         // bool isDying = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_die");
 
+        
+        thisAnimator.SetFloat("WalkSpeed", thisRigidbody.velocity.x);
+
+        bool isInTurnAround = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_turn_around");
+        bool isWalking = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rockGollumWalk");
+
+        bool lastframFlip = spRenderer.flipX;
+        if(isWalking) {
+            if (thisRigidbody.velocity.x > 0.3)
+            {
+                spRenderer.flipX = true;
+            }
+
+            if (thisRigidbody.velocity.x < -0.3)
+            {
+                spRenderer.flipX = false;
+            }
+        }
+
+        if(!isSentinel) {
+            if(lastframFlip != spRenderer.flipX && !isInTurnAround) {
+                thisAnimator.SetTrigger("turn_around");
+                flipForTurnAround = !spRenderer.flipX;
+                enforceFlip();
+                // Debug.Log("turningArounf");
+            }
+
+            if(spRenderer.flipX) {
+                Vector2 offTemp = thisCollider.offset;
+                offTemp.x = -3;
+                thisCollider.offset = offTemp;
+            } else {
+                Vector2 offTemp = thisCollider.offset;
+                offTemp.x = 3;
+                thisCollider.offset = offTemp;
+            }
+        }
+
+        
+
+
+        // if (isDying) {
+        //     // bool finished = deathTimer.updateTimer(Time.deltaTime);
+        //     // float canVal = deathTimer.getCanoncial();
+        //     // float alphaVal = Mathf.Lerp(1, 0, canVal);
+        //     // spRenderer.color = new Vector4(spRenderer.color.r, spRenderer.color.g, spRenderer.color.b, alphaVal);
+        //     // thisRigidbody.detectCollisions = false;
+        //     // thisCollider.enabled = false;
+
+        //     AnimatorStateInfo info = thisAnimator.GetCurrentAnimatorStateInfo(0);
+        //     bool isDeadTriggered = thisAnimator.GetBool("isDead");
+        //     bool isInDieState = info.IsName("rock_gollum_die") || isDeadTriggered;
+        //     if (!isInDieState) {
+        //         // deathTimer.turnOff();
+                
+        //         // spRenderer.color = startTint;
+        //     }
+        // }
+
+
+        
+    }
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
         if(!sleeping) {
             Vector2 diffVec = playerTransform.position - thisTransform.position;
             spRenderer.color = Color.white;
@@ -462,68 +528,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             }
 
         }
-        thisAnimator.SetFloat("WalkSpeed", thisRigidbody.velocity.x);
 
-        bool isInTurnAround = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_turn_around");
-        bool isWalking = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rockGollumWalk");
-
-        bool lastframFlip = spRenderer.flipX;
-        if(isWalking) {
-            if (thisRigidbody.velocity.x > 0.3)
-            {
-                spRenderer.flipX = true;
-            }
-
-            if (thisRigidbody.velocity.x < -0.3)
-            {
-                spRenderer.flipX = false;
-            }
-        }
-
-        if(!isSentinel) {
-            if(lastframFlip != spRenderer.flipX && !isInTurnAround) {
-                thisAnimator.SetTrigger("turn_around");
-                flipForTurnAround = !spRenderer.flipX;
-                enforceFlip();
-                // Debug.Log("turningArounf");
-            }
-        }
-
-        if(spRenderer.flipX) {
-            Vector2 offTemp = thisCollider.offset;
-            offTemp.x = -3;
-            thisCollider.offset = offTemp;
-        } else {
-            Vector2 offTemp = thisCollider.offset;
-            offTemp.x = 3;
-            thisCollider.offset = offTemp;
-        }
-
-
-        // if (isDying) {
-        //     // bool finished = deathTimer.updateTimer(Time.deltaTime);
-        //     // float canVal = deathTimer.getCanoncial();
-        //     // float alphaVal = Mathf.Lerp(1, 0, canVal);
-        //     // spRenderer.color = new Vector4(spRenderer.color.r, spRenderer.color.g, spRenderer.color.b, alphaVal);
-        //     // thisRigidbody.detectCollisions = false;
-        //     // thisCollider.enabled = false;
-
-        //     AnimatorStateInfo info = thisAnimator.GetCurrentAnimatorStateInfo(0);
-        //     bool isDeadTriggered = thisAnimator.GetBool("isDead");
-        //     bool isInDieState = info.IsName("rock_gollum_die") || isDeadTriggered;
-        //     if (!isInDieState) {
-        //         // deathTimer.turnOff();
-                
-        //         // spRenderer.color = startTint;
-        //     }
-        // }
-
-
-        
-    }
-    // Update is called once per frame
-    void FixedUpdate()
-    {
         Vector2 f = forceUpdator.update();        
         
         thisRigidbody.AddForce(ForceToAdd + f);

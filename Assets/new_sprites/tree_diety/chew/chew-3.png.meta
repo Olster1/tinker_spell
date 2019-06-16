@@ -95,9 +95,9 @@ TextureImporter:
       name: chew-3_0
       rect:
         serializedVersion: 2
-        x: 50
+        x: 49
         y: 0
-        width: 849
+        width: 851
         height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -106,7 +106,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b8cf3d677663844e39ed7728b6a63af4
+      spriteID: 74a00e0480e1f4a7ebdadbb9ce621685
       vertices: []
       indices: 
       edges: []
@@ -115,10 +115,10 @@ TextureImporter:
       name: chew-3_1
       rect:
         serializedVersion: 2
-        x: 528
-        y: 1062
-        width: 5
-        height: 5
+        x: 891
+        y: 0
+        width: 854
+        height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -126,7 +126,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d4d229f827fbd4bd2a954079ee8213dd
+      spriteID: 6017bf3bd8a584338a9c3a68943959d6
       vertices: []
       indices: 
       edges: []
@@ -135,9 +135,9 @@ TextureImporter:
       name: chew-3_2
       rect:
         serializedVersion: 2
-        x: 895
+        x: 1736
         y: 0
-        width: 849
+        width: 853
         height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -146,7 +146,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e33f4eb7ad95b4e9e94690cf31cd6d4a
+      spriteID: bd10f167390ee43c79af683ac6395c8d
       vertices: []
       indices: 
       edges: []
@@ -155,10 +155,10 @@ TextureImporter:
       name: chew-3_3
       rect:
         serializedVersion: 2
-        x: 1373
-        y: 1062
-        width: 6
-        height: 6
+        x: 2581
+        y: 0
+        width: 854
+        height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,7 +166,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dc04b9e467be64c19b080866f32853e3
+      spriteID: 9b09abbe914a1462591a0d1feb05e8d1
       vertices: []
       indices: 
       edges: []
@@ -175,9 +175,9 @@ TextureImporter:
       name: chew-3_4
       rect:
         serializedVersion: 2
-        x: 1739
+        x: 3426
         y: 0
-        width: 849
+        width: 854
         height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -186,67 +186,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c7e21406cb0b44d3d9ef6450bf50027f
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: chew-3_5
-      rect:
-        serializedVersion: 2
-        x: 2219
-        y: 1062
-        width: 4
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f12962fdcf22947e9ae0a14c04993016
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: chew-3_6
-      rect:
-        serializedVersion: 2
-        x: 2584
-        y: 0
-        width: 850
-        height: 1080
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5700d416c631d4759a04a161babea24c
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: chew-3_7
-      rect:
-        serializedVersion: 2
-        x: 3430
-        y: 0
-        width: 849
-        height: 1080
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f3be280e84ee54914ae4c0de4ec3d76a
+      spriteID: 2046def85102b4376944986e7e3f2940
       vertices: []
       indices: 
       edges: []

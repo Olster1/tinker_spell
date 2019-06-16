@@ -97,9 +97,9 @@ TextureImporter:
       name: chew-1_0
       rect:
         serializedVersion: 2
-        x: 50
+        x: 49
         y: 0
-        width: 849
+        width: 851
         height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -108,7 +108,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04587b0c4e09c48d6ad8faebbf70d605
+      spriteID: d564564a3a3b947ccaa7d84f15a9654c
       vertices: []
       indices: 
       edges: []
@@ -117,10 +117,10 @@ TextureImporter:
       name: chew-1_1
       rect:
         serializedVersion: 2
-        x: 528
-        y: 1062
-        width: 5
-        height: 5
+        x: 891
+        y: 0
+        width: 854
+        height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,7 +128,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ee6dc0c07a50d44b18e6a230430ce22d
+      spriteID: 189853ced19fe4ae68325c0aed28fa36
       vertices: []
       indices: 
       edges: []
@@ -137,9 +137,9 @@ TextureImporter:
       name: chew-1_2
       rect:
         serializedVersion: 2
-        x: 895
+        x: 1736
         y: 0
-        width: 849
+        width: 853
         height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -148,7 +148,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5dc062e0dd20845b3a68ff4be2c130bc
+      spriteID: f57072994d26346e1b61222831744ac9
       vertices: []
       indices: 
       edges: []
@@ -157,10 +157,10 @@ TextureImporter:
       name: chew-1_3
       rect:
         serializedVersion: 2
-        x: 1373
-        y: 1062
-        width: 6
-        height: 6
+        x: 2581
+        y: 0
+        width: 853
+        height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -168,7 +168,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ee3b122d108b84680b47fc699a79afef
+      spriteID: 4d0c448c9a47541af976ded79badb601
       vertices: []
       indices: 
       edges: []
@@ -177,9 +177,9 @@ TextureImporter:
       name: chew-1_4
       rect:
         serializedVersion: 2
-        x: 1739
+        x: 3426
         y: 0
-        width: 849
+        width: 854
         height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -188,107 +188,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6206d7a1e32f84e678027a54a1279466
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: chew-1_5
-      rect:
-        serializedVersion: 2
-        x: 2219
-        y: 1062
-        width: 4
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: edfc3bb372f2044858314367f9f5cf7f
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: chew-1_6
-      rect:
-        serializedVersion: 2
-        x: 2584
-        y: 0
-        width: 850
-        height: 1080
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1b893d9294be643bdb042c3b0b514710
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: chew-1_7
-      rect:
-        serializedVersion: 2
-        x: 3063
-        y: 1062
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 17ef0c0ae35b049c4b936d32c333ba98
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: chew-1_8
-      rect:
-        serializedVersion: 2
-        x: 3430
-        y: 0
-        width: 849
-        height: 1080
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 208c76aa3d67e4c40a70c0c2ea2a72fa
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: chew-1_9
-      rect:
-        serializedVersion: 2
-        x: 3908
-        y: 1062
-        width: 5
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d53a83aedafad4bac9d4d773c2a2ad8b
+      spriteID: dff89fc6d3b87419097fe2abaa4709b7
       vertices: []
       indices: 
       edges: []

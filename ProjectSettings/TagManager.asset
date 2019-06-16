@@ -7,6 +7,7 @@ TagManager:
   - Sword
   - Enemy
   - Amber
+  - Platform
   layers:
   - Default
   - TransparentFX
@@ -70,4 +71,7 @@ TagManager:
     locked: 0
   - name: ForeGround
     uniqueID: 2267829271
+    locked: 0
+  - name: Platform
+    uniqueID: 3853530639
     locked: 0

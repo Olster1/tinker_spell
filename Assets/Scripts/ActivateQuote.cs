@@ -8,6 +8,8 @@ public class ActivateQuote : MonoBehaviour
 	public Animator quoteAnimator;
     public AudioSource soundSource;
     public GameObject uiImage;
+    public string[] dialog;
+    public TextWriter writer;
 
     // Start is called before the first frame update
     void Start()
@@ -21,11 +23,12 @@ public class ActivateQuote : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.tag == "Player") {
+    private void OnTriggerStay2D(Collider2D other) {
+        if (other.gameObject.tag == "Player" && Input.GetButtonDown("Fire1")) {
         	quoteAnimator.SetTrigger("OffscreenIn");
-            soundSource.Play();
-            uiImage.SetActive(false);
+            writer.stringArray = dialog;
+            // soundSource.Play();
+            // uiImage.SetActive(false);
 
         }
     }
@@ -33,9 +36,9 @@ public class ActivateQuote : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other) {
         if (other.gameObject.tag == "Player") {
-        	quoteAnimator.SetTrigger("OffscreenOut");
-            soundSource.Stop();
-            uiImage.SetActive(true);
+        	// quoteAnimator.SetTrigger("OffscreenOut");
+         //    soundSource.Stop();
+         //    uiImage.SetActive(true);
         }
     }
 }

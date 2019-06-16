@@ -76,6 +76,10 @@ public class SceneStateManager : MonoBehaviour
         playerMovement.autoMoveTimer.paused = false;
     }
 
+    void ResetFromFall() {
+        playerMovement.ResetPositionFromFall();   
+    }
+
     void ChangeScene() {
         for(int i = 0; i < levelObjects.Length; ++i) {
             GameObject obj = levelObjects[i];

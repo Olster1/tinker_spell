@@ -21,13 +21,20 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     public float jumpAccel;
     public float moveAccel;
     private Animator animator;
+
+    public GameObject camera;
+
+    public Animator panelAnimator;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
+
+    [HideInInspector] public Vector3 lastValidPos;
 
     public AudioSource landingSoundSource;
     public AudioSource regularAttackSound;
     public AudioSource uppercutAttackSound;
     public AudioSource jumpAudioSrc;
+    public float reboundForce;
 
     public float raySize;
     public float speedMargin;
@@ -61,6 +68,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     private Vector2 originalBoxSize;
     private Vector2 originalBoxOffset;
     private Vector2 originalJumpOffset;
+    public float timeIncrease;
 
 
     private ForceUpdator forceUpdator;
@@ -74,7 +82,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         boxCollider = gameObject.GetComponent<BoxCollider2D>();
 
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        jumpTimer = new Timer(1.0f);
+        jumpTimer = new Timer(0.5f);
         jumpTimer.turnOff();
         autoMoveTimer = new Timer(autoMoveTime);
         canControlPlayer = true;
@@ -87,6 +95,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
         swapAnimation = false;
         toSwapTo = IdleAnimation.ANIMATION_IDLE1;
+
+        
     }
 
     public void CreateUpwardAttackObject() {
@@ -118,8 +128,13 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         for(int i = 0; i < hits.Length; ++i) {
             RaycastHit2D hit = hits[i];
             if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
-                isGrounded = true;
-                break;
+                if(hit.collider.gameObject.tag == "Platform" && rigidBody.velocity.y > 0) {
+
+                } else {
+                    isGrounded = true;
+                    break;    
+                }
+                
             } 
         }
         return isGrounded;
@@ -212,10 +227,11 @@ public class PlayerMovement : MonoBehaviour, IHitBox
            dir.Normalize();
 
 
-           ForceToAddStruct force = new ForceToAddStruct(0.1f, 1000*dir);
-
+           ForceToAddStruct force = new ForceToAddStruct(0.1f, reboundForce*dir);
+           forceUpdator.AddForce(force);
            // thisAnimator.SetTrigger("WasHit");
            GameManager.playerHealth -= damage;
+           GameManager.updateHealth = true;
            
            //Instantiate(hitParticleSystem);
 
@@ -228,10 +244,19 @@ public class PlayerMovement : MonoBehaviour, IHitBox
        }
     }
 
+    public void ResetPositionFromFall() {
+
+        transform.position = lastValidPos;
+        rigidBody.velocity = Vector2.zero;
+        camera.transform.position = new Vector3(transform.position.x, transform.position.y, camera.transform.position.z);
+    }
+
     public void Die() {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        // thisAnimator.SetTrigger("isDead");
-      //  thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_die");
+        panelAnimator.SetTrigger("FadeIn");
+        panelAnimator.SetTrigger("FadeFromFall");
+        
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        
     }
 
 
@@ -264,18 +289,26 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
         bool lastFameGrounded = isGrounded;
         isGrounded = false;
-        Vector3 halfCollider = new Vector3(0.5f*boxCollider.size.x, 0, 0);
-        if(!CastGroundedRay(new Vector3(0, 0, 0))) {
-            if(!CastGroundedRay(-halfCollider)) {
-                if(!CastGroundedRay(halfCollider)) {
-                }       
-            }                
+        // if(rigidBody.velocity.y <= 0) 
+        {
+            Vector3 halfCollider = new Vector3(0.5f*boxCollider.size.x, 0, 0);
+            if(!CastGroundedRay(new Vector3(0, 0, 0))) {
+                if(!CastGroundedRay(-halfCollider)) {
+                    if(!CastGroundedRay(halfCollider)) {
+                    }       
+                }                
+            }
         }
 
         animator.SetBool("grounded", isGrounded);
         
         if(lastFameGrounded != isGrounded && !isJumping) {
             landingSoundSource.Play();
+
+        }
+
+        if(isGrounded) {
+            lastValidPos = transform.position;
         }
 
         bool isInAttackAnimation = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack2") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack1") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_downward_dash") || animator.GetBool("attack1") || animator.GetBool("attack2") || animator.GetBool("downward_dash");
@@ -338,20 +371,25 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             {
                 spriteRenderer.flipX = true;
             }
-            idleAnimationTimer.tAt = 0;
+            // idleAnimationTimer.tAt = 0;
+            idleAnimationTimer.turnOn(); 
+            swapAnimation = true;
+            toSwapTo = IdleAnimation.ANIMATION_IDLE1;
+            checkSwap();
+            // Debug.Log("can Val = " + idleAnimationTimer.getCanoncial());
         } else {
             bool fin = idleAnimationTimer.updateTimer(Time.deltaTime);
             float canVal = idleAnimationTimer.getCanoncial();
 
             if(canVal < 0.5f) {
                 // if() {
-                    Debug.Log("idle at " + canVal);
+                    
                     swapAnimation = true;
                     toSwapTo = IdleAnimation.ANIMATION_IDLE1;
                 // }
 
             } else if(canVal >= 0.5f) {
-                Debug.Log("second idle at " + canVal);
+                // Debug.Log("second idle at " + canVal);
                 // if() {
                     swapAnimation = true;
                     toSwapTo = IdleAnimation.ANIMATION_IDLE2;
@@ -398,6 +436,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 animator.SetTrigger("jump");
                 jumpAudioSrc.Play();
                 jumpTimer.turnOn();
+                jumpTimer.period = 0.5f;
                 // readyingJump = true;
                 
             } else {
@@ -406,6 +445,13 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             
         } else {
             // Debug.Log("couldn't jump");
+        }
+
+        if(jumpTimer.isOn()) {
+            if(Input.GetButton("Jump") && jumpTimer.period < 1.0f) {
+                jumpTimer.period += timeIncrease*Time.fixedDeltaTime;
+
+            }
         }
 
         if(isGrounded) {
@@ -443,11 +489,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     {
         Vector2 movementForce = new Vector2(0, 0);
         
-
         if(autoMoveTimer.isOn() && !autoMoveTimer.paused) {
 
             bool finished = autoMoveTimer.updateTimer(Time.fixedDeltaTime);
-            Debug.Log("auto move timer ON " + autoMoveTimer.tAt);
+            // Debug.Log("auto move timer ON " + autoMoveTimer.tAt);
             //the automovedirection should only be between -1 && 1
             movementForce = autoMoveDirection;
             if(finished) {
@@ -455,6 +500,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             }
         } else if(canControlPlayer) {
             movementForce.x = Input.GetAxis("Horizontal");
+            if(movementForce.x > 0.25f) {
+                movementForce.x = Mathf.Max(movementForce.x, 0.8f);    
+            }
+            
         } 
 
         float thisJmpAccel = jumpAccel;
@@ -462,6 +511,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         //NOTE(ollie): This is the jump timer so you get a nice jump. We propotion out the jump force over the jump
         if(jumpTimer.isOn()) {
             bool fin = jumpTimer.updateTimer(Time.fixedDeltaTime);
+            if(Input.GetButton("Jump")) {
+
+            }
+            
             if (!fin && jumpTimer.getCanoncial() < waitPercentToJump) { //has to be before the jump timer is finished 
                 //wait till over a percentage
                 

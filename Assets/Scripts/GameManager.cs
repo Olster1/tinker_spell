@@ -9,6 +9,7 @@ namespace EasyGameManager
         public static int senintelHeadCount = 0;
         public static bool hasEarth1 = true;
         public static int fuelCellCount = 0;
+        public static bool updateHealth;
 
     }
 }
