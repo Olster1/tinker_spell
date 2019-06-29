@@ -145,15 +145,15 @@ SpriteRenderer:
   m_SortingLayerID: -40494839
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0e34d716869f840b695dd93e35f895fb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2df344472cb844cae824adc79e2028e5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 10.1, y: 8.84}
+  m_Size: {x: 9.45, y: 8.059999}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!61 &2850328975263803225
@@ -172,9 +172,9 @@ BoxCollider2D:
   m_Offset: {x: 1, y: -2}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.3162922}
-    oldSize: {x: 10.1, y: 8.84}
-    newSize: {x: 10.1, y: 8.84}
+    pivot: {x: 0.55733585, y: 0.7444169}
+    oldSize: {x: 9.45, y: 8.059999}
+    newSize: {x: 9.45, y: 8.059999}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -195,9 +195,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerToFollow: {fileID: 0}
+  hitPs: {fileID: 3859417302317968039, guid: 35199ae5e47f04c3da2b9353598f1650, type: 3}
   accelForce: 200
   attackForce: 700
-  partolDistance: 400
+  partolDistance: {x: 5, y: 1}
   attackDistance: 50
   health: 3
   startHealth: 100
@@ -206,10 +207,19 @@ MonoBehaviour:
     type: 3}
   genericAttackObject: {fileID: 6368268402639536057, guid: b9589d6f131aa4c59a0216c8079786f3,
     type: 3}
+  nameCollider: 
+  rockHitSound: {fileID: 0}
+  sentinelAttack: {fileID: 0}
+  isSentinel: 0
+  isRangeGollum: 0
+  earthOffset: {x: 0, y: 0}
+  earthAttackObject: {fileID: 0}
   sleeping: 0
   rayCastSize: 1
   knockBackForce: 0
   healthBar: {fileID: 8212999913690830142}
+  aiState: 0
+  subAiState: 0
 --- !u!50 &2850328975263803224
 Rigidbody2D:
   serializedVersion: 4
@@ -225,7 +235,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 15
   m_AngularDrag: 0.05
-  m_GravityScale: 15
+  m_GravityScale: 30
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -265,12 +275,12 @@ PrefabInstance:
     - target: {fileID: 6604229406746703335, guid: 31f25e6de04f244479963f1e6abbba0c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.05
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6604229406746703335, guid: 31f25e6de04f244479963f1e6abbba0c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.73
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6604229406746703335, guid: 31f25e6de04f244479963f1e6abbba0c,
         type: 3}
@@ -326,6 +336,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 2.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 666417901968041728, guid: 31f25e6de04f244479963f1e6abbba0c,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8406788575868999963, guid: 31f25e6de04f244479963f1e6abbba0c,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.65
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31f25e6de04f244479963f1e6abbba0c, type: 3}

@@ -116,10 +116,10 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 3, y: 0}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 3.1200001, y: 0, z: 2.03, w: 2.89}
-    pivot: {x: 0.40678656, y: 0.4347826}
+    pivot: {x: 0.55161107, y: 0.4347826}
     oldSize: {x: 22.51, y: 19.550001}
     newSize: {x: 22.51, y: 19.55}
     adaptiveTilingThreshold: 0.5
@@ -163,9 +163,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerToFollow: {fileID: 0}
+  hitPs: {fileID: 3859417302317968039, guid: 35199ae5e47f04c3da2b9353598f1650, type: 3}
   accelForce: 100
   attackForce: 100
-  partolDistance: 10
+  partolDistance: {x: 0, y: 0}
   attackDistance: 100
   health: 0
   startHealth: 300
@@ -174,8 +175,19 @@ MonoBehaviour:
     type: 3}
   genericAttackObject: {fileID: 6368268402639536057, guid: b9589d6f131aa4c59a0216c8079786f3,
     type: 3}
+  nameCollider: 
+  rockHitSound: {fileID: 0}
+  sentinelAttack: {fileID: 0}
+  isSentinel: 0
+  isRangeGollum: 0
+  earthOffset: {x: 0, y: 0}
+  earthAttackObject: {fileID: 0}
+  sleeping: 0
   rayCastSize: 1
+  knockBackForce: 0
   healthBar: {fileID: 8107055780686006783}
+  aiState: 0
+  subAiState: 0
 --- !u!1001 &3561290939684017376
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -191,12 +203,12 @@ PrefabInstance:
     - target: {fileID: 6604229406746703335, guid: 31f25e6de04f244479963f1e6abbba0c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 21.2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6604229406746703335, guid: 31f25e6de04f244479963f1e6abbba0c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6604229406746703335, guid: 31f25e6de04f244479963f1e6abbba0c,
         type: 3}

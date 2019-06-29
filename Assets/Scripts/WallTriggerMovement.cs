@@ -10,6 +10,7 @@ public class WallTriggerMovement : MonoBehaviour, IHitBox
   public SpriteRenderer spRender;
   public GameObject childObject;
   public AudioSource audioSrc;
+  public ParticleSystem ps;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +24,7 @@ public class WallTriggerMovement : MonoBehaviour, IHitBox
     }
 
     public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
-        Debug.Log("Was Hit");
+        
       
        if (enemyType == EnemyType.ENEMY_GOOD) 
        {	
@@ -36,6 +37,7 @@ public class WallTriggerMovement : MonoBehaviour, IHitBox
               spRender.enabled = false;
               childObject.SetActive(true);
               audioSrc.Play();
+              ps.Play();
            } else {
             whiteWallAnimator.SetTrigger("goWhite");
             Debug.Log("went White");

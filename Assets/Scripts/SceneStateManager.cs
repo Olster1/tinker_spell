@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Timer_namespace;
 
 public enum LevelStateId {
     LEVEL_PORTAL_ROOM,
     LEVEL_1,
     LEVEL_SKILL_TREE,
+    LEVEL_PORTAL_ROOM_RETURN,
 
 
     ///////EVERTHING MUST BE ABOVE THIS!!!//////
@@ -31,7 +33,7 @@ public class SceneStateManager : MonoBehaviour
     private PlayerMovement playerMovement;
     public GameObject spell;
     public GameObject camera;
-    
+
     // public CheckGrounded playerGroundedScript;
     [HideInInspector] public bool useSpawnPoint;
 
@@ -107,6 +109,8 @@ public class SceneStateManager : MonoBehaviour
         // //
         
         // camera. yStuck[(int)stateToLoad];
+
+
         if(spawnPoint != null && useSpawnPoint) {
             player.transform.position = spawnPoint.transform.position;
 
@@ -114,10 +118,11 @@ public class SceneStateManager : MonoBehaviour
             Vector3 spellOffset = new Vector3(0, 1, 0);
             spell.transform.position = spawnPoint.transform.position + spellOffset;
             Vector3 camPos = new Vector3(spawnPoint.transform.position.x + offsetCam.x, spawnPoint.transform.position.y + offsetCam.y, cameraZ[(int)stateToLoad]);
-            Debug.Log("setting cam pos. Offset is " + offsetCam);
             camera.transform.position = camPos;
         } 
 
         useSpawnPoint = true;
+
+
     }
 }

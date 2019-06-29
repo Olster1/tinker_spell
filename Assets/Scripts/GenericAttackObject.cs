@@ -22,6 +22,7 @@ public class GenericAttackObject : MonoBehaviour
 	public EnemyType type;
     public List<int> idList;
     public string attackType;
+    public bool forever;
 
     // Start is called before the first frame update
     void Start() {	
@@ -36,26 +37,37 @@ public class GenericAttackObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {	
-    	bool finished = attackTimer.updateTimer(Time.fixedDeltaTime);
-    	float canVal = attackTimer.getCanoncial();
-    	Vector2 midPos = Vector2.Lerp(startPos, endPos, canVal);
-    	gameObject.transform.localPosition = new Vector3(midPos.x, midPos.y, gameObject.transform.localPosition.z);
+        if(forever) {
 
-    	if(finished) {
-    		Destroy(gameObject);
-    	}
+        } else {
+        	bool finished = attackTimer.updateTimer(Time.fixedDeltaTime);
+        	float canVal = attackTimer.getCanoncial();
+        	Vector2 midPos = Vector2.Lerp(startPos, endPos, canVal);
+        	gameObject.transform.localPosition = new Vector3(midPos.x, midPos.y, gameObject.transform.localPosition.z);
+
+        	if(finished) {
+        		Destroy(gameObject);
+        	}
+        }
     }
 
-    void OnTriggerEnter2D(Collider2D other) {
-      GameObject gm = other.gameObject;
-      int id = gm.GetInstanceID();
-      Debug.Log(gm.name);
-      if(!idList.Contains(id)) {
-        idList.Add(id);
+    void AttackBox(GameObject gm) {
         IHitBox hb = (IHitBox)gm.GetComponent(typeof(IHitBox));
         if(hb != null) {
             int attackDamage = (int)Mathf.Lerp(minDamage, maxDamage, Random.Range(0.0f, 1.0f));
             hb.wasHit(attackDamage, attackType, type, transform.position);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+      GameObject gm = other.gameObject;
+      if(forever) {
+        AttackBox(gm);
+      } else {
+        int id = gm.GetInstanceID();
+        if(!idList.Contains(id)) {
+            idList.Add(id);
+            AttackBox(gm);
         }
       }
     }

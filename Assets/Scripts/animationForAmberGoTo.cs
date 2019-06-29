@@ -45,6 +45,9 @@ public class animationForAmberGoTo : MonoBehaviour
                     } break;
                     case AmberType.AMBER_HEALTH: {
                         GameManager.playerHealth += 2;
+                        if(GameManager.playerHealth > 100) {
+                            GameManager.playerHealth = 100;
+                        }
                     } break;
                     case AmberType.AMBER_SENTINEL_HEAD: {
                         

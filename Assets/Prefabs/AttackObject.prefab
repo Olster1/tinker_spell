@@ -101,6 +101,7 @@ MonoBehaviour:
   type: 1
   idList: 
   attackType: 
+  forever: 0
 --- !u!61 &1581182870525807483
 BoxCollider2D:
   m_ObjectHideFlags: 0

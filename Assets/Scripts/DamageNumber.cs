@@ -20,7 +20,7 @@ public class DamageNumber : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        // transform.Scale = new Vector3(1.0f, 1.0f, 1.0f);
     }
 
     //did this because i think start func is called on instaiate() call, but the number to display isn't set

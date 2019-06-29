@@ -5,6 +5,7 @@ using UnityEngine;
 public class CallTextScript : MonoBehaviour
 {
 	public TextWriter textWriter;
+    
     // Start is called before the first frame update
     void Start()
     {

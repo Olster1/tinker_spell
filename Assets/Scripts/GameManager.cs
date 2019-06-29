@@ -7,7 +7,7 @@ namespace EasyGameManager
         public static int manaCount = 100;
         public static int playerHealth = 100;
         public static int senintelHeadCount = 0;
-        public static bool hasEarth1 = true;
+        public static bool hasEarth1 = false;
         public static int fuelCellCount = 0;
         public static bool updateHealth;
 

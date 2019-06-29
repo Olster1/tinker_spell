@@ -31,7 +31,7 @@ public class ControlHealth : MonoBehaviour
     	}
 
     	if(timer.isOn()) {
-    		bool fin = timer.updateTimer(Time.deltaTime);
+    		bool fin = timer.updateTimer(Time.unscaledDeltaTime);
     		float f = timer.getCanoncial();
     		float s = Mathf.Lerp(oldScale, newScale, f);
     		originalScale.x = s;

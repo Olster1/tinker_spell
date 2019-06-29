@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Timer_namespace;
 
 
 public class NextSceneTrigger : MonoBehaviour
@@ -13,12 +14,13 @@ public class NextSceneTrigger : MonoBehaviour
     public bool withText;
     public string textToShow;
     public Text textUI;
+    public PlayerMovement playerMovement;
 
 	
     // Start is called before the first frame update
     void Start()
     {
-            
+
     }
 
     // Update is called once per frame
@@ -30,7 +32,7 @@ public class NextSceneTrigger : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other) {
         GameObject gm = other.gameObject;
 
-        if(gm.name == "Player") {
+        if(gm.name == "Player" && !playerMovement.autoMoveTimer.isOn()) {
             if(!withText) {
                 animator.SetTrigger("FadeIn");
             } else {
@@ -40,7 +42,6 @@ public class NextSceneTrigger : MonoBehaviour
             }
  			
  			manager.stateToLoad = levelToLoad;
-            PlayerMovement playerMovement = gm.GetComponent<PlayerMovement>();
             playerMovement.autoMoveDirection = autoMoveDirection;
             playerMovement.canControlPlayer = false;
             playerMovement.autoMoveTimer.turnOn();

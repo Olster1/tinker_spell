@@ -10,8 +10,7 @@ public class TextWriter : MonoBehaviour
 	[HideInInspector] public string[] stringArray;
 	private int stringAt;
 	private Timer showTimer;
-	private bool showText;
-	private float charTimeLength;
+	public bool showText;
 	private int lastCharCount;
 	public float timeToShow;
 	private Color startColor;
@@ -19,6 +18,8 @@ public class TextWriter : MonoBehaviour
 	public Animator aButtonAnimator;
 	public Animator quoteAnimator;
 	private Timer fadeOutTimer;
+	public bool isOn;
+	public PlayerMovement player;
 
 	public class GlyphInfo {
 		public float alphaAt;
@@ -51,14 +52,16 @@ public class TextWriter : MonoBehaviour
 
 
 	public void ActivateFontWriter() {
-		showTimer = new Timer(timeToShow);
+		showTimer = new Timer(timeToShow*(stringArray[stringAt].Length));
+		
         textObject.text = stringArray[stringAt];
 
         showTimer.turnOn();
         showText = true;
-        charTimeLength = showTimer.period / (stringArray[stringAt].Length);
         lastCharCount = 0;
         initGlyphInfos();
+        player.canControlPlayer = false;
+        Time.timeScale = 0.0f;
 	}
 
 	public void CancelFontWriting() {
@@ -68,14 +71,17 @@ public class TextWriter : MonoBehaviour
     	textObject.color = startColor;
     	stringAt = 0;
     	initGlyphInfos(); 
+    	player.canControlPlayer = true;
+    	Time.timeScale = 1.0f;
 
 	}
 
 	void initGlyphInfos() {
+		Debug.Log("inited " + stringArray[stringAt].Length);
 		glyphInfos = new GlyphInfo[stringArray[stringAt].Length];
 		for(int i = 0; i < glyphInfos.Length; ++i) {
 			glyphInfos[i] = new GlyphInfo();
-			glyphInfos[i].timer = new Timer(0.4f);
+			glyphInfos[i].timer = new Timer(0.1f);
 			glyphInfos[i].color = hexColor;
 			glyphInfos[i].sizeAt = 15;
 		}
@@ -91,29 +97,34 @@ public class TextWriter : MonoBehaviour
 
     	fadeOutTimer = new Timer(0.4f);
     	fadeOutTimer.turnOff();
-    	initGlyphInfos();
+    	// initGlyphInfos();
     }
 
     // Update is called once per frame
     void Update()
     {
     	if(showText) {
-
-    		float alphaValue = 0;
+    		
+    		float alphaValue = 1.0f;
     		if(fadeOutTimer.isOn()) {
-    			bool fin = fadeOutTimer.updateTimer(Time.deltaTime);
-    			alphaValue = fadeOutTimer.getCanoncial();
+    			bool fin = fadeOutTimer.updateTimer(Time.unscaledDeltaTime);
+    			alphaValue = 1.0f - fadeOutTimer.getCanoncial();
 
     			if(fin) {
     				stringAt++;
     				ActivateFontWriter();
+    				fadeOutTimer.turnOff();
     			}
     		}
     		string newString = "";
     		if(showTimer.isOn()) {
-    			Debug.Log("show time in");
-	    		bool finished = showTimer.updateTimer(Time.deltaTime);
-	    		int numOfCharacters = (int)(showTimer.tAt / charTimeLength);
+    			float dt = Time.unscaledDeltaTime;
+    			if(Input.GetButtonDown("Jump")) {
+    				dt *= 10.0f;
+    			}
+
+	    		bool finished = showTimer.updateTimer(dt);
+	    		int numOfCharacters = (int)(showTimer.getCanoncial()*(stringArray[stringAt].Length - 1));
 	    		if(numOfCharacters < 0) {
 	    			numOfCharacters = 0;
 	    		}
@@ -126,39 +137,40 @@ public class TextWriter : MonoBehaviour
 	    			lastCharCount = numOfCharacters;
 	    		}
 	    		if(finished) {
-	    			Debug.Log("finished show time in");
 	    			textObject.text = stringArray[stringAt];
 	    			showTimer.turnOff();
 	    			aButtonAnimator.SetTrigger("FadeIn");
 	    		}
 	    	} else {
-	    		if(Input.GetButtonDown("Fire1")) {
-	    			Debug.Log("finished show writer");
-		    		if(stringAt < (stringArray.Length - 1)) {
-	    				
-	    				Debug.Log("finished show writer" + stringAt);
-	    				fadeOutTimer.turnOn();
-	    			} else {
-	    				// fadeOutTimer.turnOn();
-	    				quoteAnimator.SetTrigger("OffscreenOut");
-	    			}
+	    		if(Input.GetButtonDown("Jump")) {
+	    			if(!fadeOutTimer.isOn()) {
+			    		if(stringAt < (stringArray.Length - 1)) {
+		    				
+		    				// Debug.Log("finished show writer" + stringAt);
+		    				fadeOutTimer.turnOn();
+		    			} else {
+		    				// fadeOutTimer.turnOn();
+		    				quoteAnimator.SetTrigger("OffscreenOut");
+		    				CancelFontWriting();
+		    			}
+		    		}
 	    		}
 	    		
 	    	}
     		for(int i = 0; i < stringArray[stringAt].Length; ++i) {
-    			glyphInfos[i].update(Time.deltaTime);
+    			glyphInfos[i].update(Time.unscaledDeltaTime);
     			
     			// Debug.Log(stringToAdd);
     			// string stringToAdd = startString.Substring(i, 1);
     			//
     			//"<size=" + glyphInfos[i].sizeAt + ">" + 
-    			uint hexColor;
+    			uint hexColor1;
     			if(fadeOutTimer.isOn()) {
-    				hexColor = ((uint)(255*alphaValue) << 0);
+    				hexColor1 = hexColor | ((uint)(255*alphaValue) << 0);
 				} else {
-					hexColor = glyphInfos[i].color;
+					hexColor1 = glyphInfos[i].color;
 				}
-    			string stringToAdd = "<color=#" + hexColor.ToString("X") + ">" + stringArray[stringAt].Substring(i, 1) + "</color>";
+    			string stringToAdd = "<color=#" + hexColor1.ToString("X") + ">" + stringArray[stringAt].Substring(i, 1) + "</color>";
     			// Debug.Log(stringToAdd);
     			newString += stringToAdd;
     		}

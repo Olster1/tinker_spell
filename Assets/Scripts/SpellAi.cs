@@ -126,8 +126,6 @@ public class SpellAi : MonoBehaviour
             thisAnimator.SetTrigger("fire_twirl");
             offset.x = 0;
             enterPlayerTransform();
-            
-            
         }
 
         if(isInFireAnimation) {

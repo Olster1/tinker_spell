@@ -1,8 +1,10 @@
 ﻿using System;
 namespace Timer_namespace
 {
+     //[Serializable]
     public class Timer
     {
+
         public float period;
         public float tAt;
         public bool paused;
@@ -40,7 +42,7 @@ namespace Timer_namespace
             bool result = false;
             tAt += dt;
             if(tAt >= period) {
-                tAt = 1.0f;
+                tAt = period;
                 result = true;
             }
             return result;
