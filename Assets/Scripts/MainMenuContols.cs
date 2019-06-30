@@ -142,7 +142,7 @@ public class MainMenuContols : MonoBehaviour
           bool b = glowTimer.updateTimer(Time.fixedDeltaTime);
           float alpha = (float)-Mathf.Cos(2*Mathf.PI*glowTimer.getCanoncial()) + 1.0f;
           alpha = (alpha / 2.0f);
-          Debug.Log(alpha);
+          // Debug.Log(alpha);
           texts[i].color = new Color(alpha, alpha, 0, 1);
 
           if(b) {

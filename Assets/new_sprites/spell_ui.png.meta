@@ -7,6 +7,7 @@ TextureImporter:
     21300004: spell_ui_2
     21300006: spell_ui_3
     21300008: spell_ui_4
+    21300010: spell_ui_5
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -97,7 +98,7 @@ TextureImporter:
         width: 1112
         height: 986
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -117,7 +118,7 @@ TextureImporter:
         width: 484
         height: 359
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -137,7 +138,7 @@ TextureImporter:
         width: 561
         height: 292
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -157,7 +158,7 @@ TextureImporter:
         width: 533
         height: 301
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -177,13 +178,33 @@ TextureImporter:
         width: 536
         height: 247
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 772aca56718d6449da2f7429fda5ef6b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spell_ui_5
+      rect:
+        serializedVersion: 2
+        x: 1053
+        y: 363
+        width: 129
+        height: 137
+      alignment: 9
+      pivot: {x: 0.46520805, y: 0.42993855}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0da03338a7cb49929398dd3be4bc3ff
       vertices: []
       indices: 
       edges: []

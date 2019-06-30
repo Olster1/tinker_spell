@@ -8,7 +8,7 @@ public class CameraFollowPlayer : MonoBehaviour
     public GameObject playerToFollow;
     private Transform playerTransform;
     private Transform cameraTransform;
-    private bool followPlayer;
+    [HideInInspector] public bool followPlayer;
     public float xDiff;
     public float yDiff;
     // private Vector2 cameraVelocity;

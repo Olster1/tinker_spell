@@ -34,6 +34,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private bool finishedAttack;
     public string nameCollider;
 
+    public BossFightTrigger bossTriggerEnd;
+
     private PlayerMovement playerMovement;
 
     public AudioSource rockHitSound;
@@ -252,6 +254,9 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                 if(isSentinel || isRangeGollum) {
                     
                     fadeInTimer.turnOn();
+                }
+                if(bossTriggerEnd != null) {
+                    bossTriggerEnd.bossDied();
                 }
 
            }
