@@ -33,7 +33,7 @@ public class GoToSkillTree : MonoBehaviour
     void OnTriggerStay2D(Collider2D other) {
     	// Assert.IsTrue(false);
     	GameObject gm = other.gameObject;
-    	if(Input.GetButtonDown("Fire1") && gm.name == "Player") {
+    	if(Input.GetButtonDown("Jump") && gm.name == "Player" && !cam.moveUpTimer.isOn()) {
     		cam.moveUpTimer.turnOn();
     		cam.startMovePos = cam.transform.position;
     		cam.levelToLoad = LevelStateId.LEVEL_SKILL_TREE;

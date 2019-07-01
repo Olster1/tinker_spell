@@ -15,6 +15,13 @@ public class ActivateQuote : MonoBehaviour
     public TextWriter writer;
     private bool fadeIn;
 
+    public GameObject[] imageObjs;
+
+    public enum QuoteImage {
+        TINKER_HEAD,
+        TREE_DIETY_HEAD,
+    }
+
     public SpriteRenderer sp;
     private Timer fadeTimer;
 
@@ -24,6 +31,8 @@ public class ActivateQuote : MonoBehaviour
 
     public bool fuelCellEffected;
     public int fuelCellsNeeded;
+
+    public QuoteImage quoteType;
 
     public BoxCollider2D boxCollider;
     // Start is called before the first frame update
@@ -81,6 +90,13 @@ public class ActivateQuote : MonoBehaviour
             firstPlay = true;
         	quoteAnimator.SetTrigger("OffscreenIn");   
             writer.stringArray = dialog;
+            if(quoteType == QuoteImage.TINKER_HEAD) {
+                imageObjs[0].SetActive(true);
+                imageObjs[1].SetActive(false);
+            } else if(quoteType == QuoteImage.TREE_DIETY_HEAD) {
+                imageObjs[1].SetActive(true);
+                imageObjs[0].SetActive(false);
+            }
             
             // interact.SetTrigger("Out");
             fadeTimer.turnOn();

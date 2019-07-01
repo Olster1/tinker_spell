@@ -208,10 +208,14 @@ MonoBehaviour:
   - I need you and spell to go find me a fuel capsule.
   - But be carerful, the spirits have been extra aggressive lately.
   writer: {fileID: 0}
+  imageObjs:
+  - {fileID: 0}
+  - {fileID: 0}
   sp: {fileID: 8859419538703765678}
   automatic: 0
   fuelCellEffected: 0
   fuelCellsNeeded: 0
+  quoteType: 0
   boxCollider: {fileID: 8859419539613156831}
 --- !u!82 &8859419539613156825
 AudioSource:

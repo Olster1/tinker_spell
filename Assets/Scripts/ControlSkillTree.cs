@@ -23,20 +23,20 @@ public class ControlSkillTree : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Fire1")) {
+        if(Input.GetButtonDown("Jump")) {
         	if (!GameManager.hasEarth1) {
-	        	// if(GameManager.amberCount >= 120 && GameManager.senintelHeadCount >= 1) {
-	        		GameManager.amberCount -= 120;
+	        	if(GameManager.amberCount >= 60 && GameManager.senintelHeadCount >= 1) {
+	        		GameManager.amberCount -= 60;
 	        		GameManager.senintelHeadCount--;
 
 	        		GameManager.hasEarth1 = true;
                     selectSound.Play();
 
 	        		earthEmblem1.SetTrigger("FadeIn");
-	        	// }
+	        	}
 	        }
         }
-        if(Input.GetButtonDown("Fire2")) {
+        if(Input.GetButtonDown("Fire1")) {
             cam.moveDownTimer.turnOn();
             
             playerMovement.canControlPlayer = true;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Timer_namespace;
+using EasyGameManager;
 
 public class BossFightTrigger : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class BossFightTrigger : MonoBehaviour
         if(timer.isOn()) {
         	bool b = timer.updateTimer(Time.deltaTime);
         	float f = timer.getCanoncial();
-        	camTrans.position = Vector3.Lerp(startP, startP + offset, f);
+        	camTrans.position = Vector3.Lerp(startP, transform.position + offset, f);
         	if(b) {
         		timer.turnOff();
         		Assert.IsTrue(!active);
@@ -40,6 +41,11 @@ public class BossFightTrigger : MonoBehaviour
     public void bossDied() {
     	mixer.SetSound(musicId);
     	cam.followPlayer = true;
+      //restore player health
+      GameManager.playerHealth = 100;
+      GameManager.updateHealth = true;
+
+      ////////
       Destroy(gameObject);
 
     }

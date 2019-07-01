@@ -5,6 +5,7 @@ using Timer_namespace;
 using EasyGameManager;
 using UnityEngine.SceneManagement;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 using EasyAttackObjectCreator;
 using ConfigControls_namespace;
 using EasyForceUpdator;
@@ -31,6 +32,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
     public GameObject camera;
 
+    public Image fadePanel;
+
     public Animator panelAnimator;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
@@ -44,6 +47,9 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     public AudioSource regularAttackSound;
     public AudioSource uppercutAttackSound;
     public AudioSource jumpAudioSrc;
+
+    public AudioSource attackVoice;
+    public AudioClip[] attackVoiceClips;
     public float reboundForce;
 
     public float raySize;
@@ -85,6 +91,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
     public Vector2 earthOffset;
     [HideInInspector] public Timer globalPauseTimer;
+    [HideInInspector] public Timer dieTimer;
     // Start is called before the first frame update
     void Start()
     {
@@ -107,9 +114,11 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         swapAnimation = false;
         toSwapTo = IdleAnimation.ANIMATION_IDLE1;
 
-        globalPauseTimer = new Timer(0.3f);
+        globalPauseTimer = new Timer(0.1f);
+        dieTimer = new Timer(0.7f);
+        dieTimer.turnOff();
         ParticleSystem.MainModule main = ps.main;
-        // main.useUnscaledTime = true;
+        main.useUnscaledTime = true;
 
         earthTimer = new Timer(1.5f);
         earthTimer.turnOff();
@@ -121,6 +130,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         lastValidPos = new Vector3[16];
         validPosTimer = new Timer(0.1f);
 
+        Time.timeScale = 1.0f;
         
     }
 
@@ -265,9 +275,9 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
            if (GameManager.playerHealth < 0)
            {
+                Time.timeScale = 0.0f;
                 GameManager.playerHealth = 100;
-             
-
+                GameManager.updateHealth = true;
            }
        }
     }
@@ -325,6 +335,20 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         jumpTimer.turnOff();
     }
 
+    void playAttackVoice() {
+        Assert.IsTrue(attackVoiceClips.Length > 0);
+
+        int randIndex = (int)Random.Range(0, attackVoiceClips.Length);
+        if(randIndex == attackVoiceClips.Length) {
+            randIndex = attackVoiceClips.Length - 1;
+        }
+        attackVoice.clip = attackVoiceClips[randIndex];
+        attackVoice.volume = 0.7f;
+        // attackVoice.pitch = (float)Random.Range(0.8f, 1.2f);
+        attackVoice.Play();
+        
+    }
+
     void Update() {
 
         //this is the global pause timer
@@ -334,6 +358,16 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             if(fin) {
                 globalPauseTimer.turnOff();
                 Time.timeScale = 1.0f;
+            }
+        }
+
+        if(dieTimer.isOn()) {
+            bool fin = dieTimer.updateTimer(Time.unscaledDeltaTime);
+            fadePanel.color = new Color(0, 0, 0, 1.0f - dieTimer.getCanoncial());
+            // Time.timeScale = Mathf.Lerp(0.0f, 0.3f, dieTimer.getCanoncial());
+            if(fin) {
+                dieTimer.turnOff();
+                SceneManager.LoadScene("LoadingScreen");
             }
         }
 
@@ -400,15 +434,19 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                     } else if(!isGrounded) {
                         animator.SetTrigger("attack1"); 
                         uppercutAttackSound.Play();
+                        playAttackVoice();
                     } else if (isVertical) {
                         animator.SetTrigger("attack1");
                         uppercutAttackSound.Play();
+                        playAttackVoice();
                     } else if(isHorizontal) {
                         regularAttackSound.Play();
                         animator.SetTrigger("attack2");
+                        playAttackVoice();
                     } else {
                         animator.SetTrigger("attack1"); //don't yet have stationary attack
                         uppercutAttackSound.Play();
+                        playAttackVoice();
                     }
                 }
             }
