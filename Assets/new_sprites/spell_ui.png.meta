@@ -8,6 +8,7 @@ TextureImporter:
     21300006: spell_ui_3
     21300008: spell_ui_4
     21300010: spell_ui_5
+    21300012: spell_ui_6
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -205,6 +206,26 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: f0da03338a7cb49929398dd3be4bc3ff
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spell_ui_6
+      rect:
+        serializedVersion: 2
+        x: 1047
+        y: 660
+        width: 128
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e82ff7edeae943af86db3e15c3dec76
       vertices: []
       indices: 
       edges: []

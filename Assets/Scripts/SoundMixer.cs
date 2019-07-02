@@ -72,7 +72,7 @@ public class SoundMixer : MonoBehaviour
         		if(settings[i].fadeOut) {
         			f = 1.0f - f;
         		}
-        		sources[settings[i].sourceId].volume = f;
+        		sources[settings[i].sourceId].volume = Mathf.Lerp(0, 0.5f, f);
         		if(b) {
         			if(settings[i].fadeOut) {
         				sources[settings[i].sourceId].Stop();

@@ -68,7 +68,7 @@ SpriteRenderer:
   m_SortingLayerID: -682040951
   m_SortingLayer: 7
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 86cfdad328e2c482da37149ed295c9b1, type: 3}
+  m_Sprite: {fileID: 21300012, guid: ae53630cc570549b78f09948e8ed8fd5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -211,12 +211,14 @@ MonoBehaviour:
   imageObjs:
   - {fileID: 0}
   - {fileID: 0}
+  toActivate: {fileID: 0}
   sp: {fileID: 8859419538703765678}
   automatic: 0
   fuelCellEffected: 0
   fuelCellsNeeded: 0
   quoteType: 0
   boxCollider: {fileID: 8859419539613156831}
+  spInteract: {fileID: 8859419538703765678}
 --- !u!82 &8859419539613156825
 AudioSource:
   m_ObjectHideFlags: 0

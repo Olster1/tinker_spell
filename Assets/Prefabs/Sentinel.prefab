@@ -176,6 +176,11 @@ MonoBehaviour:
   genericAttackObject: {fileID: 6368268402639536057, guid: b9589d6f131aa4c59a0216c8079786f3,
     type: 3}
   nameCollider: 
+  attackSwipe: {fileID: 4218342321001553541, guid: 8743a90adc1234aba92f4e4737604c54,
+    type: 3}
+  rockObj: {fileID: 0}
+  rocks: []
+  bossTriggerEnd: {fileID: 0}
   rockHitSound: {fileID: 0}
   sentinelAttack: {fileID: 0}
   isSentinel: 0

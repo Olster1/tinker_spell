@@ -100,23 +100,34 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0
-    functionName: enforceFlipForAttack
+    functionName: FireRock
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 2850328975263803226, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
+      type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0
-    functionName: CreateRangeAttackObject
+  - time: 0.33333334
+    functionName: FireRock
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 2850328975263803226, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
+      type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0
-    functionName: applyRangeAttackForce
+  - time: 0.5833333
+    functionName: FireRock
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 2850328975263803226, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
+      type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.8333333
+    functionName: FireRock
+    data: 
+    objectReferenceParameter: {fileID: 2850328975263803226, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
+      type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

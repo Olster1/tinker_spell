@@ -17,6 +17,11 @@ public class ActivateQuote : MonoBehaviour
 
     public GameObject[] imageObjs;
 
+    public GameObject toActivate;
+    public GameObject toDeactivate;
+
+    public AudioClip[] clips;
+
     public enum QuoteImage {
         TINKER_HEAD,
         TREE_DIETY_HEAD,
@@ -35,6 +40,7 @@ public class ActivateQuote : MonoBehaviour
     public QuoteImage quoteType;
 
     public BoxCollider2D boxCollider;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -45,8 +51,10 @@ public class ActivateQuote : MonoBehaviour
         if(fuelCellEffected) {
             if(GameManager.fuelCellCount == fuelCellsNeeded) {
                 boxCollider.enabled = true;
+                sp.enabled = true;
             } else {
                 boxCollider.enabled = false;
+                sp.enabled = false;
             }
         }
     }
@@ -60,12 +68,14 @@ public class ActivateQuote : MonoBehaviour
         if(fuelCellEffected) {
             if(GameManager.fuelCellCount == fuelCellsNeeded) {
                 boxCollider.enabled = true;
+                sp.enabled = true;
             } else {
                 boxCollider.enabled = false;
+                sp.enabled = false;
             }
         }
 
-        if(fadeTimer.isOn()) {
+        if(fadeTimer.isOn() && sp.enabled) {
             bool b = fadeTimer.updateTimer(Time.deltaTime);
             float f = fadeTimer.getCanoncial();
             if(!fadeIn) {
@@ -82,14 +92,18 @@ public class ActivateQuote : MonoBehaviour
                 fadeTimer.turnOff();
             }
         }
-        
+
     }
 
     private void OnTriggerStay2D(Collider2D other) {
-        if (other.gameObject.tag == "Player" && !writer.showText && (Input.GetButtonDown("Jump") || (automatic && !played && !firstPlay))) {
+
+        if (other.gameObject.tag == "Player" && !writer.showText && (Input.GetButtonDown("Fire1") || (automatic && !played && !firstPlay))) {
             firstPlay = true;
         	quoteAnimator.SetTrigger("OffscreenIn");   
             writer.stringArray = dialog;
+            writer.clips = clips;
+            
+            writer.currentQuote = this;
             if(quoteType == QuoteImage.TINKER_HEAD) {
                 imageObjs[0].SetActive(true);
                 imageObjs[1].SetActive(false);

@@ -16,11 +16,19 @@ public class BossFightTrigger : MonoBehaviour
 	private Vector3 startP;
 	public SoundMixer.MusicId musicId;
 	public SoundMixer mixer;
+  public SoundChanger soundChanger;
+
+  public RectTransform anim1;
+  public RectTransform anim2;
+  private Timer blackBarsTimer;
+  private bool bbOut;
     // Start is called before the first frame update
     void Start()
     {
         timer = new Timer(0.5f);
         active = true;
+        blackBarsTimer = new Timer(1.0f);
+        blackBarsTimer.turnOff();
     }
 
     // Update is called once per frame
@@ -36,6 +44,35 @@ public class BossFightTrigger : MonoBehaviour
         	}
 
         }
+
+        if(blackBarsTimer.isOn()) {
+          bool b1 = blackBarsTimer.updateTimer(Time.deltaTime);
+          float f1 = blackBarsTimer.getCanoncial();
+          
+
+          if(bbOut) {
+            f1 = 1.0f - f1;
+          } 
+
+          float newY1 = Mathf.Lerp(25, -25, f1);
+          float newY2 = Mathf.Lerp(-25, 25, f1);
+          
+          
+          anim1.anchoredPosition = new Vector2(anim1.anchoredPosition.x, newY1);
+          anim2.anchoredPosition = new Vector2(anim2.anchoredPosition.x, newY2);
+          
+          if(b1) {
+            if(!bbOut) {
+              soundChanger.enabled = false;
+            }
+            blackBarsTimer.turnOff();
+            if(bbOut) {
+              ////////
+              Destroy(gameObject);
+            }
+          }
+
+        }
     }
 
     public void bossDied() {
@@ -44,9 +81,9 @@ public class BossFightTrigger : MonoBehaviour
       //restore player health
       GameManager.playerHealth = 100;
       GameManager.updateHealth = true;
-
-      ////////
-      Destroy(gameObject);
+      bbOut = true;
+      blackBarsTimer.turnOn();
+      
 
     }
 
@@ -56,6 +93,8 @@ public class BossFightTrigger : MonoBehaviour
    			timer.turnOn();
    			active = false;
    			startP = camTrans.position;
+        bbOut = false;
+        blackBarsTimer.turnOn();
    		}
    	}
 }

@@ -20,6 +20,12 @@ public class TextWriter : MonoBehaviour
 	private Timer fadeOutTimer;
 	public bool isOn;
 	public PlayerMovement player;
+	public AudioSource audioSrc;
+
+	[HideInInspector] public AudioClip[] clips;
+
+	[HideInInspector] public ActivateQuote currentQuote;
+
 
 	public class GlyphInfo {
 		public float alphaAt;
@@ -62,6 +68,11 @@ public class TextWriter : MonoBehaviour
         initGlyphInfos();
         player.canControlPlayer = false;
         Time.timeScale = 0.0f;
+
+        if(clips.Length > 0) {
+        	audioSrc.clip = clips[stringAt];
+        	audioSrc.Play();
+        }
 	}
 
 	public void CancelFontWriting() {
@@ -73,6 +84,7 @@ public class TextWriter : MonoBehaviour
     	initGlyphInfos(); 
     	player.canControlPlayer = true;
     	Time.timeScale = 1.0f;
+    	audioSrc.Stop();
 
 	}
 
@@ -145,11 +157,20 @@ public class TextWriter : MonoBehaviour
 	    		if(Input.GetButtonDown("Jump")) {
 	    			if(!fadeOutTimer.isOn()) {
 			    		if(stringAt < (stringArray.Length - 1)) {
+			    			
 		    				
+
 		    				// Debug.Log("finished show writer" + stringAt);
 		    				fadeOutTimer.turnOn();
 		    			} else {
 		    				// fadeOutTimer.turnOn();
+
+		    				if(currentQuote.toActivate != null) {
+		    					currentQuote.toActivate.SetActive(true);
+		    					currentQuote.gameObject.SetActive(false);
+		    					currentQuote.toDeactivate.SetActive(false);
+		    				}
+		    				
 		    				quoteAnimator.SetTrigger("OffscreenOut");
 		    				CancelFontWriting();
 		    			}

@@ -34,6 +34,11 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private bool finishedAttack;
     public string nameCollider;
 
+    public GameObject attackSwipe;
+
+    public GameObject rockObj;
+
+    public Sprite[] rocks;
     public BossFightTrigger bossTriggerEnd;
 
     private PlayerMovement playerMovement;
@@ -92,6 +97,27 @@ public class RockGullumAI : MonoBehaviour, IHitBox
 
     private void getRandomAiSubState() {
         subAiState = (Ai_SubState)((int)Random.Range(0, (int)(Ai_SubState.AI_SUB_COUNT)));
+    }
+
+    public void FireRock() {
+        Vector2 diffVec = playerTransform.position - thisTransform.position;
+        diffVec.Normalize();
+        int indexAt = Random.Range(0, rocks.Length - 1);
+        if(indexAt == rocks.Length - 1) {
+            indexAt--;
+        }
+
+        Sprite s = rocks[indexAt];
+
+        GameObject obj = Instantiate(rockObj, transform.position,  Quaternion.identity);
+        SpriteRenderer thisSp = obj.GetComponent<SpriteRenderer>();
+        thisSp.sprite = s;
+        Rigidbody2D thisRb = obj.GetComponent<Rigidbody2D>();
+        float rockForce = (float)Random.Range(4000, 6000);
+        thisRb.AddForce(rockForce*diffVec);
+        thisRb.AddTorque(30);
+
+
     }
 
     // Start is called before the first frame update
@@ -222,6 +248,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             }
 
             Instantiate(hitPs, transform);
+            Instantiate(attackSwipe, transform);
 
            // Time.timeScale = 0.0f;
            // playerMovement.globalPauseTimer.turnOn();
