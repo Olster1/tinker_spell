@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8953925962353149946}
   - component: {fileID: 3157239558142578109}
   - component: {fileID: 8160818392555903342}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: ThrowRock
   m_TagString: Untagged
   m_Icon: {fileID: 0}

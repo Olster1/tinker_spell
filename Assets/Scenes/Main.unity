@@ -2599,6 +2599,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mixer: {fileID: 519420036}
   idToSet: 3
+  onlyOnce: 1
 --- !u!114 &202473220
 MonoBehaviour:
   m_ObjectHideFlags: 0

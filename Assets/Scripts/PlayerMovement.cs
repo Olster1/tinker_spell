@@ -407,10 +407,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             if(Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN)) {
                 //MAGIC MOVES 
                 if(Input.GetButtonDown("Fire2") && isGrounded && GameManager.hasEarth1 && !earthTimer.isOn()) {
-                    float xDir = Mathf.Sign(xMove);
+                    float xDir = spriteRenderer.flipX ? -1 : 1;
                     earthTimer.turnOn();
                     GameObject earthObj = Instantiate(earthAttackObject, transform.position - new Vector3(xDir*earthOffset.x, earthOffset.y, 0),  Quaternion.identity);
-                    earthObj.GetComponent<SpriteRenderer>().flipX = Mathf.Sign(xMove) < 0;
+                    earthObj.GetComponent<SpriteRenderer>().flipX = xDir < 0;
                     
                     if(xDir < 0) {
                         earthObj.GetComponent<EarthAttack>().rePosBoxes();    

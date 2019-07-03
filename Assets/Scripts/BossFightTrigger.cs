@@ -62,9 +62,6 @@ public class BossFightTrigger : MonoBehaviour
           anim2.anchoredPosition = new Vector2(anim2.anchoredPosition.x, newY2);
           
           if(b1) {
-            if(!bbOut) {
-              soundChanger.enabled = false;
-            }
             blackBarsTimer.turnOff();
             if(bbOut) {
               ////////
@@ -76,6 +73,7 @@ public class BossFightTrigger : MonoBehaviour
     }
 
     public void bossDied() {
+      soundChanger.enabled = false;
     	mixer.SetSound(musicId);
     	cam.followPlayer = true;
       //restore player health

@@ -6,6 +6,8 @@ public class SoundChanger : MonoBehaviour
 {
 	public SoundMixer mixer;
 	public SoundMixer.MusicId idToSet;
+  public bool onlyOnce;
+  private bool done;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,8 +21,10 @@ public class SoundChanger : MonoBehaviour
     }
 
     public void OnTriggerEnter2D(Collider2D other) {
+      if((onlyOnce && !done) || !onlyOnce)
    		if (other.gameObject.name == "Player") {
    			mixer.SetSound(idToSet);
+        done = true;
    		}
    	}
 }
