@@ -5,12 +5,12 @@ using UnityEngine;
 public class StopAmberBounce : MonoBehaviour
 {
 	public Rigidbody2D body;
-	private int hitCount;
+	public AudioSource bounceSound;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        // body.solverIterations = 30;
     }
 
      // void OnCollisionEnter2D(Collision2D col) {
@@ -24,5 +24,11 @@ public class StopAmberBounce : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        bounceSound.Play();
+       
     }
 }

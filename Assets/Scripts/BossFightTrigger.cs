@@ -17,6 +17,7 @@ public class BossFightTrigger : MonoBehaviour
 	public SoundMixer.MusicId musicId;
 	public SoundMixer mixer;
   public SoundChanger soundChanger;
+  public AudioSource audioSrc;
 
   public RectTransform anim1;
   public RectTransform anim2;
@@ -87,6 +88,7 @@ public class BossFightTrigger : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D other) {
    		if (other.gameObject.name == "Player" && active) {
+        audioSrc.Play();
    			cam.followPlayer = false;
    			timer.turnOn();
    			active = false;

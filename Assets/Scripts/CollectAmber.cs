@@ -29,6 +29,8 @@ public class CollectAmber : MonoBehaviour
     private Rigidbody2D amberRb;
     private worldTUI createAmberUIObject;
 
+    public float relVel;
+
     public Sprite amberSprite;
     public Sprite manaSprite;
     public Sprite healthSprite;
@@ -94,6 +96,7 @@ public class CollectAmber : MonoBehaviour
 
         }
     }
+
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.tag == "Player") {

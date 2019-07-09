@@ -23,12 +23,15 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     public float moveAccel;
     public float moveWhileJumpAccel;
     private Animator animator;
+    public Image redHurtImage;
 
     [HideInInspector] public Timer earthTimer;
     [HideInInspector] public Timer waterTimer;
     [HideInInspector] public Timer fireTimer;
 
     public ParticleSystem ps;
+
+    private Timer hurtPulseTimer;
 
     public GameObject camera;
 
@@ -106,6 +109,9 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         canControlPlayer = true;
 
         idleAnimationTimer = new Timer(10.0f);
+
+        hurtPulseTimer = new Timer(1.0f);
+        hurtPulseTimer.turnOn();
 
         forceUpdator = new ForceUpdator();
 
@@ -270,7 +276,9 @@ public class PlayerMovement : MonoBehaviour, IHitBox
            Time.timeScale = 0.0f;
            globalPauseTimer.turnOn();
            ps.Play();
-           
+
+           redHurtImage.material.SetFloat("_Amount", Mathf.Lerp(0.4f, 0.0f, GameManager.playerHealth/100.0f));
+           hurtPulseTimer.turnOn();
            //Instantiate(hitParticleSystem);
 
            if (GameManager.playerHealth < 0)
@@ -350,6 +358,15 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     }
 
     void Update() {
+
+        if(hurtPulseTimer.isOn()) {
+            bool hrtDone = hurtPulseTimer.updateTimer(Time.deltaTime);
+            float alpha = (float)-Mathf.Cos(2*Mathf.PI*hurtPulseTimer.getCanoncial()) + 1.0f;
+            redHurtImage.material.SetFloat("_tAt", alpha);
+            if(hrtDone) {
+                hurtPulseTimer.turnOn();
+            } 
+        }
 
         //this is the global pause timer
         if(globalPauseTimer.isOn()) {
