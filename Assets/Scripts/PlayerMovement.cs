@@ -25,10 +25,18 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     private Animator animator;
     public Image redHurtImage;
 
+    private float timeInAir;
+
+    public AudioSource hurtBreathing;
+
     [HideInInspector] public Timer earthTimer;
     [HideInInspector] public Timer waterTimer;
     [HideInInspector] public Timer fireTimer;
 
+    public GameObject dustEffect;
+
+
+    public Animator camAnimator;
     public ParticleSystem ps;
 
     private Timer hurtPulseTimer;
@@ -154,12 +162,12 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     }
 
     public void checkSwap() {
-        if(swapAnimation) {
-            Debug.Log("Swapped animation");
-            Assert.IsTrue((int)toSwapTo < idleAnimations.Length);
-            AnimatorOverrideController newController = idleAnimations[(int)toSwapTo];
-            animator.runtimeAnimatorController = newController;
-        }
+        // if(swapAnimation) {
+        //     Debug.Log("Swapped animation");
+        //     Assert.IsTrue((int)toSwapTo < idleAnimations.Length);
+        //     AnimatorOverrideController newController = idleAnimations[(int)toSwapTo];
+        //     animator.runtimeAnimatorController = newController;
+        // }
     }
 
     public bool CastGroundedRay(Vector3 colliderOffset) {
@@ -256,6 +264,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
     }
 
+    public void ResetIdleTrigger() {
+        animator.ResetTrigger("endIdle");
+    }
+
     public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
         // bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
        if (enemyType == EnemyType.ENEMY_EVIL) 
@@ -271,20 +283,34 @@ public class PlayerMovement : MonoBehaviour, IHitBox
            ForceToAddStruct force = new ForceToAddStruct(0.1f, reboundForce*dir);
            forceUpdator.AddForce(force);
            // thisAnimator.SetTrigger("WasHit");
+
            GameManager.playerHealth -= damage;
            GameManager.updateHealth = true;
            Time.timeScale = 0.0f;
            globalPauseTimer.turnOn();
            ps.Play();
 
-           redHurtImage.material.SetFloat("_Amount", Mathf.Lerp(0.4f, 0.0f, GameManager.playerHealth/100.0f));
-           hurtPulseTimer.turnOn();
+           
+           if(GameManager.playerHealth < 50) {
+                if(!redHurtImage.enabled) {
+                    redHurtImage.enabled = true;
+               }
+                if(!hurtBreathing.isPlaying) {
+                    hurtBreathing.Play();
+                }
+                hurtBreathing.volume = Mathf.Lerp(1.0f, 0.7f, GameManager.playerHealth/50.0f);
+
+               redHurtImage.material.SetFloat("_Amount", Mathf.Lerp(0.4f, 0.0f, GameManager.playerHealth/100.0f));
+               hurtPulseTimer.turnOn();
+            }
            //Instantiate(hitParticleSystem);
 
            if (GameManager.playerHealth < 0)
            {
+                hurtBreathing.Stop();
                 Time.timeScale = 0.0f;
                 GameManager.playerHealth = 100;
+                redHurtImage.enabled = false;
                 GameManager.updateHealth = true;
            }
        }
@@ -406,8 +432,22 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         animator.SetBool("grounded", isGrounded);
         
         if(lastFameGrounded != isGrounded && !isJumping) {
-            landingSoundSource.Play();
+            //landing
 
+            landingSoundSource.Play();
+            Instantiate(dustEffect, transform.position - new Vector3(0, 1, 0), Quaternion.identity);
+
+        }
+
+        if(!isGrounded) {
+            timeInAir += Time.deltaTime;
+        } 
+
+        if(isGrounded && !lastFameGrounded) {
+            if(timeInAir > 0.7f) {
+                camAnimator.SetTrigger("shake1");
+            }
+            timeInAir = 0;
         }
 
         
@@ -446,6 +486,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                     bool isHorizontal = xMove != 0.0f;
                     bool isVertical = Mathf.Abs(yMove) > Mathf.Abs(xMove);
                     // audiosrc.PlayOneShot(attackSound);
+                    animator.SetTrigger("endIdle");
                     if(!isGrounded && isFallingAnim && isHorizontal && (Mathf.Abs(xMove) > Mathf.Abs(yMove))) {
                         animator.SetTrigger("downward_dash");
                     } else if(!isGrounded) {
@@ -501,29 +542,32 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             checkSwap();
             // Debug.Log("can Val = " + idleAnimationTimer.getCanoncial());
         } else {
-            bool fin = idleAnimationTimer.updateTimer(Time.deltaTime);
-            float canVal = idleAnimationTimer.getCanoncial();
+            // bool fin = idleAnimationTimer.updateTimer(Time.deltaTime);
+            // float canVal = idleAnimationTimer.getCanoncial();
 
-            if(canVal < 0.5f) {
-                // if() {
+            // if(canVal < 0.5f) {
+            //     // if() {
                     
-                    swapAnimation = true;
-                    toSwapTo = IdleAnimation.ANIMATION_IDLE1;
-                // }
+            //         swapAnimation = true;
+            //         toSwapTo = IdleAnimation.ANIMATION_IDLE1;
+            //     // }
 
-            } else if(canVal >= 0.5f) {
-                // Debug.Log("second idle at " + canVal);
-                // if() {
-                    swapAnimation = true;
-                    toSwapTo = IdleAnimation.ANIMATION_IDLE2;
-                // }
-            }
+            // } else if(canVal >= 0.5f) {
+            //     // Debug.Log("second idle at " + canVal);
+            //     // if() {
+            //         swapAnimation = true;
+            //         toSwapTo = IdleAnimation.ANIMATION_IDLE2;
+            //     // }
+            // }
 
-            if(fin) {
-                idleAnimationTimer.turnOn(); //basically reset the timer
-            }
+            // if(fin) {
+            //     idleAnimationTimer.turnOn(); //basically reset the timer
+            // }
         }
         animator.SetFloat("run_speed", rigidBody.velocity.x);
+        if(rigidBody.velocity.x > 1 || rigidBody.velocity.x < -1) {
+            animator.SetTrigger("endIdle");
+        }
         
         bool running = animator.GetCurrentAnimatorStateInfo(0).IsName("player_run");
         
@@ -556,8 +600,12 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         if((Input.GetButtonDown("Jump") && isGrounded && canControlPlayer)) {
             if (!jumpTimer.isOn())
             {
+                animator.SetTrigger("endIdle");
                 animator.SetTrigger("jump");
+                //start timing the jump
+                timeInAir = 0;
                 jumpAudioSrc.Play();
+                Instantiate(dustEffect, transform.position - new Vector3(0, 1, 0), Quaternion.identity);
                 jumpTimer.turnOn();
                 jumpTimer.period = 0.5f;
                 // readyingJump = true;
@@ -569,7 +617,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         } else {
             // Debug.Log("couldn't jump");
         }
-
         
 
         if(isGrounded) {
@@ -595,6 +642,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             // Debug.Log("about to land: " + isAboutToLand);
             if(!animator.GetBool("landing") && rigidBody.velocity.y < 0 && isAboutToLand) {
                 // Debug.Log("setLanding trigger");
+                animator.SetTrigger("endIdle");
                 animator.SetTrigger("landing");
             }
         }
@@ -629,7 +677,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         }
 
         if(jumpTimer.isOn()) {
-            if(Input.GetButton("Jump") && jumpTimer.period < 1.15f) {
+            if(Input.GetButton("Jump") && jumpTimer.period < 1.0f) {
                 jumpTimer.period += timeIncrease*Time.fixedDeltaTime;
 
             }
@@ -662,19 +710,25 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             if(Input.GetButton("Jump")) {
 
             }
+
+            
             
             if (!fin && jumpTimer.getCanoncial() < waitPercentToJump) { //has to be before the jump timer is finished 
                 //wait till over a percentage
                 
             } else {
-                
-                movementForce.y = 1;
-                
-                thisJmpAccel = Mathf.Lerp(jumpAccel, 0, jumpTimer.getCanoncial());
-                if (fin)
-                {
+                if(!Input.GetButton("Jump") && jumpTimer.getCanoncial() > 0.5f) {
                     jumpTimer.turnOff();
+                } else {
+
+                    movementForce.y = 1;
                     
+                    thisJmpAccel = Mathf.Lerp(jumpAccel, 0, jumpTimer.getCanoncial());
+                    if (fin)
+                    {
+                        jumpTimer.turnOff();
+                        
+                    }
                 }
             }
             

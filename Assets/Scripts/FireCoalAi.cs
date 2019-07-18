@@ -85,7 +85,9 @@ public class FireCoalAi : MonoBehaviour, IHitBox
                     
                 //     fadeInTimer.turnOn();
                 // }
-           		fadeOutTimer.turnOn();
+              if(!fadeOutTimer.isOn()) {
+           		 fadeOutTimer.turnOn();
+              }
 
            }
        }

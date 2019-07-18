@@ -19,6 +19,7 @@ public class CameraFollowPlayer : MonoBehaviour
     [HideInInspector] public Timer moveUpTimer;
     [HideInInspector] public Timer moveDownTimer;
     [HideInInspector] public Vector3 startMovePos;
+    public Camera cam;
     // Start is called before the first frame update
 
     public Animator animator;
@@ -36,7 +37,7 @@ public class CameraFollowPlayer : MonoBehaviour
 
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
 
-        Camera cam = gameObject.GetComponent<Camera>();
+        
         //this is to fix the sorting when using the perspective camera mode
         cam.transparencySortMode = TransparencySortMode.Orthographic;
         moveUpTimer = new Timer(0.4f);
