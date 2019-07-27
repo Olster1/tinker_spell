@@ -15,6 +15,17 @@ public class ActivateQuote : MonoBehaviour
     public TextWriter writer;
     private bool fadeIn;
 
+    public bool unfreezePlayer;
+
+    public bool setManual;
+    private Journal journal;
+
+    // public bool completeJournalItem;
+    public bool hasJournalItem;
+    public string journalItemName;
+    public string journalItemSynopsis;
+    public int journalItemId;
+
     public GameObject[] imageObjs;
 
     public GameObject toActivate;
@@ -24,6 +35,7 @@ public class ActivateQuote : MonoBehaviour
 
     public enum QuoteImage {
         TINKER_HEAD,
+        SPELL_HEAD,
         TREE_DIETY_HEAD,
     }
 
@@ -47,6 +59,8 @@ public class ActivateQuote : MonoBehaviour
         fadeTimer = new Timer(0.5f);
         fadeTimer.turnOff();
         sp.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+
+        journal = Camera.main.GetComponent<Journal>();
 
         if(fuelCellEffected) {
             if(GameManager.fuelCellCount == fuelCellsNeeded) {
@@ -95,11 +109,32 @@ public class ActivateQuote : MonoBehaviour
 
     }
 
-    private void OnTriggerStay2D(Collider2D other) {
+    public void EndQuote() {
+        if(hasJournalItem && !journal.hasJournalItem(journalItemId)) {
+            journal.AddJournalItem(journalItemName, journalItemSynopsis);
 
-        if (other.gameObject.tag == "Player" && !writer.showText && (Input.GetButtonDown("Fire1") || (automatic && !played && !firstPlay))) {
+        }
+    } 
+
+    private void OnTriggerStay2D(Collider2D other) {
+        if(!setManual) {
+            if(!writer.showText) {
+                if (other.gameObject.tag == "Player" && (Input.GetButtonDown("Fire1") || (automatic && !played && !firstPlay))) {
+                    Activate();
+                }
+
+                if(!writer.showText && !fadeIn && !fadeTimer.isOn()) {
+                    fadeTimer.turnOn();
+                    fadeIn = true;
+                }
+            }
+        }
+    }
+
+    public bool Activate() {
+        if(!writer.showText) {
             firstPlay = true;
-        	quoteAnimator.SetTrigger("OffscreenIn");   
+            quoteAnimator.SetTrigger("OffscreenIn");   
             writer.stringArray = dialog;
             writer.clips = clips;
             
@@ -107,8 +142,14 @@ public class ActivateQuote : MonoBehaviour
             if(quoteType == QuoteImage.TINKER_HEAD) {
                 imageObjs[0].SetActive(true);
                 imageObjs[1].SetActive(false);
+                imageObjs[2].SetActive(false);
             } else if(quoteType == QuoteImage.TREE_DIETY_HEAD) {
                 imageObjs[1].SetActive(true);
+                imageObjs[0].SetActive(false);
+                imageObjs[2].SetActive(false);
+            } else if(quoteType == QuoteImage.SPELL_HEAD) {
+                imageObjs[2].SetActive(true);
+                imageObjs[1].SetActive(false);
                 imageObjs[0].SetActive(false);
             }
             
@@ -118,25 +159,25 @@ public class ActivateQuote : MonoBehaviour
 
             // soundSource.Play();
             // uiImage.SetActive(false);
-
+            return true;
+        } else {
+            return false;            
         }
 
-        if(!writer.showText && !fadeIn && !fadeTimer.isOn()) {
-            fadeTimer.turnOn();
-            fadeIn = true;
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.tag == "Player" && !writer.showText) {
-            // interact.SetTrigger("In");
-            fadeTimer.turnOn();
-            fadeIn = true;
+        if(!setManual) {
+            if (other.gameObject.tag == "Player" && !writer.showText) {
+                // interact.SetTrigger("In");
+                fadeTimer.turnOn();
+                fadeIn = true;
+            }
         }
     }
 
     private void OnTriggerExit2D(Collider2D other) {
-        if (other.gameObject.tag == "Player") {
+        if (other.gameObject.tag == "Player" && !setManual) {
             // interact.SetTrigger("Out");
             fadeTimer.turnOn();
             fadeIn = false;

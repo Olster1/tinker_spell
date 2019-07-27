@@ -33,6 +33,7 @@ public class SceneStateManager : MonoBehaviour
     private PlayerMovement playerMovement;
     public GameObject spell;
     public GameObject camera;
+    public ParticleSystem tailPs;
 
     // public CheckGrounded playerGroundedScript;
     [HideInInspector] public bool useSpawnPoint;
@@ -98,10 +99,14 @@ public class SceneStateManager : MonoBehaviour
             // player.GetComponent<PlayerMovement>().canControlPlayer = false;
             spell.SetActive(false);
             player.SetActive(false);
+            Debug.Log("player not active");
         } else {
-            // player.GetComponent<PlayerMovement>().canControlPlayer = true;
+            player.GetComponent<PlayerMovement>().canControlPlayer = true;
             spell.SetActive(true);
             player.SetActive(true);
+            tailPs.Clear();
+
+            // tailPs.Play();
         }
 
         // //clear grounded count to get rid of any unresolved counts

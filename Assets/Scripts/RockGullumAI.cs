@@ -34,6 +34,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private bool finishedAttack;
     public string nameCollider;
 
+    public ActivateQuote quote;
+
     public GameObject attackSwipe;
 
     public GameObject rockObj;
@@ -68,6 +70,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private float startScale;
     private int physicsLayerMask;
     private Timer timerForPatrol;
+
+    public bool dead;
 
     private float lastFrameVelocityX;
 
@@ -123,6 +127,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     // Start is called before the first frame update
     void Start()
     {
+        lagGoodies = new List<LagGoodie>();
         playerTransform = playerToFollow.GetComponent<Transform>();
         playerMovement = playerToFollow.GetComponent<PlayerMovement>();
         thisCollider= gameObject.GetComponent<BoxCollider2D>();
@@ -177,31 +182,72 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         }
     }
 
-    private void emitAmber(AmberType type, int number) {
-        for(int i = 0; i < number; ++i) {
+    public List<LagGoodie> lagGoodies;
 
-            
-            GameObject objAmber = Instantiate(amber, transform.position,  Quaternion.identity);
-            Rigidbody2D amberRb = objAmber.GetComponent<Rigidbody2D>();
-            CollectAmber amberCollect = objAmber.transform.GetChild(0).gameObject.GetComponent<CollectAmber>();
-            amberCollect.type = (AmberType)type;
+    public class LagGoodie {
+        Timer timer;
+        AmberType type;
+        float angle;
 
-            if(type == AmberType.AMBER_HEALTH || type == AmberType.AMBER_MANA) {
-                float randScale = Random.Range(0.7f, 1.3f);
-                objAmber.transform.localScale = new Vector3(randScale, randScale, 1);
-                objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 3;
-            } else if (type == AmberType.AMBER_SENTINEL_HEAD) {
-                objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 4;
-            } else {
-                BoxCollider2D box = objAmber.GetComponent<BoxCollider2D>();
-                // box.offset
-                objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 0;
+        public LagGoodie(AmberType type, float lagTime, float angle) {
+            this.type = type;
+            timer = new Timer(lagTime);
+            timer.turnOn();
+            this.angle = angle;
+        }
+
+        public bool update(RockGullumAI ai) {
+            bool result = false;
+            if(timer.isOn()) {
+                bool finished = timer.updateTimer(Time.deltaTime);
+                if(finished) {
+                    ai.CreateGoodie(type, angle);
+                    result = true;
+                    timer.turnOff();        
+                }
             }
-            //TODO(oolie): probably a better way so we an't calling sin and cos???
-            float randomAngle = Mathf.Lerp(0.25f*Mathf.PI, 0.75f*Mathf.PI, Random.Range(0.0f, 1.0f));
-            Vector2 newForce = new Vector3(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle));
-            amberRb.bodyType = RigidbodyType2D.Dynamic;
-            amberRb.AddForce(20000*newForce);
+            return result;
+        }
+    }
+
+    private void CreateGoodie(AmberType type, float angle = 0.0f) {
+
+        GameObject objAmber = Instantiate(amber, transform.position,  Quaternion.identity);
+        Rigidbody2D amberRb = objAmber.GetComponent<Rigidbody2D>();
+        CollectAmber amberCollect = objAmber.transform.GetChild(0).gameObject.GetComponent<CollectAmber>();
+        amberCollect.type = (AmberType)type;
+
+        if(quote != null) {
+            amberCollect.SetQuoteOnCollect(quote);
+        }
+
+        if(type == AmberType.AMBER_HEALTH || type == AmberType.AMBER_MANA) {
+            float randScale = Random.Range(0.7f, 1.3f);
+            objAmber.transform.localScale = new Vector3(randScale, randScale, 1);
+            objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 3;
+        } else if (type == AmberType.AMBER_SENTINEL_HEAD) {
+            objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 4;
+        } else {
+            objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 0;
+        }
+        float randomAngle = angle;
+        if(angle == 0.0f) {
+            randomAngle = Mathf.Lerp(0.25f*Mathf.PI, 0.75f*Mathf.PI, Random.Range(0.0f, 1.0f));
+        }
+        Vector2 newForce = new Vector3(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle));
+        amberRb.bodyType = RigidbodyType2D.Dynamic;
+        float lerpVal = Mathf.Lerp(18000, 22000, Random.Range(0.0f, 1.0f));
+        amberRb.AddForce(lerpVal*newForce);
+    }
+
+    private void emitAmber(AmberType type, int number, float angle = 0.0f, float lagTime = 0.0f) {
+        for(int i = 0; i < number; ++i) {
+            if(lagTime > 0.0f) {
+                lagGoodies.Add(new LagGoodie(type, lagTime, angle));
+            } else {
+                CreateGoodie(type);
+            }
+            
         }
     }
 
@@ -209,9 +255,18 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         emitAmber(AmberType.AMBER_AMBER, 4);
         emitAmber(AmberType.AMBER_HEALTH, 10);
         emitAmber(AmberType.AMBER_MANA, 6);
-        if(isSentinel) {
-            emitAmber(AmberType.AMBER_SENTINEL_HEAD, 1);
+        if(isSentinel) 
+        {
+            emitAmber(AmberType.AMBER_SENTINEL_HEAD, 1, 0.5f*Mathf.PI, 3.0f);
         }
+    }
+
+    public void Dead() {
+        dead = true;
+        thisCollider.enabled = false;
+        thisAnimator.enabled = false;
+        spRenderer.enabled = false;
+        thisRigidbody.simulated = false;
     }
 
     public void BeginFadeInTimer() {
@@ -226,13 +281,14 @@ public class RockGullumAI : MonoBehaviour, IHitBox
 
         releaseGoodies();
 
-        Destroy(gameObject);
+        // Destroy(gameObject);
+        Dead();
         
     }
 
     public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
         bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
-       if (!isHit && enemyType == EnemyType.ENEMY_GOOD) 
+       if (!isHit && enemyType == EnemyType.ENEMY_GOOD && !dead) 
        {
            GameObject damageNumObj = Instantiate(damageNumbersObject,  transform);
            DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
@@ -247,7 +303,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                this.redHurtTimer.turnOn();
             }
 
-            Instantiate(hitPs, transform);
+            
             Instantiate(attackSwipe, transform);
 
            // Time.timeScale = 0.0f;
@@ -310,6 +366,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         Vector2 diffVec = diffVecForAttack;
         ForceToAddStruct force = new ForceToAddStruct(0.2f, attackForce * Mathf.Sign(diffVec.x) * Vector2.right);
         forceUpdator.AddForce(force);
+        Instantiate(hitPs, transform);
         // Debug.Log("applying attack force");
     }
 
@@ -370,6 +427,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         sentinelAttack.pitch = (float)Random.Range(0.9f, 1.15f);
         
         sentinelAttack.Play();
+        Instantiate(hitPs, transform);
 
     }
 
@@ -392,236 +450,249 @@ public class RockGullumAI : MonoBehaviour, IHitBox
 
     private void Update()
     {
-        Vector2 diffVec = playerTransform.position - thisTransform.position;
-        
-        // if(Mathf.Abs(diffVec.x) < partolDistance.x && Mathf.Abs(diffVec.y) < partolDistance.y) {
-        //     newPos.x = Mathf.Sign(diffVec.x)*4;
-        //     healthBar.transform.localPosition = newPos;    
-        // }
-        
-        
-        if(redHurtTimer.isOn()) {
-            bool finished = redHurtTimer.updateTimer(Time.deltaTime);
-            float canVal = redHurtTimer.getCanoncial();
-            canVal = Mathf.Sin(canVal*Mathf.PI);
-            float redValAlpha = Mathf.Lerp(1, 0, canVal);
-            spRenderer.color = new Vector4(1, redValAlpha, redValAlpha, 1);
-            if(finished) {
-                if(!deathTimer.isOn()) {
-                    spRenderer.color = Color.white;
-                }
-                redHurtTimer.turnOff();
+        for(int i = 0; i < lagGoodies.Count; ) {
+            bool rem = lagGoodies[i].update(this);
+            if(rem) {
+                lagGoodies.RemoveAt(i);
+            } else {
+                i++;
             }
         }
-        if(fadeInTimer.isOn()) {
+
+        if(!dead) {
+            Vector2 diffVec = playerTransform.position - thisTransform.position;
             
-            bool finished = fadeInTimer.updateTimer(Time.deltaTime);
-            float canVal = fadeInTimer.getCanoncial();
-            float alphaVal = Mathf.Lerp(0, 1, canVal);
-            spRenderer.color = new Vector4(spRenderer.color.r, spRenderer.color.g, spRenderer.color.b, alphaVal);
-            if(finished) {
-                // thisRigidbody.detectCollisions = true;
-                // thisCollider.enabled = true;
-                fadeInTimer.turnOff();
-                releaseGoodies();
-                Destroy(gameObject);
-            }
-
-        }
-        bool isAttacking = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_attack");
-        //Debug.Log(isAttacking);
-        bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
-        // bool isDying = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_die");
-
-        
-        thisAnimator.SetFloat("WalkSpeed", thisRigidbody.velocity.x);
-
-        bool isInTurnAround = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_turn_around");
-        bool isWalking = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rockGollumWalk");
-
-        bool lastframFlip = spRenderer.flipX;
-        if(isWalking) {
-            if (thisRigidbody.velocity.x > 0.3)
-            {
-                spRenderer.flipX = true;
-            }
-
-            if (thisRigidbody.velocity.x < -0.3)
-            {
-                spRenderer.flipX = false;
-            }
-        }
-
-        if(!isSentinel && !isRangeGollum) {
-            if(lastframFlip != spRenderer.flipX && !isInTurnAround) {
-                thisAnimator.SetTrigger("turn_around");
-                flipForTurnAround = !spRenderer.flipX;
-                enforceFlip();
-                // Debug.Log("turningArounf");
-            }
-
-            // if(spRenderer.flipX) {
-            //     Vector2 offTemp = thisCollider.offset;
-            //     offTemp.x = -3;
-            //     thisCollider.offset = offTemp;
-            // } else {
-            //     Vector2 offTemp = thisCollider.offset;
-            //     offTemp.x = 3;
-            //     thisCollider.offset = offTemp;
+            // if(Mathf.Abs(diffVec.x) < partolDistance.x && Mathf.Abs(diffVec.y) < partolDistance.y) {
+            //     newPos.x = Mathf.Sign(diffVec.x)*4;
+            //     healthBar.transform.localPosition = newPos;    
             // }
-        }
-
-        
-
-
-        // if (isDying) {
-        //     // bool finished = deathTimer.updateTimer(Time.deltaTime);
-        //     // float canVal = deathTimer.getCanoncial();
-        //     // float alphaVal = Mathf.Lerp(1, 0, canVal);
-        //     // spRenderer.color = new Vector4(spRenderer.color.r, spRenderer.color.g, spRenderer.color.b, alphaVal);
-        //     // thisRigidbody.detectCollisions = false;
-        //     // thisCollider.enabled = false;
-
-        //     AnimatorStateInfo info = thisAnimator.GetCurrentAnimatorStateInfo(0);
-        //     bool isDeadTriggered = thisAnimator.GetBool("isDead");
-        //     bool isInDieState = info.IsName("rock_gollum_die") || isDeadTriggered;
-        //     if (!isInDieState) {
-        //         // deathTimer.turnOff();
+            
+            
+            if(redHurtTimer.isOn()) {
+                bool finished = redHurtTimer.updateTimer(Time.deltaTime);
+                float canVal = redHurtTimer.getCanoncial();
+                canVal = Mathf.Sin(canVal*Mathf.PI);
+                float redValAlpha = Mathf.Lerp(1, 0, canVal);
+                spRenderer.color = new Vector4(1, redValAlpha, redValAlpha, 1);
+                if(finished) {
+                    if(!deathTimer.isOn()) {
+                        spRenderer.color = Color.white;
+                    }
+                    redHurtTimer.turnOff();
+                }
+            }
+            if(fadeInTimer.isOn()) {
                 
-        //         // spRenderer.color = startTint;
-        //     }
-        // }
+                bool finished = fadeInTimer.updateTimer(Time.deltaTime);
+                float canVal = fadeInTimer.getCanoncial();
+                float alphaVal = Mathf.Lerp(0, 1, canVal);
+                spRenderer.color = new Vector4(spRenderer.color.r, spRenderer.color.g, spRenderer.color.b, alphaVal);
+                if(finished) {
+                    // thisRigidbody.detectCollisions = true;
+                    // thisCollider.enabled = true;
+                    fadeInTimer.turnOff();
+                    releaseGoodies();
+                    Dead();
+                    // Destroy(gameObject);
+                }
+
+            }
+            bool isAttacking = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_attack");
+            //Debug.Log(isAttacking);
+            bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
+            // bool isDying = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_die");
+
+            
+            thisAnimator.SetFloat("WalkSpeed", thisRigidbody.velocity.x);
+
+            bool isInTurnAround = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_turn_around");
+            bool isWalking = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rockGollumWalk");
+
+            bool lastframFlip = spRenderer.flipX;
+            if(isWalking) {
+                if (thisRigidbody.velocity.x > 0.3)
+                {
+                    spRenderer.flipX = true;
+                }
+
+                if (thisRigidbody.velocity.x < -0.3)
+                {
+                    spRenderer.flipX = false;
+                }
+            }
+
+            if(!isSentinel && !isRangeGollum) {
+                if(lastframFlip != spRenderer.flipX && !isInTurnAround) {
+                    thisAnimator.SetTrigger("turn_around");
+                    flipForTurnAround = !spRenderer.flipX;
+                    enforceFlip();
+                    // Debug.Log("turningArounf");
+                }
+
+                // if(spRenderer.flipX) {
+                //     Vector2 offTemp = thisCollider.offset;
+                //     offTemp.x = -3;
+                //     thisCollider.offset = offTemp;
+                // } else {
+                //     Vector2 offTemp = thisCollider.offset;
+                //     offTemp.x = 3;
+                //     thisCollider.offset = offTemp;
+                // }
+            }
+
+            
 
 
+            // if (isDying) {
+            //     // bool finished = deathTimer.updateTimer(Time.deltaTime);
+            //     // float canVal = deathTimer.getCanoncial();
+            //     // float alphaVal = Mathf.Lerp(1, 0, canVal);
+            //     // spRenderer.color = new Vector4(spRenderer.color.r, spRenderer.color.g, spRenderer.color.b, alphaVal);
+            //     // thisRigidbody.detectCollisions = false;
+            //     // thisCollider.enabled = false;
+
+            //     AnimatorStateInfo info = thisAnimator.GetCurrentAnimatorStateInfo(0);
+            //     bool isDeadTriggered = thisAnimator.GetBool("isDead");
+            //     bool isInDieState = info.IsName("rock_gollum_die") || isDeadTriggered;
+            //     if (!isInDieState) {
+            //         // deathTimer.turnOff();
+                    
+            //         // spRenderer.color = startTint;
+            //     }
+            // }
+
+        }
         
     }
     // Update is called once per frame
     void FixedUpdate()
     {
-        bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
-        if(!sleeping) {
-            Vector2 diffVec = playerTransform.position - thisTransform.position;
-            spRenderer.color = Color.white;
-            if(isDying) {
-                
-            } else if (isHit)
-            {
-                if(!finishedAttack) {
-                    endAttack();
-                    finishedAttack = true;
-                }
-            }
-            else if (aiState == Ai_State.AI_ATTACK)
-            {
-                // spRenderer.color = Color.red;
+        if(!dead) {
+            bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
+            if(!sleeping) {
+                Vector2 diffVec = playerTransform.position - thisTransform.position;
+                spRenderer.color = Color.white;
+                if(isDying) {
                     
-            }
-            else if (aiState == Ai_State.AI_FIND)
-            {
-                // spRenderer.color = Color.blue;
-                //spRenderer.color = Color.blue;
-                // Debug.Log("Diff Vec: " + Vector2.SqrMagnitude(diffVec));
-                if (Vector2.SqrMagnitude(diffVec) < attackDistance)
+                } else if (isHit)
                 {
-                    aiState = Ai_State.AI_ATTACK;
-                    finishedAttack = false;
-                    thisAnimator.SetTrigger("IsAttacking");
+                    if(!finishedAttack) {
+                        endAttack();
+                        finishedAttack = true;
+                    }
                 }
-                else if (Mathf.Abs(diffVec.x) < partolDistance.x && Mathf.Abs(diffVec.y) < partolDistance.y)
+                else if (aiState == Ai_State.AI_ATTACK)
                 {
-                    ForceToAdd += accelForce * Mathf.Sign(diffVec.x) * Vector2.right;
+                    // spRenderer.color = Color.red;
+                        
                 }
-                else
+                else if (aiState == Ai_State.AI_FIND)
                 {
-                    aiState = Ai_State.AI_PATROL;
+                    // spRenderer.color = Color.blue;
+                    //spRenderer.color = Color.blue;
+                    // Debug.Log("Diff Vec: " + Vector2.SqrMagnitude(diffVec));
+                    if (Vector2.SqrMagnitude(diffVec) < attackDistance)
+                    {
+                        aiState = Ai_State.AI_ATTACK;
+                        finishedAttack = false;
+                        thisAnimator.SetTrigger("IsAttacking");
+                    }
+                    else if (Mathf.Abs(diffVec.x) < partolDistance.x && Mathf.Abs(diffVec.y) < partolDistance.y)
+                    {
+                        ForceToAdd += accelForce * Mathf.Sign(diffVec.x) * Vector2.right;
+                    }
+                    else
+                    {
+                        aiState = Ai_State.AI_PATROL;
+                    }
                 }
-            }
-            else if (aiState == Ai_State.AI_PATROL)
-            {
-                // spRenderer.color = Color.yellow;
-                bool finishedForPatrol = timerForPatrol.updateTimer(Time.fixedDeltaTime);
-                if(finishedForPatrol) {
-                    timerForPatrol.turnOff();
-                }
-                if (Mathf.Abs(diffVec.x) < partolDistance.x && Mathf.Abs(diffVec.y) < partolDistance.y && !timerForPatrol.isOn())
+                else if (aiState == Ai_State.AI_PATROL)
                 {
-                    aiState = Ai_State.AI_FIND;
-                } else {
-                    if(walkTimer.isOn()) {
-
+                    // spRenderer.color = Color.yellow;
+                    bool finishedForPatrol = timerForPatrol.updateTimer(Time.fixedDeltaTime);
+                    if(finishedForPatrol) {
+                        timerForPatrol.turnOff();
+                    }
+                    if (Mathf.Abs(diffVec.x) < partolDistance.x && Mathf.Abs(diffVec.y) < partolDistance.y && !timerForPatrol.isOn())
+                    {
+                        aiState = Ai_State.AI_FIND;
                     } else {
-                        walkTimer.turnOn();   
-                        getRandomAiSubState();
+                        if(walkTimer.isOn()) {
 
-                    }
-                    bool finished = walkTimer.updateTimer(Time.fixedDeltaTime);
-                    if(finished) {
-                        walkTimer.turnOff();
-                        getRandomAiSubState();
-                    }
-                    Vector2 colSize = thisCollider.size;
-                    Vector3 colOffset = thisCollider.offset;
-                    float raySize = 0.5f*colSize.x + rayCastSize;
+                        } else {
+                            walkTimer.turnOn();   
+                            getRandomAiSubState();
 
-                    switch(subAiState) {
+                        }
+                        bool finished = walkTimer.updateTimer(Time.fixedDeltaTime);
+                        if(finished) {
+                            walkTimer.turnOff();
+                            getRandomAiSubState();
+                        }
+                        Vector2 colSize = thisCollider.size;
+                        Vector3 colOffset = thisCollider.offset;
+                        float raySize = 0.5f*colSize.x + rayCastSize;
 
-                        case Ai_SubState.AI_SUB_IDLE: {
-                            //do nothing
-                        } break;
-                        case Ai_SubState.AI_SUB_LEFT: {
-                            ForceToAdd += accelForce * Vector2.left;
-                                
-                            //NOTE(ollie): Do we want to use layers instead so we are using just one raycast?? Not sure if this would be faster
-                            RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, Vector2.left, raySize, physicsLayerMask);
-                            // Debug.DrawLine(thisCollider.bounds.center, thisCollider.bounds.center + colOffset + raySize*Vector3.left);
-                            for(int i = 0; i < hits.Length; ++i) {
-                                RaycastHit2D hit = hits[i];
-                                
-                                if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
-                                    // Debug.Log(hit.collider.gameObject.name);
-                                    subAiState = Ai_SubState.AI_SUB_RIGHT;
-                                    nameCollider = hit.collider.gameObject.name;
-                                    break;
+                        switch(subAiState) {
+
+                            case Ai_SubState.AI_SUB_IDLE: {
+                                //do nothing
+                            } break;
+                            case Ai_SubState.AI_SUB_LEFT: {
+                                ForceToAdd += accelForce * Vector2.left;
+                                    
+                                //NOTE(ollie): Do we want to use layers instead so we are using just one raycast?? Not sure if this would be faster
+                                RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, Vector2.left, raySize, physicsLayerMask);
+                                // Debug.DrawLine(thisCollider.bounds.center, thisCollider.bounds.center + colOffset + raySize*Vector3.left);
+                                for(int i = 0; i < hits.Length; ++i) {
+                                    RaycastHit2D hit = hits[i];
+                                    
+                                    if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
+                                        // Debug.Log(hit.collider.gameObject.name);
+                                        subAiState = Ai_SubState.AI_SUB_RIGHT;
+                                        nameCollider = hit.collider.gameObject.name;
+                                        break;
+                                    }
                                 }
-                            }
-                            
-                            
-                        } break;
-                        case Ai_SubState.AI_SUB_RIGHT: {
-                            ForceToAdd += accelForce * Vector2.right;
-                            //NOTE(ollie): Do we want to use layers instead so we are using just one raycast?? Not sure if this would be faster
-                            RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, Vector2.right, raySize, physicsLayerMask);
-                            // Debug.DrawLine(thisCollider.bounds.center, transform.position + colOffset + raySize*Vector3.right);
-                            for(int i = 0; i < hits.Length; ++i) {
-                                RaycastHit2D hit = hits[i];
                                 
-                                if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
-                                    // Debug.Log(hit.collider.gameObject.name);
-                                    subAiState = Ai_SubState.AI_SUB_LEFT;
-                                    nameCollider = hit.collider.gameObject.name;
-                                    break;
+                                
+                            } break;
+                            case Ai_SubState.AI_SUB_RIGHT: {
+                                ForceToAdd += accelForce * Vector2.right;
+                                //NOTE(ollie): Do we want to use layers instead so we are using just one raycast?? Not sure if this would be faster
+                                RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, Vector2.right, raySize, physicsLayerMask);
+                                // Debug.DrawLine(thisCollider.bounds.center, transform.position + colOffset + raySize*Vector3.right);
+                                for(int i = 0; i < hits.Length; ++i) {
+                                    RaycastHit2D hit = hits[i];
+                                    
+                                    if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
+                                        // Debug.Log(hit.collider.gameObject.name);
+                                        subAiState = Ai_SubState.AI_SUB_LEFT;
+                                        nameCollider = hit.collider.gameObject.name;
+                                        break;
+                                    }
                                 }
-                            }
-                            
-                        } break;
-                        default: {
+                                
+                            } break;
+                            default: {
 
-                        } break;
-                    }    
+                            } break;
+                        }    
+                    }
+                    //spRenderer.color = Color.green;
+                    //do nothing for now
+                } else if(aiState == Ai_State.AI_NULL) {
+                    aiState = Ai_State.AI_FIND;
                 }
-                //spRenderer.color = Color.green;
-                //do nothing for now
-            } else if(aiState == Ai_State.AI_NULL) {
-                aiState = Ai_State.AI_FIND;
+
             }
 
+            Vector2 f = forceUpdator.update();        
+            
+            thisRigidbody.AddForce(ForceToAdd + f);
+            ForceToAdd.x = 0;
+            ForceToAdd.y = 0;
         }
-
-        Vector2 f = forceUpdator.update();        
-        
-        thisRigidbody.AddForce(ForceToAdd + f);
-        ForceToAdd.x = 0;
-        ForceToAdd.y = 0;
     }
 
 

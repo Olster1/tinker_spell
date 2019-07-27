@@ -29,6 +29,8 @@ public class CollectAmber : MonoBehaviour
     private Rigidbody2D amberRb;
     private worldTUI createAmberUIObject;
 
+    public ActivateQuote quoteToActivate;
+
     public float relVel;
 
     public Sprite amberSprite;
@@ -74,6 +76,11 @@ public class CollectAmber : MonoBehaviour
         
     }
 
+    public void SetQuoteOnCollect(ActivateQuote quote) 
+    {   
+        this.quoteToActivate = quote;
+    }   
+
     // Update is called once per frame
     void Update()
     {
@@ -104,6 +111,10 @@ public class CollectAmber : MonoBehaviour
             col.enabled = false;
             audioSrc.Play();
             fadeTimer.turnOn();
+
+            if(quoteToActivate != null) {
+                quoteToActivate.Activate();
+            }
 
             switch(type) {
                 case AmberType.AMBER_AMBER: {

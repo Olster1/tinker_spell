@@ -11,6 +11,7 @@ public class WallTriggerMovement : MonoBehaviour, IHitBox
   public GameObject childObject;
   public AudioSource audioSrc;
   public ParticleSystem ps;
+  public GameObject rb;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +39,8 @@ public class WallTriggerMovement : MonoBehaviour, IHitBox
               childObject.SetActive(true);
               audioSrc.Play();
               ps.Play();
+              rb.SetActive(false);
+
            } else {
             whiteWallAnimator.SetTrigger("goWhite");
             Debug.Log("went White");

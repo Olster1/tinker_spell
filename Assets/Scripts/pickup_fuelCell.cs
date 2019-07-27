@@ -9,12 +9,15 @@ public class pickup_fuelCell : MonoBehaviour
 	public SpriteRenderer sp;
 	private Timer fadeTimer;
 	public AudioSource audioSrc;
+    public ActivateQuote quote;
+    public BoxCollider2D box;
 
     // Start is called before the first frame update
     void Start()
     {
         fadeTimer = new Timer(0.5f);
         fadeTimer.turnOff();
+        box = gameObject.GetComponent<BoxCollider2D>();
         
     }
 
@@ -29,7 +32,8 @@ public class pickup_fuelCell : MonoBehaviour
 	        sp.color = c;
 	        if(fin) {
 	        	fadeTimer.turnOff();
-	        	Destroy(gameObject);
+
+	        	// Destroy(gameObject);
 	        }
 	    }
     }
@@ -37,8 +41,13 @@ public class pickup_fuelCell : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
     	if(other.gameObject.name == "Player") {
     		audioSrc.Play();
+            box.enabled = false;
     		fadeTimer.turnOn();
     		GameManager.fuelCellCount++;
+            if(quote != null) {
+                quote.Activate();
+            }
+
     	}
     }
 }

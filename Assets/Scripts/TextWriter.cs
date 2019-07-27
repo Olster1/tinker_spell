@@ -56,6 +56,10 @@ public class TextWriter : MonoBehaviour
 		initGlyphInfos();
 	}
 
+	public void AddJournalItem() {
+		currentQuote.EndQuote();
+	}
+
 
 	public void ActivateFontWriter() {
 		showTimer = new Timer(timeToShow*(stringArray[stringAt].Length));
@@ -66,8 +70,13 @@ public class TextWriter : MonoBehaviour
         showText = true;
         lastCharCount = 0;
         initGlyphInfos();
-        player.canControlPlayer = false;
-        Time.timeScale = 0.0f;
+        Debug.Log(currentQuote.unfreezePlayer);
+        if(!currentQuote.unfreezePlayer) {
+        	Debug.Log("unfreeze player");
+        	player.canControlPlayer = false;
+        	Time.timeScale = 0.0f;
+        }
+        
 
         if(clips.Length > 0) {
         	audioSrc.clip = clips[stringAt];
@@ -89,7 +98,6 @@ public class TextWriter : MonoBehaviour
 	}
 
 	void initGlyphInfos() {
-		Debug.Log("inited " + stringArray[stringAt].Length);
 		glyphInfos = new GlyphInfo[stringArray[stringAt].Length];
 		for(int i = 0; i < glyphInfos.Length; ++i) {
 			glyphInfos[i] = new GlyphInfo();
@@ -101,6 +109,28 @@ public class TextWriter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+    // 	List<string> forcesToAdd = new List<string>();
+	    
+	   //  forcesToAdd.Add("apple");
+	   //  forcesToAdd.Add("banana");
+	   //  forcesToAdd.Add("carrot");
+	   //  forcesToAdd.Add("danish");
+	   //  forcesToAdd.Add("elephant");
+
+	   //  for(int i = 0; i < forcesToAdd.Count; ) {
+	   //  	Debug.Log(forcesToAdd[i]);
+	   //  	bool increment = true;
+	   //  	if(i == 1) {
+				// forcesToAdd.RemoveAt(i);	  
+				// increment = false;  		
+	   //  	}
+
+	   //  	if(increment) ++i;
+	   //  }
+
+
+
     	textObject = gameObject.GetComponent<Text>();
     	stringAt = 0;
 
@@ -131,16 +161,21 @@ public class TextWriter : MonoBehaviour
     		string newString = "";
     		if(showTimer.isOn()) {
     			float dt = Time.unscaledDeltaTime;
-    			if(Input.GetButtonDown("Jump")) {
-    				dt *= 10.0f;
-    			}
+    			int numOfCharacters = 0;
+    			
 
 	    		bool finished = showTimer.updateTimer(dt);
-	    		int numOfCharacters = (int)(showTimer.getCanoncial()*(stringArray[stringAt].Length - 1));
+
+	    		if(Input.GetButtonDown("Jump") && !currentQuote.unfreezePlayer) {
+    				showTimer.tAt = showTimer.period;
+    				finished = true;	
+    			} 
+
+	    		numOfCharacters = (int)(showTimer.getCanoncial()*(stringArray[stringAt].Length - 1));
 	    		if(numOfCharacters < 0) {
 	    			numOfCharacters = 0;
 	    		}
-	    		Debug.Log(lastCharCount);
+	    		
 	    		if(numOfCharacters != lastCharCount) {
 	    			for(int j = lastCharCount; j <= numOfCharacters; ++j) {
 	    				glyphInfos[j].timer.turnOn();	
@@ -154,7 +189,7 @@ public class TextWriter : MonoBehaviour
 	    			aButtonAnimator.SetTrigger("FadeIn");
 	    		}
 	    	} else {
-	    		if(Input.GetButtonDown("Jump")) {
+	    		if(Input.GetButtonDown("Jump") || currentQuote.unfreezePlayer) {
 	    			if(!fadeOutTimer.isOn()) {
 			    		if(stringAt < (stringArray.Length - 1)) {
 			    			

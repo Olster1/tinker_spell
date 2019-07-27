@@ -22,6 +22,10 @@ public class CallTextScript : MonoBehaviour
     	textWriter.ActivateFontWriter();
     }
 
+    public void AddJournalItem() {
+        textWriter.AddJournalItem();
+    }
+
     // Update is called once per frame
     void Update()
     {
