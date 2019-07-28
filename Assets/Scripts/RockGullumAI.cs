@@ -257,7 +257,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         emitAmber(AmberType.AMBER_MANA, 6);
         if(isSentinel) 
         {
-            emitAmber(AmberType.AMBER_SENTINEL_HEAD, 1, 0.5f*Mathf.PI, 3.0f);
+            emitAmber(AmberType.AMBER_SENTINEL_HEAD, 1, 0.5f*Mathf.PI, 1.0f);
         }
     }
 
@@ -290,7 +290,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
        if (!isHit && enemyType == EnemyType.ENEMY_GOOD && !dead) 
        {
-           GameObject damageNumObj = Instantiate(damageNumbersObject,  transform);
+           GameObject damageNumObj = Instantiate(damageNumbersObject,   transform.position, Quaternion.identity);
            DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
            damageNum.initializeObject(damage, type);
 

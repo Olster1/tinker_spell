@@ -12,7 +12,7 @@ public class SpellAi : MonoBehaviour
 	private Vector2 velocity;
 	public float dragFactor;
 	public float accelPower;
-	private Animator thisAnimator;
+	[HideInInspector] public Animator thisAnimator;
 	private SpriteRenderer thisSpriteRenderer;
     private SpriteRenderer playerSpriteRenderer;
 	public BoxCollider2D triggerCollider;
@@ -50,6 +50,10 @@ public class SpellAi : MonoBehaviour
         beginOffset = offset;
         controllingSpell = false;
         movementForce = new Vector2(0, 0);
+    }
+
+    public void InitEarthMove() {
+        playerMovement.CreateEarthMove();
     }
 
     public void flipSprite() {

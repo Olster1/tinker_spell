@@ -35,6 +35,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
     public GameObject dustEffect;
 
+    public SpellAi spell;
+
 
     public Animator camAnimator;
     public ParticleSystem ps;
@@ -272,7 +274,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         // bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
        if (enemyType == EnemyType.ENEMY_EVIL) 
        {
-           GameObject damageNumObj = Instantiate(damageNumbersObject,  transform);
+           GameObject damageNumObj = Instantiate(damageNumbersObject,  transform.position, Quaternion.identity);
            DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
            damageNum.initializeObject(damage, type);
 
@@ -334,6 +336,25 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
         // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         
+    }
+
+    public void CreateEarthMove() {
+
+        Handheld.Vibrate();
+        
+        float xDir = spriteRenderer.flipX ? -1 : 1;
+        earthTimer.turnOn();
+        GameObject earthObj = Instantiate(earthAttackObject, transform.position - new Vector3(xDir*earthOffset.x, earthOffset.y, 0),  Quaternion.identity);
+        earthObj.GetComponent<SpriteRenderer>().flipX = xDir < 0;
+        
+        if(xDir < 0) {
+            earthObj.GetComponent<EarthAttack>().rePosBoxes();    
+        }
+        
+        GenericAttackObject earthAttack = earthObj.transform.GetChild(0).gameObject.GetComponent<GenericAttackObject>();
+        earthAttack.startPos.x *= xDir;
+        earthAttack.endPos.x *= xDir;
+        earthAttack.attackType = "earth";
     }
 
 
@@ -445,7 +466,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
         if(isGrounded && !lastFameGrounded) {
             if(timeInAir > 0.7f) {
-                camAnimator.SetTrigger("shake1");
+                // camAnimator.SetTrigger("shake1");
             }
             timeInAir = 0;
         }
@@ -464,19 +485,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             if(Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN)) {
                 //MAGIC MOVES 
                 if(Input.GetButtonDown("Fire2") && isGrounded && GameManager.hasEarth1 && !earthTimer.isOn()) {
-                    float xDir = spriteRenderer.flipX ? -1 : 1;
-                    earthTimer.turnOn();
-                    GameObject earthObj = Instantiate(earthAttackObject, transform.position - new Vector3(xDir*earthOffset.x, earthOffset.y, 0),  Quaternion.identity);
-                    earthObj.GetComponent<SpriteRenderer>().flipX = xDir < 0;
-                    
-                    if(xDir < 0) {
-                        earthObj.GetComponent<EarthAttack>().rePosBoxes();    
-                    }
-                    
-                    GenericAttackObject earthAttack = earthObj.transform.GetChild(0).gameObject.GetComponent<GenericAttackObject>();
-                    earthAttack.startPos.x *= xDir;
-                    earthAttack.endPos.x *= xDir;
-                    earthAttack.attackType = "earth";
+                    spell.thisAnimator.SetTrigger("earth_dive");
+                    camAnimator.SetTrigger("zoom");
                     
                 } 
             } else {
@@ -502,7 +512,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                         animator.SetTrigger("attack2");
                         playAttackVoice();
                     } else {
-                        animator.SetTrigger("attack1"); //don't yet have stationary attack
+                        animator.SetTrigger("idleAttack"); //don't yet have stationary attack
                         uppercutAttackSound.Play();
                         playAttackVoice();
                     }
