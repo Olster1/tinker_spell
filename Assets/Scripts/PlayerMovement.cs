@@ -12,63 +12,64 @@ using EasyForceUpdator;
 
 public class PlayerMovement : MonoBehaviour, IHitBox
 {
-
+    
     public enum IdleAnimation {
         ANIMATION_IDLE1, 
         ANIMATION_IDLE2, 
     }
-
+    
     private Rigidbody2D rigidBody;
     public float jumpAccel;
     public float moveAccel;
     public float moveWhileJumpAccel;
     private Animator animator;
     public Image redHurtImage;
-
+    
     private float timeInAir;
-
+    
     public AudioSource hurtBreathing;
-
+    
     [HideInInspector] public Timer earthTimer;
     [HideInInspector] public Timer waterTimer;
     [HideInInspector] public Timer fireTimer;
-
+    
     public GameObject dustEffect;
-
+    
     public SpellAi spell;
-
-
+    
+    public Timer flashTimer;
+    
     public Animator camAnimator;
     public ParticleSystem ps;
-
+    
     private Timer hurtPulseTimer;
-
+    
     public GameObject camera;
-
+    
     public Image fadePanel;
-
+    
     public Animator panelAnimator;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
-
+    
     [HideInInspector] public Vector3[] lastValidPos;
     private Timer validPosTimer;
     private int validPosIndexAt;
     private int lastValidPosTop;
-
+    
     public AudioSource landingSoundSource;
     public AudioSource regularAttackSound;
     public AudioSource uppercutAttackSound;
     public AudioSource jumpAudioSrc;
-
+    
     public AudioSource attackVoice;
     public AudioClip[] attackVoiceClips;
     public float reboundForce;
-
+    
     public float raySize;
     public float speedMargin;
     [HideInInspector] public bool isGrounded;
-
+    
     private Timer jumpTimer;
     // private bool readyingJump;
     public float waitPercentToJump;
@@ -77,31 +78,31 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     [HideInInspector] public Timer autoMoveTimer;
     [HideInInspector] public Vector2 autoMoveDirection;
     public float autoMoveTime;
-
+    
     public float jumpRaySize;
-
+    
     public AnimatorOverrideController[] idleAnimations;
     private Timer idleAnimationTimer;
     private bool swapAnimation;
     private IdleAnimation toSwapTo;
     
     private int physicsLayerMask;
-
+    
     public float attackForceUp;
     public float downwardAttackForce;
-
+    
     public GameObject genericAttackObject;
     public GameObject damageNumbersObject;
     public GameObject earthAttackObject;
-
+    
     private Vector2 originalBoxSize;
     private Vector2 originalBoxOffset;
     private Vector2 originalJumpOffset;
     public float timeIncrease;
-
-
+    
+    
     private ForceUpdator forceUpdator;
-
+    
     public Vector2 earthOffset;
     [HideInInspector] public Timer globalPauseTimer;
     [HideInInspector] public Timer dieTimer;
@@ -111,58 +112,61 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
         animator = gameObject.GetComponent<Animator>();
         boxCollider = gameObject.GetComponent<BoxCollider2D>();
-
+        
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         jumpTimer = new Timer(0.5f);
         jumpTimer.turnOff();
         autoMoveTimer = new Timer(autoMoveTime);
         canControlPlayer = true;
-
+        
         idleAnimationTimer = new Timer(10.0f);
-
+        
+        flashTimer = new Timer(1.0f);
+        flashTimer.turnOff();
+        
         hurtPulseTimer = new Timer(1.0f);
         hurtPulseTimer.turnOn();
-
+        
         forceUpdator = new ForceUpdator();
-
+        
         physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);
-
+        
         swapAnimation = false;
         toSwapTo = IdleAnimation.ANIMATION_IDLE1;
-
+        
         globalPauseTimer = new Timer(0.1f);
         dieTimer = new Timer(0.7f);
         dieTimer.turnOff();
         ParticleSystem.MainModule main = ps.main;
         main.useUnscaledTime = true;
-
+        
         earthTimer = new Timer(1.5f);
         earthTimer.turnOff();
         waterTimer = new Timer(0.5f);
         waterTimer.turnOff();
         fireTimer = new Timer(0.5f);
         fireTimer.turnOff();
-
+        
         lastValidPos = new Vector3[16];
         validPosTimer = new Timer(0.1f);
-
+        
         Time.timeScale = 1.0f;
         
     }
-
+    
     public void CreateUpwardAttackObject() {
         ForceToAddStruct force = new ForceToAddStruct(0.2f, attackForceUp*Vector2.up);
         forceUpdator.AddForce(force);
         
         GameObject attackObj = Instantiate(genericAttackObject, transform);
-
+        
         Vector2 startPos = (Vector2)boxCollider.bounds.center + new Vector2(0, 0.5f*boxCollider.size.y + 0.1f);        
         Vector2 localStartPos = (Vector2)transform.InverseTransformPoint(startPos);
         AttackObjectCreator.initAttackObject(attackObj, localStartPos, localStartPos, 
-                    EnemyType.ENEMY_GOOD, 0.5f, 22, 36);
-
+                                             EnemyType.ENEMY_GOOD, 0.5f, 22, 36);
+        
     }
-
+    
     public void checkSwap() {
         // if(swapAnimation) {
         //     Debug.Log("Swapped animation");
@@ -171,7 +175,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         //     animator.runtimeAnimatorController = newController;
         // }
     }
-
+    
     public bool CastGroundedRay(Vector3 colliderOffset) {
         Vector3 bottomCenter = boxCollider.bounds.center + new Vector3(0, -0.5f*boxCollider.size.y, 0);
         
@@ -180,7 +184,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             RaycastHit2D hit = hits[i];
             if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
                 if(hit.collider.gameObject.tag == "Platform" && rigidBody.velocity.y > 0) {
-
+                    
                 } else {
                     isGrounded = true;
                     break;    
@@ -190,134 +194,138 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         }
         return isGrounded;
     }
-
+    
     public void CreateSidewardAttack() {
         float signOfMovement = Mathf.Sign(rigidBody.velocity.x);
-
+        
         ForceToAddStruct force = new ForceToAddStruct(0.1f, Vector2.right*signOfMovement*attackForceUp);
         forceUpdator.AddForce(force);
         
         GameObject attackObj = Instantiate(genericAttackObject, transform);
-
+        
         Vector2 startPos = (Vector2)boxCollider.bounds.center + new Vector2(signOfMovement*(0.5f*boxCollider.size.y + 0.1f), 0);        
         Vector2 localStartPos = (Vector2)transform.InverseTransformPoint(startPos);
         AttackObjectCreator.initAttackObject(attackObj, localStartPos, localStartPos, 
-                    EnemyType.ENEMY_GOOD, 0.5f, 22, 36);
-
+                                             EnemyType.ENEMY_GOOD, 0.5f, 22, 36);
+        
     }
-
+    
     public void scaleUp() {
         Vector3 tempScale = transform.localScale;
         tempScale.x = 1.5f;
         tempScale.y = 1.5f;
         transform.localScale = tempScale;
     }
-
+    
     public void scaleDown() {
         Vector3 tempScale = transform.localScale;
         tempScale.x = 1.0f;
         tempScale.y = 1.0f;
         transform.localScale = tempScale;
     }
-
+    
     public void downwardStrike() {
         float signOfMovement = Mathf.Sign(rigidBody.velocity.x);
         Vector2 directionAttack = new Vector2(signOfMovement*0.707f, -0.707f);
-
+        
         ForceToAddStruct force = new ForceToAddStruct(0.1f, downwardAttackForce*directionAttack);
         forceUpdator.AddForce(force);
-
+        
         GameObject attackObj = Instantiate(genericAttackObject, transform);
-
+        
         Vector2 startPos = (Vector2)boxCollider.bounds.center + new Vector2(signOfMovement*0.5f*boxCollider.size.x + signOfMovement*0.1f, 0.5f*boxCollider.size.y + 0.1f);        
         Vector2 localStartPos = (Vector2)transform.InverseTransformPoint(startPos);
         AttackObjectCreator.initAttackObject(attackObj, localStartPos, localStartPos, 
-                    EnemyType.ENEMY_GOOD, 1.0f, 22, 36);
-
+                                             EnemyType.ENEMY_GOOD, 1.0f, 22, 36);
+        
         originalBoxSize = boxCollider.size;
-
+        
         originalBoxOffset = boxCollider.offset;
         
-
+        
         Vector2 tempSize = boxCollider.size;
         tempSize.y = 2;
         boxCollider.size = tempSize;
-
+        
         Vector2 tempOffset = boxCollider.offset;
         tempOffset.y = 1;
         boxCollider.offset = tempOffset;
-
+        
         // tempOffset = jumpBoxCollider.offset;
         // tempOffset.y = -1;
         // jumpBoxCollider.offset = tempOffset;
-
+        
     }
-
+    
     public void endDownwardStrike() {
         boxCollider.size = originalBoxSize;
-
+        
         boxCollider.offset = originalBoxOffset;
         
         // jumpBoxCollider.offset = originalJumpOffset;
         Vector3 tempPos = transform.position;
         tempPos.y += 2;
         transform.position = tempPos;
-
-
+        
+        
     }
-
+    
     public void ResetIdleTrigger() {
         animator.ResetTrigger("endIdle");
     }
-
+    
     public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
-        // bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
-       if (enemyType == EnemyType.ENEMY_EVIL) 
-       {
-           GameObject damageNumObj = Instantiate(damageNumbersObject,  transform.position, Quaternion.identity);
-           DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
-           damageNum.initializeObject(damage, type);
-
-           Vector2 dir = (Vector2)transform.position - position;
-           dir.Normalize();
-
-
-           ForceToAddStruct force = new ForceToAddStruct(0.1f, reboundForce*dir);
-           forceUpdator.AddForce(force);
-           // thisAnimator.SetTrigger("WasHit");
-
-           GameManager.playerHealth -= damage;
-           GameManager.updateHealth = true;
-           Time.timeScale = 0.0f;
-           globalPauseTimer.turnOn();
-           ps.Play();
-
-           
-           if(GameManager.playerHealth < 50) {
-                if(!redHurtImage.enabled) {
-                    redHurtImage.enabled = true;
-               }
-                if(!hurtBreathing.isPlaying) {
-                    hurtBreathing.Play();
-                }
-                hurtBreathing.volume = Mathf.Lerp(1.0f, 0.7f, GameManager.playerHealth/50.0f);
-
-               redHurtImage.material.SetFloat("_Amount", Mathf.Lerp(0.4f, 0.0f, GameManager.playerHealth/100.0f));
-               hurtPulseTimer.turnOn();
-            }
-           //Instantiate(hitParticleSystem);
-
-           if (GameManager.playerHealth < 0)
-           {
-                hurtBreathing.Stop();
-                Time.timeScale = 0.0f;
-                GameManager.playerHealth = 100;
-                redHurtImage.enabled = false;
+        
+        if(!flashTimer.isOn()) {
+            // bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
+            if (enemyType == EnemyType.ENEMY_EVIL) 
+            {
+                flashTimer.turnOn();
+                GameObject damageNumObj = Instantiate(damageNumbersObject,  transform.position, Quaternion.identity);
+                DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
+                damageNum.initializeObject(damage, type);
+                
+                Vector2 dir = (Vector2)transform.position - position;
+                dir.Normalize();
+                
+                
+                ForceToAddStruct force = new ForceToAddStruct(0.1f, reboundForce*dir);
+                forceUpdator.AddForce(force);
+                // thisAnimator.SetTrigger("WasHit");
+                
+                GameManager.playerHealth -= damage;
                 GameManager.updateHealth = true;
-           }
-       }
+                Time.timeScale = 0.0f;
+                globalPauseTimer.turnOn();
+                ps.Play();
+                
+                
+                if(GameManager.playerHealth < 50) {
+                    if(!redHurtImage.enabled) {
+                        redHurtImage.enabled = true;
+                    }
+                    if(!hurtBreathing.isPlaying) {
+                        hurtBreathing.Play();
+                    }
+                    hurtBreathing.volume = Mathf.Lerp(1.0f, 0.7f, GameManager.playerHealth/50.0f);
+                    
+                    redHurtImage.material.SetFloat("_Amount", Mathf.Lerp(0.1f, 0.0f, GameManager.playerHealth/100.0f));
+                    hurtPulseTimer.turnOn();
+                }
+                //Instantiate(hitParticleSystem);
+                
+                if (GameManager.playerHealth < 0)
+                {
+                    hurtBreathing.Stop();
+                    Time.timeScale = 0.0f;
+                    GameManager.playerHealth = 100;
+                    redHurtImage.enabled = false;
+                    GameManager.updateHealth = true;
+                }
+            }
+        }
     }
-
+    
     public void ResetPositionFromFall() {
         rigidBody.simulated = true;
         int index = validPosIndexAt + 1;
@@ -328,7 +336,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         rigidBody.velocity = Vector2.zero;
         camera.transform.position = new Vector3(transform.position.x, transform.position.y, camera.transform.position.z);
     }
-
+    
     public void Die() {
         panelAnimator.SetTrigger("FadeIn");
         panelAnimator.SetTrigger("FadeFromFall");
@@ -337,9 +345,9 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         
     }
-
+    
     public void CreateEarthMove() {
-
+        
         Handheld.Vibrate();
         
         float xDir = spriteRenderer.flipX ? -1 : 1;
@@ -356,15 +364,15 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         earthAttack.endPos.x *= xDir;
         earthAttack.attackType = "earth";
     }
-
-
+    
+    
     public void flipSpriteXToNormal() {
         // spriteRenderer.flipX = false;
         
     }
-
     
-
+    
+    
     public void flipSprite() {
         float i = Input.GetAxis("Horizontal");
         if(Mathf.Abs(i) > 0.25f) {
@@ -378,7 +386,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             {
                 spriteRenderer.flipX = false;
             }
-
+            
             if (rigidBody.velocity.x < 0)
             {
                 spriteRenderer.flipX = true;
@@ -389,10 +397,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     public void turnOffJumpTimer() {
         jumpTimer.turnOff();
     }
-
+    
     void playAttackVoice() {
         Assert.IsTrue(attackVoiceClips.Length > 0);
-
+        
         int randIndex = (int)Random.Range(0, attackVoiceClips.Length);
         if(randIndex == attackVoiceClips.Length) {
             randIndex = attackVoiceClips.Length - 1;
@@ -403,9 +411,23 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         attackVoice.Play();
         
     }
-
+    
     void Update() {
-
+        if(flashTimer.isOn()) {
+            bool flashDone = flashTimer.updateTimer(Time.deltaTime);
+            
+            float alpha = (float)0.5f*Mathf.Cos(10*Mathf.PI*flashTimer.getCanoncial()) + 0.5f;
+            //Debug.Log(alpha);
+            Assert.IsTrue(alpha >= 0.0f && alpha <= 1.0f);
+            Color tempColor = spriteRenderer.color;
+            tempColor.a = alpha;
+            spriteRenderer.color = tempColor;
+            if(flashDone) {
+                flashTimer.turnOff();
+                
+            }
+        }
+        
         if(hurtPulseTimer.isOn()) {
             bool hrtDone = hurtPulseTimer.updateTimer(Time.deltaTime);
             float alpha = (float)-Mathf.Cos(2*Mathf.PI*hurtPulseTimer.getCanoncial()) + 1.0f;
@@ -414,7 +436,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 hurtPulseTimer.turnOn();
             } 
         }
-
+        
         //this is the global pause timer
         if(globalPauseTimer.isOn()) {
             bool fin = globalPauseTimer.updateTimer(Time.unscaledDeltaTime);
@@ -424,7 +446,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 Time.timeScale = 1.0f;
             }
         }
-
+        
         if(dieTimer.isOn()) {
             bool fin = dieTimer.updateTimer(Time.unscaledDeltaTime);
             fadePanel.color = new Color(0, 0, 0, 1.0f - dieTimer.getCanoncial());
@@ -434,9 +456,9 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 SceneManager.LoadScene("LoadingScreen");
             }
         }
-
+        
         bool isJumping = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_jump");
-
+        
         bool lastFameGrounded = isGrounded;
         isGrounded = false;
         // if(rigidBody.velocity.y <= 0) 
@@ -449,30 +471,30 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 }                
             }
         }
-
+        
         animator.SetBool("grounded", isGrounded);
         
         if(lastFameGrounded != isGrounded && !isJumping) {
             //landing
-
+            
             landingSoundSource.Play();
-            Instantiate(dustEffect, transform.position - new Vector3(0, 1, 0), Quaternion.identity);
-
+            Instantiate(dustEffect, transform.position - new Vector3(0, 2, 0), Quaternion.identity);
+            
         }
-
+        
         if(!isGrounded) {
             timeInAir += Time.deltaTime;
         } 
-
+        
         if(isGrounded && !lastFameGrounded) {
             if(timeInAir > 0.7f) {
                 // camAnimator.SetTrigger("shake1");
             }
             timeInAir = 0;
         }
-
         
-
+        
+        
         bool isInAttackAnimation = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack2") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack1") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_downward_dash") || animator.GetBool("attack1") || animator.GetBool("attack2") || animator.GetBool("downward_dash");
         bool isFallingAnim = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_falling");
         
@@ -481,7 +503,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             //get direction of the controller
             float xMove = Input.GetAxis("Horizontal");
             float yMove = Input.GetAxis("Vertical");
-
+            
             if(Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN)) {
                 //MAGIC MOVES 
                 if(Input.GetButtonDown("Fire2") && isGrounded && GameManager.hasEarth1 && !earthTimer.isOn()) {
@@ -519,7 +541,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 }
             }
         }
-
+        
         bool isIdle = animator.GetCurrentAnimatorStateInfo(0).IsName("player_idle");
         
         ////Update the animation variable
@@ -539,7 +561,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 {
                     spriteRenderer.flipX = false;
                 }
-
+                
                 if (rigidBody.velocity.x < 0)
                 {
                     spriteRenderer.flipX = true;
@@ -554,14 +576,14 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         } else {
             // bool fin = idleAnimationTimer.updateTimer(Time.deltaTime);
             // float canVal = idleAnimationTimer.getCanoncial();
-
+            
             // if(canVal < 0.5f) {
             //     // if() {
-                    
+            
             //         swapAnimation = true;
             //         toSwapTo = IdleAnimation.ANIMATION_IDLE1;
             //     // }
-
+            
             // } else if(canVal >= 0.5f) {
             //     // Debug.Log("second idle at " + canVal);
             //     // if() {
@@ -569,7 +591,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             //         toSwapTo = IdleAnimation.ANIMATION_IDLE2;
             //     // }
             // }
-
+            
             // if(fin) {
             //     idleAnimationTimer.turnOn(); //basically reset the timer
             // }
@@ -587,21 +609,21 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         // {
         //     float maxVal = 18.0f;
         //     float absVel = Mathf.Min(Mathf.Abs(rigidBody.velocity.x), maxVal);
-            
-            
+        
+        
         //     animator.speed = Mathf.Max((1.0f - (absVel / maxVal)) * 1.0f, 0.9f);
         //     // animator.speed = 0.6f;
-            
+        
         // } else if(isIdle) {
         //     animator.speed = 0.0f;
-            
+        
         // } 
         if (Mathf.Abs(rigidBody.velocity.x) > 0.1f)
         {
-          // audioComponents[1].Play();
+            // audioComponents[1].Play();
         } 
-
-
+        
+        
         if(isGrounded && !isJumping && !animator.GetBool("jump") && rigidBody.velocity.y <= 0) {
             //can't jump
             jumpTimer.turnOff();
@@ -628,14 +650,14 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             // Debug.Log("couldn't jump");
         }
         
-
+        
         if(isGrounded) {
             animator.ResetTrigger("landing");
         }
-
+        
         if(!isGrounded && isFallingAnim) {
             bool isAboutToLand = false;
-                
+            
             Vector2 rayDir = rigidBody.velocity;
             rayDir.Normalize();
             RaycastHit2D[] hits = Physics2D.RaycastAll(boxCollider.bounds.center, rayDir, 0.5f*boxCollider.size.y + landingRaySize, physicsLayerMask);
@@ -678,25 +700,25 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                     }
                     validPosTimer.turnOn();
                 }
-
+                
             }
             
-
+            
         } else {
             validPosTimer.tAt = validPosTimer.period;
         }
-
+        
         if(jumpTimer.isOn()) {
             if(Input.GetButton("Jump") && jumpTimer.period < 1.0f) {
                 jumpTimer.period += timeIncrease*Time.fixedDeltaTime;
-
+                
             }
         }
         
         Vector2 movementForce = new Vector2(0, 0);
         
         if(autoMoveTimer.isOn() && !autoMoveTimer.paused) {
-
+            
             bool finished = autoMoveTimer.updateTimer(Time.fixedDeltaTime);
             // Debug.Log("auto move timer ON " + autoMoveTimer.tAt);
             //the automovedirection should only be between -1 && 1
@@ -711,16 +733,16 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             }
             
         } 
-
+        
         float thisJmpAccel = jumpAccel;
         
         //NOTE(ollie): This is the jump timer so you get a nice jump. We propotion out the jump force over the jump
         if(jumpTimer.isOn()) {
             bool fin = jumpTimer.updateTimer(Time.fixedDeltaTime);
             if(Input.GetButton("Jump")) {
-
+                
             }
-
+            
             
             
             if (!fin && jumpTimer.getCanoncial() < waitPercentToJump) { //has to be before the jump timer is finished 
@@ -730,7 +752,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 if(!Input.GetButton("Jump") && jumpTimer.getCanoncial() > 0.5f) {
                     jumpTimer.turnOff();
                 } else {
-
+                    
                     movementForce.y = 1;
                     
                     thisJmpAccel = Mathf.Lerp(jumpAccel, 0, jumpTimer.getCanoncial());
@@ -743,8 +765,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             }
             
         } 
-
-
+        
+        
         Vector2 f = forceUpdator.update();
         if(isGrounded) {
             movementForce.x *= moveAccel;    

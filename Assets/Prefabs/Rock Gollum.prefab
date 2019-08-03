@@ -196,8 +196,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerToFollow: {fileID: 0}
   hitPs: {fileID: 3859417302317968039, guid: 35199ae5e47f04c3da2b9353598f1650, type: 3}
-  accelForce: 200
-  attackForce: 700
+  accelForce: 10000
+  attackForce: 60000
   partolDistance: {x: 5, y: 1}
   attackDistance: 50
   health: 3
@@ -208,6 +208,7 @@ MonoBehaviour:
   genericAttackObject: {fileID: 6368268402639536057, guid: b9589d6f131aa4c59a0216c8079786f3,
     type: 3}
   nameCollider: 
+  quote: {fileID: 0}
   attackSwipe: {fileID: 4218342321001553541, guid: 8743a90adc1234aba92f4e4737604c54,
     type: 3}
   rockObj: {fileID: 0}
@@ -223,6 +224,7 @@ MonoBehaviour:
   rayCastSize: 1
   knockBackForce: 0
   healthBar: {fileID: 8212999913690830142}
+  dead: 0
   aiState: 0
   subAiState: 0
 --- !u!50 &2850328975263803224
@@ -237,8 +239,8 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 15
+  m_Mass: 40
+  m_LinearDrag: 3
   m_AngularDrag: 0.05
   m_GravityScale: 30
   m_Material: {fileID: 0}

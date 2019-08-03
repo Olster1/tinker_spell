@@ -963,12 +963,12 @@ PrefabInstance:
     - target: {fileID: 2850328975263803228, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: accelForce
-      value: 300
+      value: 6000
       objectReference: {fileID: 0}
     - target: {fileID: 2850328975263803228, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: attackForce
-      value: 3000
+      value: 50000
       objectReference: {fileID: 0}
     - target: {fileID: 2850328975263803228, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
@@ -1100,7 +1100,7 @@ PrefabInstance:
     - target: {fileID: 2850328975263803224, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: m_LinearDrag
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2850328975263803224, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
@@ -9355,7 +9355,7 @@ GameObject:
   - component: {fileID: 764839117}
   - component: {fileID: 764839116}
   - component: {fileID: 764839118}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22642,12 +22642,12 @@ PrefabInstance:
     - target: {fileID: 2850328975263803228, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: accelForce
-      value: 300
+      value: 6000
       objectReference: {fileID: 0}
     - target: {fileID: 2850328975263803228, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: attackForce
-      value: 3000
+      value: 50000
       objectReference: {fileID: 0}
     - target: {fileID: 2850328975263803228, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
@@ -22779,7 +22779,7 @@ PrefabInstance:
     - target: {fileID: 2850328975263803224, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: m_LinearDrag
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2850328975263803224, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
@@ -22794,12 +22794,12 @@ PrefabInstance:
     - target: {fileID: 3256453747530286166, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -47.9
+      value: -35.9
       objectReference: {fileID: 0}
     - target: {fileID: 3256453747530286166, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 19
+      value: -12.7
       objectReference: {fileID: 0}
     - target: {fileID: 277248123859806287, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
@@ -25861,7 +25861,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 1
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -27099,7 +27099,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   ColorModule:
-    enabled: 0
+    enabled: 1
     gradient:
       serializedVersion: 2
       minMaxState: 1
@@ -27108,7 +27108,7 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 1}
+        key1: {r: 1, g: 1, b: 1, a: 0}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -27822,8 +27822,8 @@ ParticleSystem:
     speedModifier:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1.7
-      minScalar: 1.5
+      scalar: 3
+      minScalar: 3
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -36254,12 +36254,12 @@ PrefabInstance:
     - target: {fileID: 2850328975263803228, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: accelForce
-      value: 200
+      value: 6000
       objectReference: {fileID: 0}
     - target: {fileID: 2850328975263803228, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: attackForce
-      value: 3000
+      value: 50000
       objectReference: {fileID: 0}
     - target: {fileID: 2850328975263803228, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
@@ -36333,6 +36333,11 @@ PrefabInstance:
       propertyPath: m_SortingLayer
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 2850328975263803230, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2850328975263803225, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: m_Offset.y
@@ -36386,7 +36391,7 @@ PrefabInstance:
     - target: {fileID: 2850328975263803224, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: m_LinearDrag
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2850328975263803224, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
@@ -50673,7 +50678,7 @@ MonoBehaviour:
   knockBackForce: 700
   damageNumbersObject: {fileID: 4352203236051628151, guid: 3d07795d9ae794617bd1de79b6065cc0,
     type: 3}
-  health: 20
+  startHealth: 0
   movePower: 300
   thisCollider: {fileID: 1698076801}
   sp: {fileID: 1698076803}
@@ -61839,12 +61844,12 @@ PrefabInstance:
     - target: {fileID: 2850328975263803228, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: accelForce
-      value: 300
+      value: 6000
       objectReference: {fileID: 0}
     - target: {fileID: 2850328975263803228, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: attackForce
-      value: 3000
+      value: 50000
       objectReference: {fileID: 0}
     - target: {fileID: 2850328975263803228, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
@@ -61891,7 +61896,7 @@ PrefabInstance:
         type: 3}
       propertyPath: quote
       value: 
-      objectReference: {fileID: 1265644481}
+      objectReference: {fileID: 0}
     - target: {fileID: 2850328973818659657, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: player
@@ -61981,7 +61986,7 @@ PrefabInstance:
     - target: {fileID: 2850328975263803224, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
       propertyPath: m_LinearDrag
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2850328975263803224, guid: 8a3edbf80e2324e77a0bfb7d8c04becd,
         type: 3}
@@ -62032,6 +62037,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367383727805641558, guid: 50c145f759a4b46dfab0ec0229f3bc89,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 3367383727805641515, guid: 50c145f759a4b46dfab0ec0229f3bc89,
         type: 3}
@@ -62592,6 +62602,51 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
+        type: 3}
+      propertyPath: playerObj
+      value: 
+      objectReference: {fileID: 1280995391}
+    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
+        type: 3}
+      propertyPath: offset.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
+        type: 3}
+      propertyPath: offset.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
+        type: 3}
+      propertyPath: diffSize
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
+        type: 3}
+      propertyPath: rigidBody
+      value: 
+      objectReference: {fileID: 1152384140}
+    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
+        type: 3}
+      propertyPath: moveAccel
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
+        type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1005321601}
+    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
+        type: 3}
+      propertyPath: triggerCollider
+      value: 
+      objectReference: {fileID: 3653935151608681812}
+    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
+        type: 3}
+      propertyPath: rbCol
+      value: 
+      objectReference: {fileID: 1152384141}
     - target: {fileID: 7639954282670285317, guid: 9801e2b9a5a644655813eea0e75e6531,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -62657,51 +62712,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.8
       objectReference: {fileID: 0}
-    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
-        type: 3}
-      propertyPath: playerObj
-      value: 
-      objectReference: {fileID: 1280995391}
-    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
-        type: 3}
-      propertyPath: offset.x
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
-        type: 3}
-      propertyPath: offset.y
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
-        type: 3}
-      propertyPath: diffSize
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
-        type: 3}
-      propertyPath: rigidBody
-      value: 
-      objectReference: {fileID: 1152384140}
-    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
-        type: 3}
-      propertyPath: moveAccel
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
-        type: 3}
-      propertyPath: cam
-      value: 
-      objectReference: {fileID: 1005321601}
-    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
-        type: 3}
-      propertyPath: triggerCollider
-      value: 
-      objectReference: {fileID: 3653935151608681812}
-    - target: {fileID: 905038772359350830, guid: 9801e2b9a5a644655813eea0e75e6531,
-        type: 3}
-      propertyPath: rbCol
-      value: 
-      objectReference: {fileID: 1152384141}
     - target: {fileID: 7853367163602400974, guid: 9801e2b9a5a644655813eea0e75e6531,
         type: 3}
       propertyPath: m_SortingLayerID
