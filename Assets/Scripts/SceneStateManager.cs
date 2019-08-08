@@ -35,6 +35,8 @@ public class SceneStateManager : MonoBehaviour
     public GameObject camera;
     public ParticleSystem tailPs;
 
+    private Rigidbody2D camRb;
+
     // public CheckGrounded playerGroundedScript;
     [HideInInspector] public bool useSpawnPoint;
 
@@ -52,6 +54,8 @@ public class SceneStateManager : MonoBehaviour
         Assert.IsTrue(spawnPointObjs.Length == len);
         Assert.IsTrue(offsetCams.Length == len);
         Assert.IsTrue(yStuck.Length == len);
+
+        camRb = camera.GetComponent<Rigidbody2D>();
         
         useSpawnPoint = true;
         ChangeScene();
@@ -113,8 +117,14 @@ public class SceneStateManager : MonoBehaviour
         // playerGroundedScript.groundedCount = 0;
         // //
         
-        // camera. yStuck[(int)stateToLoad];
+        if(yStuck[(int)stateToLoad]) {
+            camRb.constraints |= RigidbodyConstraints2D.FreezePositionY;
+        } else {
+            camRb.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
+        }
 
+
+        // camRb.constraints |= RigidbodyConstraints2D.FreezeAll;
 
         if(spawnPoint != null && useSpawnPoint) {
             player.transform.position = spawnPoint.transform.position;

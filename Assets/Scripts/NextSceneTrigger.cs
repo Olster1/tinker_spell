@@ -16,35 +16,56 @@ public class NextSceneTrigger : MonoBehaviour
     public Text textUI;
     public PlayerMovement playerMovement;
 
+    public GameObject indicatorPrefab;
+
+    private InteractWithIndicate indicator;
+    public bool isAutomatic;
 	
     // Start is called before the first frame update
     void Start()
     {
-
+        if(!isAutomatic) {
+            indicator = Instantiate(indicatorPrefab, transform.position, Quaternion.identity).GetComponent<InteractWithIndicate>();
+            indicator.spRender.flipX = autoMoveDirection.x < 0;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(!isAutomatic) {
+           if(!playerMovement.autoMoveTimer.isOn() && Input.GetButtonDown("Fire2") && indicator.isOn()) {
+               if(!withText) {
+                   animator.SetTrigger("FadeIn");
+               } else {
+                   textUI.text = textToShow;
+                   animator.SetTrigger("FadeIn");
+                   animator.SetTrigger("FadeWithText");
+               }
+                
+                manager.stateToLoad = levelToLoad;
+               playerMovement.autoMoveDirection = autoMoveDirection;
+               playerMovement.canControlPlayer = false;
+               playerMovement.autoMoveTimer.turnOn();
+            }
+        }
     }
 
-    void OnTriggerEnter2D(Collider2D other) {
+    public void OnTriggerEnter2D(Collider2D other) {
         GameObject gm = other.gameObject;
-
-        if(gm.name == "Player" && !playerMovement.autoMoveTimer.isOn()) {
-            if(!withText) {
-                animator.SetTrigger("FadeIn");
-            } else {
-                textUI.text = textToShow;
-                animator.SetTrigger("FadeIn");
-                animator.SetTrigger("FadeWithText");
-            }
- 			
- 			manager.stateToLoad = levelToLoad;
-            playerMovement.autoMoveDirection = autoMoveDirection;
-            playerMovement.canControlPlayer = false;
-            playerMovement.autoMoveTimer.turnOn();
- 		}
+      if(isAutomatic && gm.name == "Player" && !playerMovement.autoMoveTimer.isOn()) {
+          if(!withText) {
+              animator.SetTrigger("FadeIn");
+          } else {
+              textUI.text = textToShow;
+              animator.SetTrigger("FadeIn");
+              animator.SetTrigger("FadeWithText");
+          }
+           
+           manager.stateToLoad = levelToLoad;
+          playerMovement.autoMoveDirection = autoMoveDirection;
+          playerMovement.canControlPlayer = false;
+          playerMovement.autoMoveTimer.turnOn();
+       }
     }
 }

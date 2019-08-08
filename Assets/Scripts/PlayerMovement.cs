@@ -28,6 +28,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     private float timeInAir;
     
     public AudioSource hurtBreathing;
+
+    public float timeToAffectJump;
     
     [HideInInspector] public Timer earthTimer;
     [HideInInspector] public Timer waterTimer;
@@ -99,6 +101,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     private Vector2 originalBoxOffset;
     private Vector2 originalJumpOffset;
     public float timeIncrease;
+    public float percentOfJump;
+    public float maxJumpTime;
     
     
     private ForceUpdator forceUpdator;
@@ -549,30 +553,26 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         /// 
         /// 
         if(!isIdle) {
-            float i = Input.GetAxis("Horizontal");
-            if(Mathf.Abs(i) > 0.25f) {
-                if(i > 0) {
-                    spriteRenderer.flipX = false;
+            if(canControlPlayer) {
+                float i = Input.GetAxis("Horizontal");
+                if(Mathf.Abs(i) > 0.25f) {
+                    if(i > 0) {
+                        spriteRenderer.flipX = false;
+                    } else {
+                        spriteRenderer.flipX = true;
+                    }
                 } else {
-                    spriteRenderer.flipX = true;
-                }
-            } else {
-                if (rigidBody.velocity.x > 0)
-                {
-                    spriteRenderer.flipX = false;
-                }
-                
-                if (rigidBody.velocity.x < 0)
-                {
-                    spriteRenderer.flipX = true;
+                    if (rigidBody.velocity.x > 0)
+                    {
+                        spriteRenderer.flipX = false;
+                    }
+                    
+                    if (rigidBody.velocity.x < 0)
+                    {
+                        spriteRenderer.flipX = true;
+                    }
                 }
             }
-            // idleAnimationTimer.tAt = 0;
-            idleAnimationTimer.turnOn(); 
-            swapAnimation = true;
-            toSwapTo = IdleAnimation.ANIMATION_IDLE1;
-            checkSwap();
-            // Debug.Log("can Val = " + idleAnimationTimer.getCanoncial());
         } else {
             // bool fin = idleAnimationTimer.updateTimer(Time.deltaTime);
             // float canVal = idleAnimationTimer.getCanoncial();
@@ -709,7 +709,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         }
         
         if(jumpTimer.isOn()) {
-            if(Input.GetButton("Jump") && jumpTimer.period < 1.0f) {
+            if(Input.GetButton("Jump") && jumpTimer.period < timeToAffectJump) {
                 jumpTimer.period += timeIncrease*Time.fixedDeltaTime;
                 
             }
@@ -749,13 +749,18 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 //wait till over a percentage
                 
             } else {
-                if(!Input.GetButton("Jump") && jumpTimer.getCanoncial() > 0.5f) {
+                if(!Input.GetButton("Jump") && jumpTimer.tAt > 0.5f) {
                     jumpTimer.turnOff();
                 } else {
-                    
                     movementForce.y = 1;
+
+                    float percent = jumpTimer.tAt / maxJumpTime;
+
+                    if(percent > 1.0f) {
+                        percent = 1.0f;
+                    }
                     
-                    thisJmpAccel = Mathf.Lerp(jumpAccel, 0, jumpTimer.getCanoncial());
+                    thisJmpAccel = Mathf.Lerp(jumpAccel, percentOfJump*jumpAccel, percent);
                     if (fin)
                     {
                         jumpTimer.turnOff();
