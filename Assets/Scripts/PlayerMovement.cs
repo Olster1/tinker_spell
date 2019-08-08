@@ -45,6 +45,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     public ParticleSystem ps;
     
     private Timer hurtPulseTimer;
+
+    public EarthMoveValidator earthMoveValidator;
     
     public GameObject camera;
     
@@ -511,10 +513,13 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             if(Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN)) {
                 //MAGIC MOVES 
                 if(Input.GetButtonDown("Fire2") && isGrounded && GameManager.hasEarth1 && !earthTimer.isOn()) {
+                    earthMoveValidator.turnOn();
+                    
+                } else if(Input.GetButtonUp("Fire2") && earthMoveValidator.isOk()) {
                     spell.thisAnimator.SetTrigger("earth_dive");
                     camAnimator.SetTrigger("zoom");
-                    
-                } 
+                    earthMoveValidator.turnOff();
+                }
             } else {
                 
                 if(Input.GetButtonDown("Fire1")) {
@@ -674,7 +679,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             // Debug.Log("about to land: " + isAboutToLand);
             if(!animator.GetBool("landing") && rigidBody.velocity.y < 0 && isAboutToLand) {
                 // Debug.Log("setLanding trigger");
-                animator.SetTrigger("endIdle");
+                // animator.SetTrigger("endIdle");
                 animator.SetTrigger("landing");
             }
         }
