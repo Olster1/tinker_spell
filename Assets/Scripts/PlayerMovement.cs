@@ -513,6 +513,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             if(Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN)) {
                 //MAGIC MOVES 
                 if(Input.GetButtonDown("Fire2") && isGrounded && GameManager.hasEarth1 && !earthTimer.isOn()) {
+                    gameObject.isActive(true);
                     earthMoveValidator.turnOn();
                     
                 } else if(Input.GetButtonUp("Fire2") && earthMoveValidator.isOk()) {

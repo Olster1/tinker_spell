@@ -58,11 +58,12 @@ public class EarthMoveValidator : MonoBehaviour
     }
 
     public void turnOff() {
-    	sps[0].color = Color.white;
-    	sps[1].color = Color.white;
-    	sps[2].color = Color.white;
+    	sps[0].color = Color.clear;
+    	sps[1].color = Color.clear;
+    	sps[2].color = Color.clear;
 
     	isOn = false;	
+    	gameObject.isActive(false);
     }
 
     public bool isOk() {
