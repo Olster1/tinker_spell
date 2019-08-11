@@ -62913,7 +62913,7 @@ PrefabInstance:
     - target: {fileID: 3367383727805641517, guid: 50c145f759a4b46dfab0ec0229f3bc89,
         type: 3}
       propertyPath: jumpRaySize
-      value: 1
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 3367383727805641517, guid: 50c145f759a4b46dfab0ec0229f3bc89,
         type: 3}
@@ -63056,6 +63056,11 @@ PrefabInstance:
       propertyPath: thisCamera
       value: 
       objectReference: {fileID: 1005321597}
+    - target: {fileID: 3367383727805641517, guid: 50c145f759a4b46dfab0ec0229f3bc89,
+        type: 3}
+      propertyPath: landingRaySize
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3367383727805641516, guid: 50c145f759a4b46dfab0ec0229f3bc89,
         type: 3}
       propertyPath: m_CollisionDetection

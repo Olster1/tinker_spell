@@ -70,8 +70,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     public AudioClip[] attackVoiceClips;
     public float reboundForce;
     
-    public float raySize;
-    public float speedMargin;
     [HideInInspector] public bool isGrounded;
     
     private Timer jumpTimer;
@@ -182,13 +180,15 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         Vector3 bottomCenter = boxCollider.bounds.center + new Vector3(0, -0.5f*boxCollider.size.y, 0);
         
         RaycastHit2D[] hits = Physics2D.RaycastAll(bottomCenter + colliderOffset, Vector2.down, jumpRaySize, physicsLayerMask);
+        Debug.DrawLine(bottomCenter + colliderOffset, bottomCenter + colliderOffset + jumpRaySize*Vector3.down);
+                                
         for(int i = 0; i < hits.Length; ++i) {
             RaycastHit2D hit = hits[i];
             if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
-                if(rigidBody.velocity.y <= 0) {
+                //if(rigidBody.velocity.y <= 0) {
                     isGrounded = true;
                     break;    
-                }
+              //  }
                 
             } 
         }
@@ -473,6 +473,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         }
         
         animator.SetBool("grounded", isGrounded);
+
+        spriteRenderer.color = (isGrounded ? Color.red : Color.white); 
         
         if(lastFameGrounded != isGrounded && !isJumping) {
             //landing
@@ -657,12 +659,12 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             animator.ResetTrigger("landing");
         }
         
-        if(!isGrounded && isFallingAnim) {
+        if(!isGrounded && isFallingAnim && landingRaySize > 0) {
             bool isAboutToLand = false;
             
             Vector2 rayDir = rigidBody.velocity;
             rayDir.Normalize();
-            RaycastHit2D[] hits = Physics2D.RaycastAll(boxCollider.bounds.center, rayDir, 0.5f*boxCollider.size.y + landingRaySize, physicsLayerMask);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(boxCollider.bounds.center, Vector2.down, 0.5f*boxCollider.size.y + landingRaySize, physicsLayerMask);
             for(int i = 0; i < hits.Length; ++i) {
                 RaycastHit2D landingHit = hits[i];
                 if(landingHit && landingHit.collider.gameObject != gameObject && !landingHit.collider.isTrigger && landingHit.collider.gameObject.transform.parent != gameObject) {
@@ -670,9 +672,9 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                     break;
                 }
             }
-            // Debug.DrawLine(boxCollider.bounds.center, boxCollider.bounds.center + (0.5f*boxCollider.size.y + landingRaySize)*Vector3.down);
+            Debug.DrawLine(boxCollider.bounds.center, (Vector2)boxCollider.bounds.center + ((0.5f*boxCollider.size.y + landingRaySize)*Vector2.down));
             // Debug.Log("landing: " + animator.GetBool("landing"));
-            Debug.Log("velocity less: " + (rigidBody.velocity.y < 0));
+            //Debug.Log("velocity less: " + (rigidBody.velocity.y < 0));
             // Debug.Log("about to land: " + isAboutToLand);
             if(!animator.GetBool("landing") && rigidBody.velocity.y < 0 && isAboutToLand) {
                 // Debug.Log("setLanding trigger");
