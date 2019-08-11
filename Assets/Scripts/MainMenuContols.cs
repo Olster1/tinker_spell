@@ -19,7 +19,6 @@ public class MainMenuContols : MonoBehaviour
   public AudioSource confirmSound;
   private bool readyToLoadLevel;
   private bool exit;
-  private bool play;
 
     // Start is called before the first frame update
     void Start()
@@ -79,7 +78,6 @@ public class MainMenuContols : MonoBehaviour
             confirmSound.Play();
             if(indexOn == 0) {
               fadeoutTimer.turnOn();
-              play = true;
               // LoadNewScene();
             } else if(indexOn == 1) {
               fadeoutTimer.turnOn();

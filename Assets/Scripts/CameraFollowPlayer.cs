@@ -89,10 +89,12 @@ public class CameraFollowPlayer : MonoBehaviour
             if (Mathf.Abs(difference.x) > xDiff)
             {
                 forceAccel.x = Mathf.Sign(difference.x)*xForce;
+                // Debug.Log("outside of x region");
             }
             if (Mathf.Abs(difference.y) > yDiff)
             {
                 forceAccel.y = Mathf.Sign(difference.y) * yForce;
+                // Debug.Log("outside of y region");
             }
 
             rigidBody.AddForce(forceAccel);
@@ -105,5 +107,10 @@ public class CameraFollowPlayer : MonoBehaviour
         }
     }
 
+    void OnDrawGizmos() {
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
+
+        Gizmos.DrawCube(transform.position, new Vector3(2*xDiff, 2*yDiff, 1));
+    }
 
 }

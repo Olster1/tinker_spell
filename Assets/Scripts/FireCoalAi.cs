@@ -28,10 +28,12 @@ public class FireCoalAi : MonoBehaviour, IHitBox
 	public SpriteRenderer sp;
     private Vector3 startP;
     
-	
     // Start is called before the first frame update
     void Start()
     {
+        DebugEntityManager entManager = Camera.main.GetComponent<DebugEntityManager>();
+        entManager.AddEntity(gameObject);
+        
         forceUpdator = new ForceUpdator();
         fadeOutTimer = new Timer(1.0f);
         fadeOutTimer.turnOff();

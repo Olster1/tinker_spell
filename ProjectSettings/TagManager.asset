@@ -8,6 +8,9 @@ TagManager:
   - Enemy
   - Amber
   - Platform
+  - WorldGeometry
+  - CameraCollision
+  - Scenery
   layers:
   - Default
   - TransparentFX
@@ -26,7 +29,7 @@ TagManager:
   - EnemyLayer
   - rock_physics
   - player
-  - 
+  - RockIndicator
   - 
   - 
   - 

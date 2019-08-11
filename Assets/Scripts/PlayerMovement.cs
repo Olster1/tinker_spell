@@ -48,7 +48,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
     public EarthMoveValidator earthMoveValidator;
     
-    public GameObject camera;
+    public GameObject thisCamera;
     
     public Image fadePanel;
     
@@ -87,8 +87,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     
     public AnimatorOverrideController[] idleAnimations;
     private Timer idleAnimationTimer;
-    private bool swapAnimation;
-    private IdleAnimation toSwapTo;
     
     private int physicsLayerMask;
     
@@ -137,8 +135,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
         physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);
         
-        swapAnimation = false;
-        toSwapTo = IdleAnimation.ANIMATION_IDLE1;
         
         globalPauseTimer = new Timer(0.1f);
         dieTimer = new Timer(0.7f);
@@ -189,9 +185,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         for(int i = 0; i < hits.Length; ++i) {
             RaycastHit2D hit = hits[i];
             if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
-                if(hit.collider.gameObject.tag == "Platform" && rigidBody.velocity.y > 0) {
-                    
-                } else {
+                if(rigidBody.velocity.y <= 0) {
                     isGrounded = true;
                     break;    
                 }
@@ -340,7 +334,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         } 
         transform.position = lastValidPos[index];
         rigidBody.velocity = Vector2.zero;
-        camera.transform.position = new Vector3(transform.position.x, transform.position.y, camera.transform.position.z);
+        thisCamera.transform.position = new Vector3(transform.position.x, transform.position.y, thisCamera.transform.position.z);
     }
     
     public void Die() {
@@ -513,16 +507,18 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             if(Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN)) {
                 //MAGIC MOVES 
                 if(Input.GetButtonDown("Fire2") && isGrounded && GameManager.hasEarth1 && !earthTimer.isOn()) {
-                    gameObject.isActive(true);
+        
                     earthMoveValidator.turnOn();
+                    // Debug.Log("isOn");
                     
-                } else if(Input.GetButtonUp("Fire2") && earthMoveValidator.isOk()) {
+                } else if(Input.GetButtonUp("Fire2") && earthMoveValidator.isOk() >= 0) {
                     spell.thisAnimator.SetTrigger("earth_dive");
                     camAnimator.SetTrigger("zoom");
                     earthMoveValidator.turnOff();
+                    // Debug.Log("isOff");
                 }
             } else {
-                
+                earthMoveValidator.turnOff();
                 if(Input.GetButtonDown("Fire1")) {
                     
                     bool isHorizontal = xMove != 0.0f;
@@ -649,7 +645,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 // readyingJump = true;
                 
             } else {
-                Assert.IsTrue(false);
+                //Assert.IsTrue(false);
             }
             
         } else {
@@ -676,7 +672,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             }
             // Debug.DrawLine(boxCollider.bounds.center, boxCollider.bounds.center + (0.5f*boxCollider.size.y + landingRaySize)*Vector3.down);
             // Debug.Log("landing: " + animator.GetBool("landing"));
-            // Debug.Log("velocity less: " + (rigidBody.velocity.y < 0));
+            Debug.Log("velocity less: " + (rigidBody.velocity.y < 0));
             // Debug.Log("about to land: " + isAboutToLand);
             if(!animator.GetBool("landing") && rigidBody.velocity.y < 0 && isAboutToLand) {
                 // Debug.Log("setLanding trigger");

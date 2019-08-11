@@ -44,7 +44,7 @@ public class LoadScene : MonoBehaviour
 
        // While the asynchronous operation to load the new scene is not yet complete, continue waiting until it's done.
        while (!async.isDone) {
-       		if(async.progress > 0.5f && !setTrigger) {
+       		if(async.progress > 0.5f && !fadeTimer.isOn()) {
             fadeTimer.turnOn();
        		// 	panelFade.SetTrigger("FadeOut");
        		// 	setTrigger = true;

@@ -10,6 +10,7 @@ public class HideOnPlay : MonoBehaviour
     void Start()
     {
         spRenderer = gameObject.GetComponent<SpriteRenderer>();
+         spRenderer.enabled = false;
     }
     
     // Update is called once per frame
@@ -17,6 +18,6 @@ public class HideOnPlay : MonoBehaviour
     {
         //this is basically to hide the collision geomtry when we are playing the game. 
         //Might want to make this into a debug feature later. 
-        spRenderer.enabled = false;
+       
     }
 }

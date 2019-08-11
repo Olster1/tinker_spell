@@ -32,7 +32,7 @@ public class SceneStateManager : MonoBehaviour
     public GameObject player;
     private PlayerMovement playerMovement;
     public GameObject spell;
-    public GameObject camera;
+    public GameObject cam;
     public ParticleSystem tailPs;
 
     private Rigidbody2D camRb;
@@ -55,7 +55,7 @@ public class SceneStateManager : MonoBehaviour
         Assert.IsTrue(offsetCams.Length == len);
         Assert.IsTrue(yStuck.Length == len);
 
-        camRb = camera.GetComponent<Rigidbody2D>();
+        camRb = cam.GetComponent<Rigidbody2D>();
         
         useSpawnPoint = true;
         ChangeScene();
@@ -133,7 +133,7 @@ public class SceneStateManager : MonoBehaviour
             Vector3 spellOffset = new Vector3(0, 1, 0);
             spell.transform.position = spawnPoint.transform.position + spellOffset;
             Vector3 camPos = new Vector3(spawnPoint.transform.position.x + offsetCam.x, spawnPoint.transform.position.y + offsetCam.y, cameraZ[(int)stateToLoad]);
-            camera.transform.position = camPos;
+            cam.transform.position = camPos;
         } 
 
         useSpawnPoint = true;
