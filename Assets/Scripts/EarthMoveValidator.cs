@@ -8,18 +8,30 @@ public class EarthMoveValidator : MonoBehaviour
 	private bool isOn;
 	public SpriteRenderer[] sps;
 	private int physicsLayerMask;
+    private SpriteRenderer spPlayer;
 
     public RockIndicatorOverlap[] overlaps;
+    public BoxCollider2D[] colliders;
+
     // Start is called before the first frame update
     void Start()
     {
     	physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);
     	isValid = new bool[3];
+        spPlayer = transform.parent.GetComponent<SpriteRenderer>();
+    }
+
+    public void ResetColliders() {
+        for(int i = 0; i < overlaps.Length; ++i) {
+            overlaps[i].overlapping = 0;
+        }
     }
 
     bool castRayForRock(Vector2 centerPos, int rockIndex) {
-    	isValid[rockIndex] = (overlaps[rockIndex].overlapping == 0);
-        if(isValid[rockIndex]) {
+        bool result = false;
+    	bool overlap = (overlaps[rockIndex].overlapping != 0);
+        // Debug.Log("overlap " + rockIndex + " " + overlaps[rockIndex].overlapping);  
+        if(!overlap) {
             Vector2 rayDir = Vector2.down;
         	rayDir.Normalize();
         	float sizeOfRay = 3;
@@ -28,16 +40,19 @@ public class EarthMoveValidator : MonoBehaviour
             Debug.DrawLine(centerPos, centerPos + sizeOfRay*rayDir, Color.green, 2, true);
         	for(int i = 0; i < hits.Length; ++i) {
         	    RaycastHit2D hitObj = hits[i];
-        	    if(hitObj.collider.gameObject != gameObject && !hitObj.collider.isTrigger) {
-        	        isValid[rockIndex] = true;
+                Debug.Log(hitObj.collider.gameObject.tag);
+        	    if(hitObj.collider.gameObject != gameObject && !hitObj.collider.isTrigger && hitObj.collider.gameObject.tag == "WorldGeometryEarth") {
+                    result = true;
         	        break;
         	    }
         	}
         }
 
-        
+        if(result) {
+            result = !overlap;
+        }  
 
-    	return isValid[rockIndex];
+    	return result;
     }
 
     // Update is called once per frame
@@ -48,22 +63,64 @@ public class EarthMoveValidator : MonoBehaviour
     	isValid[2] = false;
 
         if(isOn) {
-        	Vector2 centerPos = new Vector2(transform.position. x, transform.position.y);
-        	castRayForRock(centerPos + new Vector2(0, 0), 0);
-			castRayForRock(centerPos + new Vector2(8, 0), 1);
-			castRayForRock(centerPos + new Vector2(14, 0), 2);
-            
-
-
-            int maxIndex = 2;
-            if(!isValid[2]) {
-                if(!isValid[1]) {
-                    maxIndex = 0;
-                } else {
-                    maxIndex = 1;
+            Vector3 pos = transform.localPosition;
+            if(spPlayer.flipX) {
+                if(pos.x > 0) pos.x *= -1;
+                transform.localPosition = pos;
+                for(int i = 0; i < sps.Length; ++i) {
+                    sps[i].flipX = true;
+                }
+                 for(int i = 0; i < colliders.Length; ++i) {
+                    Vector2 v = colliders[i].offset;
+                    if(v.x > 0) {
+                        v.x *= -1;
+                    }
+                    colliders[i].offset = v;
+                }
+            } else {
+                if(pos.x < 0) pos.x *= -1;
+                transform.localPosition = pos;
+                for(int i = 0; i < sps.Length; ++i) {
+                    sps[i].flipX = false;
+                }
+                for(int i = 0; i < colliders.Length; ++i) {
+                    Vector2 v = colliders[i].offset;
+                    if(v.x < 0) {
+                        v.x *= -1;
+                    }
+                    colliders[i].offset = v;
                 }
             }
-            Debug.Log("max index: " + maxIndex);
+
+            float modifier = 1;
+            if(spPlayer.flipX) {
+                modifier = -1;
+            }
+
+        	Vector2 centerPos = new Vector2(transform.position.x, transform.position.y);
+
+        	bool r1 = castRayForRock(centerPos + new Vector2(0, 0), 0);
+            bool r2 = castRayForRock(centerPos + new Vector2(4, 0), 0);
+			bool r3 = castRayForRock(centerPos + new Vector2(modifier*6, 0), 1);
+			bool r4 = castRayForRock(centerPos + new Vector2(modifier*8, 0), 1);
+            bool r5 = castRayForRock(centerPos + new Vector2(modifier*12, 0), 2);
+            bool r6 = castRayForRock(centerPos + new Vector2(modifier*14, 0), 2);
+            
+            int maxIndex =0;
+            if(r1 && r2) {
+                maxIndex = 0;
+                isValid[0] = true;
+                if(r3 && r4) {
+                    maxIndex = 1;
+                    isValid[1] = true;
+                    if(r5 && r6) {
+                        maxIndex = 2;
+                        isValid[2] = true;
+                    }
+                }
+            }
+
+            //Debug.Log("max index: " + maxIndex);
 			for(int i = 0; i < isValid.Length; ++i) {
 				if(i == maxIndex) {
                     if(isValid[i]) {

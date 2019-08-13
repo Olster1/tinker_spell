@@ -37,6 +37,8 @@ public class SceneStateManager : MonoBehaviour
 
     private Rigidbody2D camRb;
 
+    public EarthMoveValidator earthValidator;
+
     // public CheckGrounded playerGroundedScript;
     [HideInInspector] public bool useSpawnPoint;
 
@@ -127,7 +129,9 @@ public class SceneStateManager : MonoBehaviour
         // camRb.constraints |= RigidbodyConstraints2D.FreezeAll;
 
         if(spawnPoint != null && useSpawnPoint) {
+
             player.transform.position = spawnPoint.transform.position;
+            earthValidator.ResetColliders();
 
             Vector2 offsetCam = offsetCams[(int)stateToLoad];
             Vector3 spellOffset = new Vector3(0, 1, 0);

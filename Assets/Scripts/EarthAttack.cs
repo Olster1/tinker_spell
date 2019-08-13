@@ -6,11 +6,6 @@ public class EarthAttack : MonoBehaviour
 {
 	private SpriteRenderer sp;
 
-    public BoxCollider2D box1;
-    public BoxCollider2D box2;
-    public BoxCollider2D box3;
-    public BoxCollider2D box4;
-
     public AudioClip earthAudio;
     public GameObject soundObj;
     // Start is called before the first frame update
@@ -23,21 +18,21 @@ public class EarthAttack : MonoBehaviour
     }
 
     public void rePosBoxes() {
-        Vector2 tempOffset = box1.offset;
-        tempOffset.x *= -1;
-        box1.offset = tempOffset;
+        // Vector2 tempOffset = box1.offset;
+        // tempOffset.x *= -1;
+        // box1.offset = tempOffset;
 
-        tempOffset = box2.offset;
-        tempOffset.x *= -1;
-        box2.offset = tempOffset;
+        // tempOffset = box2.offset;
+        // tempOffset.x *= -1;
+        // box2.offset = tempOffset;
 
-        tempOffset = box3.offset;
-        tempOffset.x *= -1;
-        box3.offset = tempOffset;
+        // tempOffset = box3.offset;
+        // tempOffset.x *= -1;
+        // box3.offset = tempOffset;
 
-        tempOffset = box4.offset;
-        tempOffset.x *= -1;
-        box4.offset = tempOffset;
+        // tempOffset = box4.offset;
+        // tempOffset.x *= -1;
+        // box4.offset = tempOffset;
 
     }
     // Update is called once per frame

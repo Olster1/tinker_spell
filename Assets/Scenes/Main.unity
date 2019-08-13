@@ -333,7 +333,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -544,7 +544,7 @@ PrefabInstance:
     - target: {fileID: 1181249630291239424, guid: eb457a3eeacd34d1a9506f0d9a028e3e,
         type: 3}
       propertyPath: m_TagString
-      value: Platform
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 1181249630291239435, guid: eb457a3eeacd34d1a9506f0d9a028e3e,
         type: 3}
@@ -1652,7 +1652,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -1872,7 +1872,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -2331,7 +2331,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -3240,7 +3240,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -3779,7 +3779,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -3899,7 +3899,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -4024,7 +4024,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -5065,7 +5065,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -5283,7 +5283,7 @@ PrefabInstance:
     - target: {fileID: 1181249630291239424, guid: eb457a3eeacd34d1a9506f0d9a028e3e,
         type: 3}
       propertyPath: m_TagString
-      value: Platform
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 1181249630291239435, guid: eb457a3eeacd34d1a9506f0d9a028e3e,
         type: 3}
@@ -5495,7 +5495,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -5855,6 +5855,7 @@ Transform:
   - {fileID: 1571356061}
   - {fileID: 1612007358}
   - {fileID: 1332541670}
+  - {fileID: 1138415013}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6205,7 +6206,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -7521,7 +7522,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -7625,7 +7626,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -8169,7 +8170,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -8700,7 +8701,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 6, y: 0}
+  m_Offset: {x: 6, y: 0.3}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.20517144, y: 0.31620553}
@@ -8809,7 +8810,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -9179,7 +9180,7 @@ PrefabInstance:
     - target: {fileID: 1181249630291239424, guid: eb457a3eeacd34d1a9506f0d9a028e3e,
         type: 3}
       propertyPath: m_TagString
-      value: Platform
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 1181249630291239435, guid: eb457a3eeacd34d1a9506f0d9a028e3e,
         type: 3}
@@ -14684,7 +14685,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -15378,7 +15379,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -15573,6 +15574,10 @@ MonoBehaviour:
   - {fileID: 1976963260}
   - {fileID: 1931530036}
   - {fileID: 649956995}
+  colliders:
+  - {fileID: 1976963259}
+  - {fileID: 1931530035}
+  - {fileID: 649956994}
 --- !u!4 &883658495
 Transform:
   m_ObjectHideFlags: 0
@@ -15771,7 +15776,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -15985,7 +15990,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -16209,7 +16214,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -16867,7 +16872,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -22151,7 +22156,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -23263,7 +23268,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -23357,7 +23362,7 @@ PrefabInstance:
     - target: {fileID: 1181249630291239424, guid: eb457a3eeacd34d1a9506f0d9a028e3e,
         type: 3}
       propertyPath: m_TagString
-      value: Platform
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 1181249630291239435, guid: eb457a3eeacd34d1a9506f0d9a028e3e,
         type: 3}
@@ -23626,7 +23631,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 38.5, y: 69.375}
+  m_AnchoredPosition: {x: 38.5, y: 69.5}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1071026462
@@ -24373,6 +24378,105 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1135794322}
   m_CullTransparentMesh: 0
+--- !u!1 &1138415012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1138415013}
+  - component: {fileID: 1138415016}
+  - component: {fileID: 1138415015}
+  - component: {fileID: 1138415014}
+  m_Layer: 0
+  m_Name: water_platform
+  m_TagString: WorldGeometryWater
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1138415013
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138415012}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -13.100006, y: -50.4, z: 0}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0}
+  m_Children: []
+  m_Father: {fileID: 395240508}
+  m_RootOrder: 164
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!251 &1138415014
+PlatformEffector2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138415012}
+  m_Enabled: 1
+  m_UseColliderMask: 1
+  m_ColliderMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_RotationalOffset: 0
+  m_UseOneWay: 1
+  m_UseOneWayGrouping: 0
+  m_SurfaceArc: 140
+  m_UseSideFriction: 0
+  m_UseSideBounce: 0
+  m_SideArc: 1
+--- !u!50 &1138415015
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138415012}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!61 &1138415016
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138415012}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 1
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -4}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 26.66, y: 30}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 25.4, y: 2}
+  m_EdgeRadius: 0
 --- !u!1 &1152384139 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1399552314379456779, guid: 9801e2b9a5a644655813eea0e75e6531,
@@ -24642,7 +24746,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -25171,7 +25275,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 76, y: -185.375}
+  m_AnchoredPosition: {x: 76, y: -185.5}
   m_SizeDelta: {x: 205.4, y: 224.55}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1205435439
@@ -25327,7 +25431,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -37323,7 +37427,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -38265,7 +38369,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -39628,7 +39732,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -40739,7 +40843,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -45705,7 +45809,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -45809,7 +45913,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -51329,7 +51433,7 @@ PrefabInstance:
     - target: {fileID: 1181249630291239424, guid: eb457a3eeacd34d1a9506f0d9a028e3e,
         type: 3}
       propertyPath: m_TagString
-      value: Platform
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 1181249630291239435, guid: eb457a3eeacd34d1a9506f0d9a028e3e,
         type: 3}
@@ -51962,7 +52066,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -52875,7 +52979,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -52991,7 +53095,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -53096,7 +53200,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -54380,7 +54484,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 3, y: 0}
+  m_Offset: {x: 3, y: 0.3}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.23675156, y: 0.48721072}
@@ -54568,6 +54672,7 @@ MonoBehaviour:
   spell: {fileID: 1152384139}
   cam: {fileID: 1005321597}
   tailPs: {fileID: 764839117}
+  earthValidator: {fileID: 883658494}
   useSpawnPoint: 0
 --- !u!114 &1942233920
 MonoBehaviour:
@@ -54658,7 +54763,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -54867,7 +54972,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 1.5, y: 0}
+  m_Offset: {x: 1.5, y: 0.3}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5194081, y: 0.56980056}
@@ -54918,7 +55023,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -55181,7 +55286,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -55376,7 +55481,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -61408,7 +61513,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -61665,7 +61770,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -61949,9 +62054,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2134682005}
   - component: {fileID: 2134682004}
-  - component: {fileID: 2134682007}
-  - component: {fileID: 2134682006}
-  - component: {fileID: 2134682008}
   m_Layer: 0
   m_Name: water plants_2
   m_TagString: Scenery
@@ -62021,72 +62123,6 @@ Transform:
   m_Father: {fileID: 395240508}
   m_RootOrder: 84
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &2134682006
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2134682003}
-  m_BodyType: 2
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!61 &2134682007
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2134682003}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 1
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -4}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 26.66, y: 30}
-    newSize: {x: 26.66, y: 30}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 25.4, y: 2}
-  m_EdgeRadius: 0
---- !u!251 &2134682008
-PlatformEffector2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2134682003}
-  m_Enabled: 1
-  m_UseColliderMask: 1
-  m_ColliderMask:
-    serializedVersion: 2
-    m_Bits: 1
-  m_RotationalOffset: 0
-  m_UseOneWay: 1
-  m_UseOneWayGrouping: 0
-  m_SurfaceArc: 140
-  m_UseSideFriction: 0
-  m_UseSideBounce: 0
-  m_SideArc: 1
 --- !u!4 &2143522786 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2440433001012684277, guid: ef8420ccdd5744c9ea59f07b1fe660e9,
@@ -62113,7 +62149,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
@@ -62869,6 +62905,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3367383727805641517, guid: 50c145f759a4b46dfab0ec0229f3bc89,
         type: 3}
+      propertyPath: earthAttackObjects.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367383727805641517, guid: 50c145f759a4b46dfab0ec0229f3bc89,
+        type: 3}
       propertyPath: earthAttackObject
       value: 
       objectReference: {fileID: 3868236852534701688, guid: 7816b9d0ef55b4264a4196c3385de8ea,
@@ -63061,6 +63102,24 @@ PrefabInstance:
       propertyPath: landingRaySize
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3367383727805641517, guid: 50c145f759a4b46dfab0ec0229f3bc89,
+        type: 3}
+      propertyPath: earthAttackObjects.Array.data[2]
+      value: 
+      objectReference: {fileID: 3868236852534701688, guid: 7816b9d0ef55b4264a4196c3385de8ea,
+        type: 3}
+    - target: {fileID: 3367383727805641517, guid: 50c145f759a4b46dfab0ec0229f3bc89,
+        type: 3}
+      propertyPath: earthAttackObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 7680335044405880704, guid: fa82e369f6ca94045beb01621ffae752,
+        type: 3}
+    - target: {fileID: 3367383727805641517, guid: 50c145f759a4b46dfab0ec0229f3bc89,
+        type: 3}
+      propertyPath: earthAttackObjects.Array.data[1]
+      value: 
+      objectReference: {fileID: 4381986995755410259, guid: 4f2e819f5120dee4cb77bbd8c7d8ec8d,
+        type: 3}
     - target: {fileID: 3367383727805641516, guid: 50c145f759a4b46dfab0ec0229f3bc89,
         type: 3}
       propertyPath: m_CollisionDetection
@@ -63614,7 +63673,7 @@ PrefabInstance:
     - target: {fileID: 4619175073455101358, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}
       propertyPath: m_TagString
-      value: WorldGeometry
+      value: WorldGeometryEarth
       objectReference: {fileID: 0}
     - target: {fileID: 4619175073455101362, guid: 48587e766f5df42248db0d4be0208c04,
         type: 3}

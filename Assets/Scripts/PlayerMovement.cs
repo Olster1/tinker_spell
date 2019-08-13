@@ -49,6 +49,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     public EarthMoveValidator earthMoveValidator;
     
     public GameObject thisCamera;
+    private int earthAttackLevel;
     
     public Image fadePanel;
     
@@ -93,7 +94,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     
     public GameObject genericAttackObject;
     public GameObject damageNumbersObject;
-    public GameObject earthAttackObject;
+    public GameObject[] earthAttackObjects;
     
     private Vector2 originalBoxSize;
     private Vector2 originalBoxOffset;
@@ -101,6 +102,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     public float timeIncrease;
     public float percentOfJump;
     public float maxJumpTime;
+    private bool flipForEarthMove;
     
     
     private ForceUpdator forceUpdator;
@@ -350,9 +352,12 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
         Handheld.Vibrate();
         
-        float xDir = spriteRenderer.flipX ? -1 : 1;
+        float xDir = flipForEarthMove ? -1 : 1;
         earthTimer.turnOn();
-        GameObject earthObj = Instantiate(earthAttackObject, transform.position - new Vector3(xDir*earthOffset.x, earthOffset.y, 0),  Quaternion.identity);
+
+        Vector3 startEarthP = spell.transform.position;
+        startEarthP.y = transform.position.y;
+        GameObject earthObj = Instantiate(earthAttackObjects[earthAttackLevel], startEarthP - new Vector3(xDir*earthOffset.x, earthOffset.y, 0),  Quaternion.identity);
         earthObj.GetComponent<SpriteRenderer>().flipX = xDir < 0;
         
         if(xDir < 0) {
@@ -474,7 +479,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
         animator.SetBool("grounded", isGrounded);
 
-        spriteRenderer.color = (isGrounded ? Color.red : Color.white); 
+        // spriteRenderer.color = (isGrounded ? Color.red : Color.white); 
         
         if(lastFameGrounded != isGrounded && !isJumping) {
             //landing
@@ -513,7 +518,11 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                     earthMoveValidator.turnOn();
                     // Debug.Log("isOn");
                     
-                } else if(Input.GetButtonUp("Fire2") && earthMoveValidator.isOk() >= 0) {
+                } else if(Input.GetButtonUp("Fire2") && earthMoveValidator.isOk() >= 0 && !earthTimer.isOn()) {
+                    earthAttackLevel = earthMoveValidator.isOk();
+                    spell.thisAnimator.SetTrigger("exit_run");
+                    flipForEarthMove = spriteRenderer.flipX;
+                    spell.flipForDive = spriteRenderer.flipX;
                     spell.thisAnimator.SetTrigger("earth_dive");
                     camAnimator.SetTrigger("zoom");
                     earthMoveValidator.turnOff();
@@ -664,15 +673,28 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             
             Vector2 rayDir = rigidBody.velocity;
             rayDir.Normalize();
-            RaycastHit2D[] hits = Physics2D.RaycastAll(boxCollider.bounds.center, Vector2.down, 0.5f*boxCollider.size.y + landingRaySize, physicsLayerMask);
-            for(int i = 0; i < hits.Length; ++i) {
+            Vector2 startP = boxCollider.bounds.center + new Vector3(0, -0.5f*boxCollider.size.y, 0);
+            float rayLen = landingRaySize;
+            RaycastHit2D[] hits = Physics2D.RaycastAll(startP, Vector2.down, rayLen, physicsLayerMask);
+            float smallestDistance = rayLen;
+            bool found = false;
+            for(int i = 0; i < hits.Length && !found; ++i) {
                 RaycastHit2D landingHit = hits[i];
-                if(landingHit && landingHit.collider.gameObject != gameObject && !landingHit.collider.isTrigger && landingHit.collider.gameObject.transform.parent != gameObject) {
-                    isAboutToLand = true;
-                    break;
+                if(landingHit && landingHit.distance < smallestDistance && landingHit.collider.gameObject != gameObject && !landingHit.collider.isTrigger && landingHit.collider.gameObject.transform.parent != gameObject) {
+                    smallestDistance = landingHit.distance;
+                    if(smallestDistance > 1.0f) {
+                        isAboutToLand = true;
+                    } else {
+                        isAboutToLand = false;
+                        //to close to do landing animation
+                        found = true;
+                        break;
+                    }
+                    
+                    //break;
                 }
             }
-            Debug.DrawLine(boxCollider.bounds.center, (Vector2)boxCollider.bounds.center + ((0.5f*boxCollider.size.y + landingRaySize)*Vector2.down));
+            Debug.DrawLine(startP, startP + (landingRaySize*Vector2.down));
             // Debug.Log("landing: " + animator.GetBool("landing"));
             //Debug.Log("velocity less: " + (rigidBody.velocity.y < 0));
             // Debug.Log("about to land: " + isAboutToLand);

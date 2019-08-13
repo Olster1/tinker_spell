@@ -18,13 +18,16 @@ public class RockIndicatorOverlap : MonoBehaviour
     }
 
     public void OnTriggerExit2D(Collider2D other) {
-    	overlapping--;
+    	if(!other.isTrigger) {
+    		overlapping--;
+    	}
+    	
     }
     public void OnTriggerEnter2D(Collider2D other) {
-     	
-   		overlapping++;
-   		
-        
+   		if(!other.isTrigger) {
+   			// Debug.Log("name " + other.gameObject.name);
+    		overlapping++;
+    	}
    	}
 
 }

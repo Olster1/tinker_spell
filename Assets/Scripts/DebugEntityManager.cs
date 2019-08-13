@@ -30,6 +30,14 @@ public class DebugEntityManager : MonoBehaviour
     	entities.Add(obj);
     }
 
+    void toggleCollisionGeometry(string name) {
+        GameObject[] objs = GameObject.FindGameObjectsWithTag(name);
+        // Debug.Log("key 2" + objs.Length);
+        for(int i = 0; i < objs.Length; ++i) {
+            objs[i].GetComponent<SpriteRenderer>().enabled = activate1;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -50,11 +58,8 @@ public class DebugEntityManager : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.F2)) {
             activate1 = !activate1;
-            GameObject[] objs = GameObject.FindGameObjectsWithTag("WorldGeometry");
-             Debug.Log("key 2" + objs.Length);
-            for(int i = 0; i < objs.Length; ++i) {
-                objs[i].GetComponent<SpriteRenderer>().enabled = activate1;
-            }
+            toggleCollisionGeometry("WorldGeometryEarth");
+            toggleCollisionGeometry("WorldGeometryWater");
         }
         if(Input.GetKeyDown(KeyCode.F3)) {
            activate2 = !activate2;

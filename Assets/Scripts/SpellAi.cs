@@ -27,6 +27,7 @@ public class SpellAi : MonoBehaviour
     private Timer centerTimer;
     private Vector3 startPos;
     private Vector3 endPos;
+    [HideInInspector] public bool flipForDive;
     [HideInInspector] public bool controllingSpell;
     private Vector2 movementForce;
     public float moveAccel;
@@ -76,12 +77,31 @@ public class SpellAi : MonoBehaviour
         thisSpriteRenderer.sortingOrder = playerSpriteRenderer.sortingOrder - 1;
     }
 
-    public void defaultIdleFlip() {
-        //this is is the idle animation never flips!
+    private bool fireFlipx;
+
+    public void SetFlipForDive() {
+        thisSpriteRenderer.flipX = flipForDive;
+    }
+
+    public void SetFlipForFire() {
+
+    }
+
+    public void SetFlipForIdle() {
         thisSpriteRenderer.flipX = false;
     }
 
-    private bool fireFlipx;
+    public void SetFlipForWalk() {
+        if (velocity.x > 0)
+        {
+            thisSpriteRenderer.flipX = false;
+        }
+
+        if (velocity.x < 0)
+        {
+            thisSpriteRenderer.flipX = true;
+        }
+    }
 
     public void enterPlayerTransform() {
         
@@ -127,6 +147,7 @@ public class SpellAi : MonoBehaviour
         bool isInFireAnimation = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("spell_fire_twirl");
         if (Input.GetButton("Fire1") && Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN) && !isInFireAnimation && playerMovement.canControlPlayer)
         {
+            thisAnimator.SetTrigger("exit_run");
             thisAnimator.SetTrigger("fire_twirl");
             offset.x = 0;
             enterPlayerTransform();
@@ -150,32 +171,10 @@ public class SpellAi : MonoBehaviour
         	// thisCollider.offset = startOffset;
         }
 
-        // if(Input.GetButton("Jump")) {
-        // 	thisAnimator.SetTrigger("fire_twirl");
-        // }
-        if(!isInFireAnimation) {
-            if (velocity.x > 0)
-            {
-                thisSpriteRenderer.flipX = false;
-            }
-
-            if (velocity.x < 0)
-            {
-                thisSpriteRenderer.flipX = true;
-            }
-        } else {
-            thisSpriteRenderer.flipX = fireFlipx;
-        }
-
-        // if(centerTimer.isOn()) {
-        //     bool fin = centerTimer.updateTimer(Time.deltaTime);
-        //     float can = centerTimer.getCanoncial();
-        //     transform.localPosition = Vector3.Lerp(startPos - playerTransform.position, endPos, can);
-        //     if(fin) {
-        //         thisAnimator.SetTrigger("fire_twirl");
-        //         centerTimer.turnOff();
-        //     }
-        // }
+        bool isWalking = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("spell_run");;
+        if(isWalking) {
+            SetFlipForWalk();
+        } 
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -191,26 +190,32 @@ public class SpellAi : MonoBehaviour
 	    }
     }
 
+    public void ClearExitRun() {
+        thisAnimator.ResetTrigger("exit_run");
+    }
+
     void FixedUpdate()
     {
-        if(!controllingSpell) {
-        // if(!centerTimer.isOn()) {
-        	float dt = Time.fixedDeltaTime;
-        	Vector3 diffPos = (playerTransform.position + offset) - thisTransform.position;
-        	Vector2 diffPos2 = Vector3.Normalize(diffPos);
-            if(diffPos.magnitude > diffSize) {
-                velocity += accelPower*diffPos2*dt;
+        if(!(thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("spell_dive") || thisAnimator.GetBool("earth_dive"))) {
+            if(!controllingSpell) {
+            // if(!centerTimer.isOn()) {
+            	float dt = Time.fixedDeltaTime;
+            	Vector3 diffPos = (playerTransform.position + offset) - thisTransform.position;
+            	Vector2 diffPos2 = Vector3.Normalize(diffPos);
+                if(diffPos.magnitude > diffSize) {
+                    velocity += accelPower*diffPos2*dt;
+                }
+                velocity -= dragFactor*velocity;
+                thisTransform.position = new Vector3(thisTransform.position.x + dt*velocity.x, thisTransform.position.y + dt*velocity.y, thisTransform.position.z);
+            // }
+            } else {
+                float xMove = Input.GetAxis("Horizontal");
+                float yMove = Input.GetAxis("Vertical");
+                movementForce.x = xMove * moveAccel;
+                movementForce.y = yMove * moveAccel;
+                rigidBody.AddForce(movementForce);
+                velocity = rigidBody.velocity;
             }
-            velocity -= dragFactor*velocity;
-            thisTransform.position = new Vector3(thisTransform.position.x + dt*velocity.x, thisTransform.position.y + dt*velocity.y, thisTransform.position.z);
-        // }
-        } else {
-            float xMove = Input.GetAxis("Horizontal");
-            float yMove = Input.GetAxis("Vertical");
-            movementForce.x = xMove * moveAccel;
-            movementForce.y = yMove * moveAccel;
-            rigidBody.AddForce(movementForce);
-            velocity = rigidBody.velocity;
         }
     }
 }

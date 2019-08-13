@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Timer_namespace;
+using ConfigControls_namespace;
 
 
 public class NextSceneTrigger : MonoBehaviour
@@ -34,7 +35,7 @@ public class NextSceneTrigger : MonoBehaviour
     void Update()
     {
         if(!isAutomatic) {
-           if(!playerMovement.autoMoveTimer.isOn() && Input.GetButtonDown("Fire2") && indicator.isOn()) {
+           if(!playerMovement.autoMoveTimer.isOn() && Input.GetButtonDown("Fire2") && indicator.isOn() && !Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN)) {
                if(!withText) {
                    animator.SetTrigger("FadeIn");
                } else {

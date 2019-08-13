@@ -11,6 +11,8 @@ TagManager:
   - WorldGeometry
   - CameraCollision
   - Scenery
+  - WorldGeometryEarth
+  - WorldGeometryWater
   layers:
   - Default
   - TransparentFX
