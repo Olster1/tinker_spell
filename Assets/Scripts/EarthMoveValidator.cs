@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Timer_namespace;
+using UnityEngine.Assertions;
 
 public class EarthMoveValidator : MonoBehaviour
 {
 	private bool[] isValid;
-	private bool isOn;
 	public SpriteRenderer[] sps;
 	private int physicsLayerMask;
     private SpriteRenderer spPlayer;
@@ -13,12 +14,15 @@ public class EarthMoveValidator : MonoBehaviour
     public RockIndicatorOverlap[] overlaps;
     public BoxCollider2D[] colliders;
 
+    private Timer flashTimer;
+
     // Start is called before the first frame update
     void Start()
     {
     	physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);
     	isValid = new bool[3];
         spPlayer = transform.parent.GetComponent<SpriteRenderer>();
+        flashTimer = new Timer(1.0f);
     }
 
     public void ResetColliders() {
@@ -40,8 +44,8 @@ public class EarthMoveValidator : MonoBehaviour
             Debug.DrawLine(centerPos, centerPos + sizeOfRay*rayDir, Color.green, 2, true);
         	for(int i = 0; i < hits.Length; ++i) {
         	    RaycastHit2D hitObj = hits[i];
-                Debug.Log(hitObj.collider.gameObject.tag);
-        	    if(hitObj.collider.gameObject != gameObject && !hitObj.collider.isTrigger && hitObj.collider.gameObject.tag == "WorldGeometryEarth") {
+                // Debug.Log(hitObj.collider.gameObject.tag);
+        	    if(hitObj.collider.gameObject != gameObject && !hitObj.collider.isTrigger && (hitObj.collider.gameObject.tag == "WorldGeometryEarth" || hitObj.collider.gameObject.tag == "PlatformGeometryEarth")) {
                     result = true;
         	        break;
         	    }
@@ -62,7 +66,8 @@ public class EarthMoveValidator : MonoBehaviour
     	isValid[1] = false;
     	isValid[2] = false;
 
-        if(isOn) {
+        //if(isOn) 
+        {
             Vector3 pos = transform.localPosition;
             if(spPlayer.flipX) {
                 if(pos.x > 0) pos.x *= -1;
@@ -106,37 +111,42 @@ public class EarthMoveValidator : MonoBehaviour
             bool r5 = castRayForRock(centerPos + new Vector2(modifier*12, 0), 2);
             bool r6 = castRayForRock(centerPos + new Vector2(modifier*14, 0), 2);
             
-            int maxIndex =0;
+            //int maxIndex = -1;
             if(r1 && r2) {
-                maxIndex = 0;
+               // maxIndex = 0;
                 isValid[0] = true;
                 if(r3 && r4) {
-                    maxIndex = 1;
+                   // maxIndex = 1;
                     isValid[1] = true;
                     if(r5 && r6) {
-                        maxIndex = 2;
+                       // maxIndex = 2;
                         isValid[2] = true;
                     }
                 }
             }
 
-            //Debug.Log("max index: " + maxIndex);
-			for(int i = 0; i < isValid.Length; ++i) {
-				if(i == maxIndex) {
-                    if(isValid[i]) {
-    					sps[i].color = Color.white;
-    				} else {
-    					sps[i].color = Color.red;
-    				}
-                } else {
-                    sps[i].color = Color.clear;
+
+            if(flashTimer.isOn()) {
+                bool flashDone = flashTimer.updateTimer(Time.deltaTime);
+                
+                float alpha = (float)0.5f*Mathf.Cos(4*Mathf.PI*flashTimer.getCanoncial()) + 0.5f;
+                //Debug.Log(alpha);
+                Assert.IsTrue(alpha >= 0.0f && alpha <= 1.0f);
+                Color tempColor = Color.red;
+                tempColor.a = alpha;
+                sps[0].color  = tempColor;
+                if(flashDone) {
+                    flashTimer.turnOff();
+                    
                 }
-			}
+            } else {
+                sps[0].color = Color.clear;
+            }
         }
     }
 
     public void turnOn() {
-    	isOn = true;
+    	flashTimer.turnOn();
 
     }
 
@@ -144,9 +154,6 @@ public class EarthMoveValidator : MonoBehaviour
     	sps[0].color = Color.clear;
     	sps[1].color = Color.clear;
     	sps[2].color = Color.clear;
-
-    	isOn = false;	
-    	
     }
 
     public int isOk() {

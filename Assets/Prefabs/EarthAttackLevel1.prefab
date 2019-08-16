@@ -317,7 +317,7 @@ PrefabInstance:
     - target: {fileID: 5159018765448221695, guid: b9589d6f131aa4c59a0216c8079786f3,
         type: 3}
       propertyPath: endPos.x
-      value: 4
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 5159018765448221695, guid: b9589d6f131aa4c59a0216c8079786f3,
         type: 3}
@@ -337,7 +337,12 @@ PrefabInstance:
     - target: {fileID: 5159018765448221695, guid: b9589d6f131aa4c59a0216c8079786f3,
         type: 3}
       propertyPath: period
-      value: 0.4
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5159018765448221695, guid: b9589d6f131aa4c59a0216c8079786f3,
+        type: 3}
+      propertyPath: startPos.x
+      value: -4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9589d6f131aa4c59a0216c8079786f3, type: 3}

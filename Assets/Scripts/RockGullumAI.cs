@@ -16,7 +16,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     public float attackForce; 
     private BoxCollider2D thisCollider;
     private Animator thisAnimator;
-    [HideInInspector] public Timer deathTimer;
+    
     [HideInInspector] public Timer walkTimer;
     private SpriteRenderer spRenderer;
     public Vector2 partolDistance;
@@ -34,13 +34,15 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private bool finishedAttack;
     public string nameCollider;
 
-    
+    private int hitCount;
     private float lastDiffVec;
     public ActivateQuote quote;
     
     public GameObject attackSwipe;
     
     public GameObject rockObj;
+
+    public Timer respawnTimer;
     
     public Sprite[] rocks;
     public BossFightTrigger bossTriggerEnd;
@@ -142,7 +144,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         thisRigidbody = gameObject.GetComponent<Rigidbody2D>();
         thisAnimator = gameObject.GetComponent<Animator>();
         spRenderer= gameObject.GetComponent<SpriteRenderer>();
-        deathTimer = new Timer(1.0f);
+        
         walkTimer = new Timer(1.0f);
         aiState = Ai_State.AI_PATROL;
         ForceToAdd = new Vector2();
@@ -152,6 +154,9 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         redHurtTimer.turnOff();
         health = startHealth;
         startTint = spRenderer.color;
+
+        respawnTimer = new Timer(3.0f);
+        respawnTimer.turnOff();
         
         spawnFadeTimer = new Timer(0.5f);
         spawnFadeTimer.turnOff();
@@ -172,7 +177,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         
         startScale = healthInnerBar.transform.localScale.x;
         
-        physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer) | Physics2D.GetLayerCollisionMask(LayerMask.NameToLayer("EnemyAiCollision"));
+        physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);// | Physics2D.GetLayerCollisionMask(LayerMask.NameToLayer("EnemyAiCollision"));
         
         forceUpdator = new ForceUpdator();
         
@@ -226,9 +231,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         CollectAmber amberCollect = objAmber.transform.GetChild(0).gameObject.GetComponent<CollectAmber>();
         amberCollect.type = (AmberType)type;
         
-        if(quote != null) {
-            amberCollect.SetQuoteOnCollect(quote);
-        }
+        
         
         if(type == AmberType.AMBER_HEALTH || type == AmberType.AMBER_MANA) {
             float randScale = Random.Range(0.7f, 1.3f);
@@ -236,6 +239,9 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 3;
         } else if (type == AmberType.AMBER_SENTINEL_HEAD) {
             objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 4;
+            if(quote != null) {
+                amberCollect.SetQuoteOnCollect(quote);
+            }
         } else {
             objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 0;
         }
@@ -245,7 +251,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         }
         Vector2 newForce = new Vector3(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle));
         amberRb.bodyType = RigidbodyType2D.Dynamic;
-        float lerpVal = Mathf.Lerp(18000, 22000, Random.Range(0.0f, 1.0f));
+        float lerpVal = Mathf.Lerp(52000, 60000, Random.Range(0.0f, 1.0f));
         amberRb.AddForce(lerpVal*newForce);
     }
     
@@ -264,25 +270,24 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         emitAmber(AmberType.AMBER_AMBER, 4);
         emitAmber(AmberType.AMBER_HEALTH, 10);
         emitAmber(AmberType.AMBER_MANA, 6);
-        if(isSentinel) 
+        if(isSentinel && hitCount <= 1) 
         {
             emitAmber(AmberType.AMBER_SENTINEL_HEAD, 1, 0.5f*Mathf.PI, 1.0f);
         }
     }
     
     public void Dead() {
-        //dead = true;
-        //thisCollider.enabled = false;
-        //thisAnimator.enabled = false;
-        //spRenderer.enabled = false;
-        //thisRigidbody.simulated = false;
         transform.position = startP;
         health = startHealth;
         Vector3 tempScale = healthInnerBar.transform.localScale;
         tempScale.x = startScale;
         healthInnerBar.transform.localScale = tempScale;
         healthBarSpriteRenderer.color = startColor;
-        spawnFadeTimer.turnOn();
+        respawnTimer.period = (float)Random.Range(3.0f, 10.0f);
+        aiState = Ai_State.AI_PATROL;
+        respawnTimer.turnOn();
+        redHurtTimer.turnOff();
+        healthBar.SetActive(false);
     }
     
     public void BeginFadeInTimer() {
@@ -304,7 +309,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     
     public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
         bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
-        if (!isHit && enemyType == EnemyType.ENEMY_GOOD && !dead) 
+        if (!isHit && enemyType == EnemyType.ENEMY_GOOD && !dead && !fadeInTimer.isOn()) 
         {
             GameObject damageNumObj = Instantiate(damageNumbersObject,   transform.position, Quaternion.identity);
             DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
@@ -345,13 +350,10 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             
             if (this.health < 0)
             {
+                hitCount++;
                 dead = true;
                 thisAnimator.SetTrigger("isDead");
-                //  thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_die");
-                // this.deathTimer = new Timer_namespace.Timer(1.0f);
-                // this.deathTimer.turnOn();
-                //dead = true;
-                //spawnFadeTimer.turnOn();
+                
                 if(isSentinel || isRangeGollum) {
                     
                     fadeInTimer.turnOn();
@@ -477,15 +479,24 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                 i++;
             }
         }
-        
-        if(spawnFadeTimer.isOn()) {
-            
-            bool finished = spawnFadeTimer.updateTimer(Time.deltaTime);
-            float canVal = 1.0f - spawnFadeTimer.getCanoncial();
-            float alphaVal = Mathf.Lerp(0, 1, canVal);
-            spRenderer.color = new Vector4(spRenderer.color.r, spRenderer.color.g, spRenderer.color.b, alphaVal);
+
+        if(respawnTimer.isOn()) {
+            bool finished = respawnTimer.updateTimer(Time.deltaTime);
+            spRenderer.color = Color.clear;
             if(finished) {
                 dead = false;
+                respawnTimer.turnOff();
+                spawnFadeTimer.turnOn();
+                healthBar.SetActive(true);
+            }
+        }
+        
+        if(spawnFadeTimer.isOn()) {
+            bool finished = spawnFadeTimer.updateTimer(Time.deltaTime);
+            float alphaVal = spawnFadeTimer.getCanoncial();
+            spRenderer.color = new Vector4(1, 1, 1, alphaVal);
+            if(finished) {
+                
                 spawnFadeTimer.turnOff();
                 
             }
@@ -499,7 +510,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             float redValAlpha = Mathf.Lerp(1, 0, canVal);
             spRenderer.color = new Vector4(1, redValAlpha, redValAlpha, 1);
             if(finished) {
-                if(!deathTimer.isOn()) {
+                if(!fadeInTimer.isOn() && !respawnTimer.isOn() && !dead) {
                     spRenderer.color = Color.white;
                 }
                 redHurtTimer.turnOff();
@@ -507,12 +518,17 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         }
         
         if(fadeInTimer.isOn()) {
-            Debug.Log("fade in timer");
+            // Debug.Log("fade in timer");
             bool finished = fadeInTimer.updateTimer(Time.deltaTime);
             float canVal = 1.0f - fadeInTimer.getCanoncial();
-            float alphaVal = Mathf.Lerp(0, 1, canVal);
-            spRenderer.color = new Vector4(spRenderer.color.r, spRenderer.color.g, spRenderer.color.b, alphaVal);
+            
+            spRenderer.color = new Vector4(spRenderer.color.r, spRenderer.color.g, spRenderer.color.b, canVal);
+            
             if(finished) {
+                if(isSentinel) {
+                    Debug.Log("fadeInTimer working");
+                }
+                spRenderer.color = Color.clear;
                 // thisRigidbody.detectCollisions = true;
                 // thisCollider.enabled = true;
                 fadeInTimer.turnOff();
@@ -600,11 +616,20 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(!dead) {
+        // if(isSentinel) {
+        //     Debug.Log("?????");
+        // }
+        
+        if(!(dead || spawnFadeTimer.isOn() || fadeInTimer.isOn() || respawnTimer.isOn())) {
             bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
+
             if(!sleeping) {
                 Vector2 diffVec = playerTransform.position - thisTransform.position;
                 spRenderer.color = Color.white;
+                // if(isSentinel) {
+                //     Debug.Log("sentinelAttack");
+                // }
+               
                 if(dead) {
                 } if (isHit)
                 {

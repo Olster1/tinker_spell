@@ -27,12 +27,17 @@ public class FireCoalAi : MonoBehaviour, IHitBox
 	private float raySize;
 	public SpriteRenderer sp;
     private Vector3 startP;
+    private Timer spawnTimer;
+    private bool isOut;
+    public GameObject attackObj;
     
     // Start is called before the first frame update
     void Start()
     {
         DebugEntityManager entManager = Camera.main.GetComponent<DebugEntityManager>();
         entManager.AddEntity(gameObject);
+
+
         
         forceUpdator = new ForceUpdator();
         fadeOutTimer = new Timer(1.0f);
@@ -43,6 +48,8 @@ public class FireCoalAi : MonoBehaviour, IHitBox
         physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer) | Physics2D.GetLayerCollisionMask(LayerMask.NameToLayer("EnemyAiCollision"));
         startP = transform.position;
         
+        spawnTimer = new Timer(4.0f);
+        spawnTimer.turnOff();
     }
     
     public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
@@ -93,6 +100,9 @@ public class FireCoalAi : MonoBehaviour, IHitBox
                 // }
                 if(!fadeOutTimer.isOn()) {
            		 fadeOutTimer.turnOn();
+                 isOut = true;
+                 attackObj.SetActive(false);
+                 gameObject.GetComponent<ParticleSystem>().Stop();
                 }
                 
             }
@@ -112,50 +122,66 @@ public class FireCoalAi : MonoBehaviour, IHitBox
     }
     
     void FixedUpdate() {
-    	Vector2 moveForce = new Vector2();
-    	if(fadeOutTimer.isOn()) {
-    		bool f = fadeOutTimer.updateTimer(Time.fixedDeltaTime);
-    		sp.color = new Color(1.0f, 1.0f, 1.0f, 1.0f - fadeOutTimer.getCanoncial());
-    		if(f) {
-                transform.position = startP;
-    			sp.color = Color.white;
-                health = startHealth;
-                //Destroy(gameObject);
-    		}
-    	} else {
-    		
-    		Vector2 dir = (direction == CoalDirection.DIRECTION_LEFT) ? Vector2.left : Vector2.right;
-    		RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, dir, raySize, physicsLayerMask);
-    		for(int i = 0; i < hits.Length; ++i) {
-    		    RaycastHit2D hit = hits[i];
-    		    
-    		    if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger && hit.collider.gameObject.name != "player") {
-    		        if(direction == CoalDirection.DIRECTION_LEFT) {
-    		        	direction = CoalDirection.DIRECTION_RIGHT;
-    		        } else {
-    		        	direction = CoalDirection.DIRECTION_LEFT;
-    		        }
-    		        
-    		        break;
-    		    }
-    		}
-            
-    		if(direction == CoalDirection.DIRECTION_LEFT) {
-    			moveForce = movePower*Vector2.left;
+        if(spawnTimer.isOn()) {
+            bool f = spawnTimer.updateTimer(Time.fixedDeltaTime);
+            if(f) {
+                spawnTimer.turnOff();
+                isOut = false;
+                fadeOutTimer.turnOn();
+                gameObject.GetComponent<ParticleSystem>().Play();
+                attackObj.SetActive(true);
+            }
+        } else {
+        	Vector2 moveForce = new Vector2();
+        	if(fadeOutTimer.isOn()) {
+        		bool f = fadeOutTimer.updateTimer(Time.fixedDeltaTime);
+                float alpha = fadeOutTimer.getCanoncial();
+                if(isOut) {
+                    alpha = 1.0f - alpha;  
+                } 
+        		sp.color = new Color(1.0f, 1.0f, 1.0f, alpha);
+        		if(f) {
+                    if(isOut) {
+                        spawnTimer.turnOn();
+                    }   
+                    
+                    fadeOutTimer.turnOff();
+        		}
+        	} else {
+        		
+        		Vector2 dir = (direction == CoalDirection.DIRECTION_LEFT) ? Vector2.left : Vector2.right;
+        		RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, dir, raySize, physicsLayerMask);
+        		for(int i = 0; i < hits.Length; ++i) {
+        		    RaycastHit2D hit = hits[i];
+        		    
+        		    if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger && hit.collider.gameObject.name != "player") {
+        		        if(direction == CoalDirection.DIRECTION_LEFT) {
+        		        	direction = CoalDirection.DIRECTION_RIGHT;
+        		        } else {
+        		        	direction = CoalDirection.DIRECTION_LEFT;
+        		        }
+        		        
+        		        break;
+        		    }
+        		}
                 
-    		} else if(direction == CoalDirection.DIRECTION_RIGHT) {
-    			
-    			moveForce = movePower*Vector2.right;
-    		}
+        		if(direction == CoalDirection.DIRECTION_LEFT) {
+        			moveForce = movePower*Vector2.left;
+                    
+        		} else if(direction == CoalDirection.DIRECTION_RIGHT) {
+        			
+        			moveForce = movePower*Vector2.right;
+        		}
+                
+        		
+        	}
             
-    		
-    	}
-        
-        
-    	anim.SetFloat("xSpeed", rb.velocity.x);
-        
-    	Vector2 totalForce = forceUpdator.update();        
-    	
-    	rb.AddForce(totalForce + moveForce);
+            
+        	anim.SetFloat("xSpeed", rb.velocity.x);
+            
+        	Vector2 totalForce = forceUpdator.update();        
+        	
+        	rb.AddForce(totalForce + moveForce);
+        }
     }
 }

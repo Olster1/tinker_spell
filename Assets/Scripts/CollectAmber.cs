@@ -16,8 +16,6 @@ public enum AmberType {
 
 public class CollectAmber : MonoBehaviour
 {
-
-    
     private Transform thisTrans;
     private float tAt;
     private float startY;
@@ -37,6 +35,8 @@ public class CollectAmber : MonoBehaviour
     public Sprite manaSprite;
     public Sprite healthSprite;
     public Sprite sentinelHeadSprite;
+
+    private GameObject player;
     
 
     public AmberType type;
@@ -44,6 +44,7 @@ public class CollectAmber : MonoBehaviour
     void Start()
     {
         GameObject amberUI = GameObject.Find("AmberUI");
+        player = GameObject.Find("Player");
         createAmberUIObject = amberUI.GetComponent<worldTUI>();
         thisTrans = gameObject.GetComponent<Transform>();
         startY = thisTrans.position.y;
@@ -90,6 +91,9 @@ public class CollectAmber : MonoBehaviour
             tAt += Time.deltaTime;
 
             thisTrans.position = new Vector3(thisTrans.position.x, startY + Mathf.Sin(tAt), thisTrans.position.z);
+        } else {
+            Vector2 forceToPlayer = player.transform.position - thisTrans.position;
+            amberRb.AddForce(1000*forceToPlayer);
         }
 
         if(fadeTimer.isOn()) {

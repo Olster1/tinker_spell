@@ -33,7 +33,7 @@ public class pickup_fuelCell : MonoBehaviour
 	        if(fin) {
 	        	fadeTimer.turnOff();
 
-	        	// Destroy(gameObject);
+	        	Destroy(gameObject);
 	        }
 	    }
     }

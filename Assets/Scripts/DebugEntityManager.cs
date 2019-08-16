@@ -60,6 +60,7 @@ public class DebugEntityManager : MonoBehaviour
             activate1 = !activate1;
             toggleCollisionGeometry("WorldGeometryEarth");
             toggleCollisionGeometry("WorldGeometryWater");
+            toggleCollisionGeometry("WorldGeometrySlope");
         }
         if(Input.GetKeyDown(KeyCode.F3)) {
            activate2 = !activate2;

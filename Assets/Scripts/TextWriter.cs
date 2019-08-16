@@ -70,7 +70,7 @@ public class TextWriter : MonoBehaviour
         showText = true;
         lastCharCount = 0;
         initGlyphInfos();
-        Debug.Log(currentQuote.unfreezePlayer);
+        //Debug.Log(currentQuote.unfreezePlayer);
         if(!currentQuote.unfreezePlayer) {
         	Debug.Log("unfreeze player");
         	player.canControlPlayer = false;

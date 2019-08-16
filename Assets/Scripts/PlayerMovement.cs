@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     private Rigidbody2D rigidBody;
     public float jumpAccel;
     public float moveAccel;
+
     public float moveWhileJumpAccel;
     private Animator animator;
     public Image redHurtImage;
@@ -29,7 +30,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     
     public AudioSource hurtBreathing;
 
-    public float timeToAffectJump;
+    public float velocityMargin; 
     
     [HideInInspector] public Timer earthTimer;
     [HideInInspector] public Timer waterTimer;
@@ -43,6 +44,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     
     public Animator camAnimator;
     public ParticleSystem ps;
+
+    public float flipMargin;
     
     private Timer hurtPulseTimer;
 
@@ -52,6 +55,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     private int earthAttackLevel;
     
     public Image fadePanel;
+    public SpriteRenderer spShadow;
     
     public Animator panelAnimator;
     private BoxCollider2D boxCollider;
@@ -72,6 +76,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     public float reboundForce;
     
     [HideInInspector] public bool isGrounded;
+
+    [HideInInspector] public BoostPad booster;
     
     private Timer jumpTimer;
     // private bool readyingJump;
@@ -99,13 +105,17 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     private Vector2 originalBoxSize;
     private Vector2 originalBoxOffset;
     private Vector2 originalJumpOffset;
-    public float timeIncrease;
     public float percentOfJump;
     public float maxJumpTime;
     private bool flipForEarthMove;
     
+    private float shadowP;
     
     private ForceUpdator forceUpdator;
+
+    [HideInInspector] public bool usingController;
+
+    public float timeToAffectJump;
     
     public Vector2 earthOffset;
     [HideInInspector] public Timer globalPauseTimer;
@@ -187,14 +197,51 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         for(int i = 0; i < hits.Length; ++i) {
             RaycastHit2D hit = hits[i];
             if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
-                //if(rigidBody.velocity.y <= 0) {
+                float velMarginToUse = velocityMargin; //
+                if(hit.collider.gameObject.tag == "WorldGeometrySlope") {
+                    velMarginToUse = 50.0f;
+                } 
+                if(rigidBody.velocity.y <= velMarginToUse) {
                     isGrounded = true;
                     break;    
-              //  }
+               }
                 
             } 
         }
         return isGrounded;
+    }
+
+     public void CastShadowRay() {
+        Vector3 bottomCenter = boxCollider.bounds.center + new Vector3(0, -0.5f*boxCollider.size.y, 0);
+        float shortDist = Mathf.Infinity;
+        RaycastHit2D[] hits = Physics2D.RaycastAll(bottomCenter, Vector2.down, Mathf.Infinity, physicsLayerMask);
+        // Debug.DrawLine(bottomCenter + colliderOffset, bottomCenter + jumpRaySize*Vector3.down);
+        bool  found = false; 
+        for(int i = 0; i < hits.Length; ++i) {
+            RaycastHit2D hit = hits[i];
+            if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
+                if(hit.distance < shortDist && hit.distance < 2) {
+                    shortDist = hit.distance;
+                    // Debug.Log("short disr: " + shortDist);
+                    found = true;
+                } 
+            } 
+        }
+        if(found) {
+            Vector3 scale = spShadow.gameObject.transform.localScale;
+            Vector3 localP = spShadow.gameObject.transform.position;
+            localP.y = bottomCenter.y - shortDist + 0.2f;
+            localP.x = transform.position.x;
+            spShadow.gameObject.transform.position = localP;
+            Assert.IsTrue(shortDist <= 2.0f);
+            float s = 1.0f - (shortDist / 2.0f);
+            s = Mathf.Clamp(s, 0.0f, 1.0f);
+            // Debug.Log(s);
+            scale.x = s;
+            spShadow.gameObject.transform.localScale = scale;
+        } else {
+            spShadow.gameObject.transform.localScale = new Vector3(0, 1, 1);
+        }
     }
     
     public void CreateSidewardAttack() {
@@ -211,6 +258,19 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                                              EnemyType.ENEMY_GOOD, 0.5f, 22, 36);
         
     }
+
+        public void CreateIdleAttack() {
+        float signOfMovement = (spriteRenderer.flipX) ? -1: 1;
+        
+        GameObject attackObj = Instantiate(genericAttackObject, transform);
+        
+        Vector2 startPos = (Vector2)boxCollider.bounds.center + new Vector2(signOfMovement*(0.5f*boxCollider.size.y + 0.1f), 0);        
+        Vector2 localStartPos = (Vector2)transform.InverseTransformPoint(startPos);
+        AttackObjectCreator.initAttackObject(attackObj, localStartPos, localStartPos, 
+                                             EnemyType.ENEMY_GOOD, 0.5f, 15, 22);
+        
+    }
+    
     
     public void scaleUp() {
         Vector3 tempScale = transform.localScale;
@@ -334,7 +394,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         if(index >= lastValidPos.Length || lastValidPosTop < lastValidPos.Length) { //if at the end of the buffer or the buffer isn't filled yet
             index = 0;
         } 
-        transform.position = lastValidPos[index];
+        transform.position = lastValidPos[0];
         rigidBody.velocity = Vector2.zero;
         thisCamera.transform.position = new Vector3(transform.position.x, transform.position.y, thisCamera.transform.position.z);
     }
@@ -350,7 +410,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     
     public void CreateEarthMove() {
         
-        Handheld.Vibrate();
+        // Handheld.Vibrate();
         
         float xDir = flipForEarthMove ? -1 : 1;
         earthTimer.turnOn();
@@ -479,9 +539,12 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
         animator.SetBool("grounded", isGrounded);
 
+        // Debug.Log("GROUNDED + " + isGrounded);
+        CastShadowRay();
+
         // spriteRenderer.color = (isGrounded ? Color.red : Color.white); 
         
-        if(lastFameGrounded != isGrounded && !isJumping) {
+        if(!lastFameGrounded && isGrounded && !isJumping && timeInAir > 0.4f) {
             //landing
             
             landingSoundSource.Play();
@@ -492,19 +555,20 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         if(!isGrounded) {
             timeInAir += Time.deltaTime;
         } 
+
+        animator.SetFloat("timeInAir", timeInAir);
         
         if(isGrounded && !lastFameGrounded) {
-            if(timeInAir > 0.7f) {
-                // camAnimator.SetTrigger("shake1");
+            if(timeInAir > 1.5f) {
+                camAnimator.SetTrigger("shake1");
             }
             timeInAir = 0;
         }
         
         
         
-        bool isInAttackAnimation = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack2") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack1") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_downward_dash") || animator.GetBool("attack1") || animator.GetBool("attack2") || animator.GetBool("downward_dash");
+        bool isInAttackAnimation = animator.GetCurrentAnimatorStateInfo(0).IsName("idle_attack") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack2") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_attack1") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_downward_dash") || animator.GetBool("attack1") || animator.GetBool("idleAttack") || animator.GetBool("attack2") || animator.GetBool("downward_dash");
         bool isFallingAnim = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_falling");
-        
         if (!isInAttackAnimation && canControlPlayer)
         {
             //get direction of the controller
@@ -513,21 +577,20 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             
             if(Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN)) {
                 //MAGIC MOVES 
+
                 if(Input.GetButtonDown("Fire2") && isGrounded && GameManager.hasEarth1 && !earthTimer.isOn()) {
-        
-                    earthMoveValidator.turnOn();
-                    // Debug.Log("isOn");
-                    
-                } else if(Input.GetButtonUp("Fire2") && earthMoveValidator.isOk() >= 0 && !earthTimer.isOn()) {
-                    earthAttackLevel = earthMoveValidator.isOk();
-                    spell.thisAnimator.SetTrigger("exit_run");
-                    flipForEarthMove = spriteRenderer.flipX;
-                    spell.flipForDive = spriteRenderer.flipX;
-                    spell.thisAnimator.SetTrigger("earth_dive");
-                    camAnimator.SetTrigger("zoom");
-                    earthMoveValidator.turnOff();
-                    // Debug.Log("isOff");
-                }
+                    // if(earthMoveValidator.isOk() >= 0) {
+                        earthAttackLevel = 2;//earthMoveValidator.isOk();
+                        spell.thisAnimator.SetTrigger("exit_run");
+                        flipForEarthMove = spriteRenderer.flipX;
+                        spell.flipForDive = spriteRenderer.flipX;
+                        spell.thisAnimator.SetTrigger("earth_dive");
+                        camAnimator.SetTrigger("zoom");
+                        earthMoveValidator.turnOff();
+                    // } else {
+                    //     earthMoveValidator.turnOn();
+                    // }
+                } 
             } else {
                 earthMoveValidator.turnOff();
                 if(Input.GetButtonDown("Fire1")) {
@@ -559,58 +622,16 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             }
         }
         
-        bool isIdle = animator.GetCurrentAnimatorStateInfo(0).IsName("player_idle");
         
         ////Update the animation variable
         /// 
         /// 
         /// 
-        if(!isIdle) {
-            if(canControlPlayer) {
-                float i = Input.GetAxis("Horizontal");
-                if(Mathf.Abs(i) > 0.25f) {
-                    if(i > 0) {
-                        spriteRenderer.flipX = false;
-                    } else {
-                        spriteRenderer.flipX = true;
-                    }
-                } else {
-                    if (rigidBody.velocity.x > 0)
-                    {
-                        spriteRenderer.flipX = false;
-                    }
-                    
-                    if (rigidBody.velocity.x < 0)
-                    {
-                        spriteRenderer.flipX = true;
-                    }
-                }
-            }
-        } else {
-            // bool fin = idleAnimationTimer.updateTimer(Time.deltaTime);
-            // float canVal = idleAnimationTimer.getCanoncial();
-            
-            // if(canVal < 0.5f) {
-            //     // if() {
-            
-            //         swapAnimation = true;
-            //         toSwapTo = IdleAnimation.ANIMATION_IDLE1;
-            //     // }
-            
-            // } else if(canVal >= 0.5f) {
-            //     // Debug.Log("second idle at " + canVal);
-            //     // if() {
-            //         swapAnimation = true;
-            //         toSwapTo = IdleAnimation.ANIMATION_IDLE2;
-            //     // }
-            // }
-            
-            // if(fin) {
-            //     idleAnimationTimer.turnOn(); //basically reset the timer
-            // }
-        }
+
+        animator.SetBool("UsingController", usingController); 
+        
         animator.SetFloat("run_speed", rigidBody.velocity.x);
-        if(rigidBody.velocity.x > 1 || rigidBody.velocity.x < -1) {
+        if(rigidBody.velocity.x > 1 || rigidBody.velocity.x < -1 || usingController) {
             animator.SetTrigger("endIdle");
         }
         
@@ -645,6 +666,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         if((Input.GetButtonDown("Jump") && isGrounded && canControlPlayer)) {
             if (!jumpTimer.isOn())
             {
+                landingSoundSource.Play();
+                Instantiate(dustEffect, transform.position - new Vector3(0, 2, 0), Quaternion.identity);
                 animator.SetTrigger("endIdle");
                 animator.SetTrigger("jump");
                 //start timing the jump
@@ -666,9 +689,13 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
         if(isGrounded) {
             animator.ResetTrigger("landing");
+             animator.ResetTrigger("landingSmall");
         }
+
+        bool isLanding = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_landing") || animator.GetCurrentAnimatorStateInfo(0).IsName("landing_small");
         
-        if(!isGrounded && isFallingAnim && landingRaySize > 0) {
+        
+        if(!isGrounded && isFallingAnim && landingRaySize > 0 && !isLanding) {
             bool isAboutToLand = false;
             
             Vector2 rayDir = rigidBody.velocity;
@@ -677,31 +704,26 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             float rayLen = landingRaySize;
             RaycastHit2D[] hits = Physics2D.RaycastAll(startP, Vector2.down, rayLen, physicsLayerMask);
             float smallestDistance = rayLen;
-            bool found = false;
-            for(int i = 0; i < hits.Length && !found; ++i) {
+            for(int i = 0; i < hits.Length; ++i) {
                 RaycastHit2D landingHit = hits[i];
                 if(landingHit && landingHit.distance < smallestDistance && landingHit.collider.gameObject != gameObject && !landingHit.collider.isTrigger && landingHit.collider.gameObject.transform.parent != gameObject) {
                     smallestDistance = landingHit.distance;
-                    if(smallestDistance > 1.0f) {
-                        isAboutToLand = true;
-                    } else {
-                        isAboutToLand = false;
-                        //to close to do landing animation
-                        found = true;
-                        break;
-                    }
-                    
-                    //break;
+                    isAboutToLand = true;
                 }
             }
             Debug.DrawLine(startP, startP + (landingRaySize*Vector2.down));
             // Debug.Log("landing: " + animator.GetBool("landing"));
             //Debug.Log("velocity less: " + (rigidBody.velocity.y < 0));
             // Debug.Log("about to land: " + isAboutToLand);
-            if(!animator.GetBool("landing") && rigidBody.velocity.y < 0 && isAboutToLand) {
+            if(!animator.GetBool("landing") && !animator.GetBool("landingSmall") && rigidBody.velocity.y < 0 && isAboutToLand) {
                 // Debug.Log("setLanding trigger");
-                // animator.SetTrigger("endIdle");
-                animator.SetTrigger("landing");
+                // if(smallestDistance > 1.0f) {
+                   animator.SetTrigger("landing");
+                   // Debug.Log("LANDING BIG");
+                // } else {
+                //     animator.SetTrigger("landingSmall");
+                //     Debug.Log("LANDING SMALL");
+                // }
             }
         }
         
@@ -734,15 +756,16 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             validPosTimer.tAt = validPosTimer.period;
         }
         
-        if(jumpTimer.isOn()) {
-            if(Input.GetButton("Jump") && jumpTimer.period < timeToAffectJump) {
-                jumpTimer.period += timeIncrease*Time.fixedDeltaTime;
+        // if(jumpTimer.isOn()) {
+        //     if(Input.GetButton("Jump") && jumpTimer.tAt < timeToAffectJump) {
+        //         jumpTimer.period += timeIncrease*Time.fixedDeltaTime;
+        //         //Debug.Log("hey there");
                 
-            }
-        }
+        //     }
+        // }
         
         Vector2 movementForce = new Vector2(0, 0);
-        
+        usingController = false;
         if(autoMoveTimer.isOn() && !autoMoveTimer.paused) {
             
             bool finished = autoMoveTimer.updateTimer(Time.fixedDeltaTime);
@@ -753,12 +776,51 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 autoMoveTimer.turnOff();
             }
         } else if(canControlPlayer) {
-            movementForce.x = Input.GetAxis("Horizontal");
-            if(Mathf.Abs(movementForce.x) > 0.25f) {
-                movementForce.x = Mathf.Sign(movementForce.x)*Mathf.Max(Mathf.Abs(movementForce.x), 0.8f);    
+            if(!animator.GetCurrentAnimatorStateInfo(0).IsName("idle_attack")) {
+                
+                float controllerX = Input.GetAxis("Horizontal");
+                if(Mathf.Abs(controllerX) > 0.25f) {
+                     
+                     Vector2 unitVec = new Vector2(1, 0);
+                    if(booster != null && rigidBody.velocity.x*booster.force.x > 0) { 
+                        unitVec = 1.3f*booster.unitVec;
+
+                        // Debug.Log("ni Vector2" + unitVec);
+                    }
+
+                    movementForce += unitVec*Mathf.Sign(controllerX)*Mathf.Max(Mathf.Abs(controllerX), 0.8f);
+
+                    usingController = true;
+                }
             }
             
         } 
+
+        bool isIdle = animator.GetCurrentAnimatorStateInfo(0).IsName("player_idle");
+        if(!isIdle) {
+            if(canControlPlayer) {
+                float i = Input.GetAxis("Horizontal");
+                if(Mathf.Abs(i) > 0.25f) {
+                    if(i > 0) {
+                        // Debug.Log("Flipped to false");
+                        spriteRenderer.flipX = false;
+                    } else {
+                        spriteRenderer.flipX = true;
+                        // Debug.Log("Flipped to true");
+                    }
+                } else {
+                    if (rigidBody.velocity.x > flipMargin)
+                    {
+                        spriteRenderer.flipX = false;
+                    }
+                    
+                    if (rigidBody.velocity.x < -flipMargin)
+                    {
+                        spriteRenderer.flipX = true;
+                    }
+                }
+            }
+        }
         
         float thisJmpAccel = jumpAccel;
         
@@ -775,7 +837,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 //wait till over a percentage
                 
             } else {
-                if(!Input.GetButton("Jump") && jumpTimer.tAt > 0.5f) {
+                if(!Input.GetButton("Jump") && jumpTimer.tAt > timeToAffectJump) {
                     jumpTimer.turnOff();
                 } else {
                     movementForce.y = 1;
@@ -799,6 +861,12 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
         
         Vector2 f = forceUpdator.update();
+        //if(movementForce.x == 0) 
+        // {
+        //     Vector2 vel = rigidBody.velocity;
+        //     vel.x *= 0.8f;
+        //     rigidBody.velocity = vel;
+        // }
         if(isGrounded) {
             movementForce.x *= moveAccel;    
         } else {

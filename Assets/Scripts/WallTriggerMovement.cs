@@ -26,7 +26,7 @@ public class WallTriggerMovement : MonoBehaviour, IHitBox
 
     public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
         
-      
+      // Debug.Log("was hit");
        if (enemyType == EnemyType.ENEMY_GOOD) 
        {	
        		// Debug.Log("is GOOD");
@@ -43,7 +43,7 @@ public class WallTriggerMovement : MonoBehaviour, IHitBox
 
            } else {
             whiteWallAnimator.SetTrigger("goWhite");
-            Debug.Log("went White");
+            // Debug.Log("went White");
              // spRender.1
           }
        } 

@@ -86,7 +86,22 @@ public class SceneStateManager : MonoBehaviour
     }
 
     void ResetFromFall() {
+        // GameObject spawnPoint = spawnPointObjs[(int)stateToLoad];
+        // ResetFromSpawnPoint(spawnPoint);
+        // playerMovement.autoMoveTimer.turnOn();
+        // playerMovement.autoMoveTimer = false;
         playerMovement.ResetPositionFromFall();   
+    }
+
+    void ResetFromSpawnPoint(GameObject spawnPoint) {
+        player.transform.position = spawnPoint.transform.position;
+        earthValidator.ResetColliders();
+
+        Vector2 offsetCam = offsetCams[(int)stateToLoad];
+        Vector3 spellOffset = new Vector3(0, 1, 0);
+        spell.transform.position = spawnPoint.transform.position + spellOffset;
+        Vector3 camPos = new Vector3(spawnPoint.transform.position.x + offsetCam.x, spawnPoint.transform.position.y + offsetCam.y, cameraZ[(int)stateToLoad]);
+        cam.transform.position = camPos;
     }
 
     void ChangeScene() {
@@ -130,14 +145,7 @@ public class SceneStateManager : MonoBehaviour
 
         if(spawnPoint != null && useSpawnPoint) {
 
-            player.transform.position = spawnPoint.transform.position;
-            earthValidator.ResetColliders();
-
-            Vector2 offsetCam = offsetCams[(int)stateToLoad];
-            Vector3 spellOffset = new Vector3(0, 1, 0);
-            spell.transform.position = spawnPoint.transform.position + spellOffset;
-            Vector3 camPos = new Vector3(spawnPoint.transform.position.x + offsetCam.x, spawnPoint.transform.position.y + offsetCam.y, cameraZ[(int)stateToLoad]);
-            cam.transform.position = camPos;
+            ResetFromSpawnPoint(spawnPoint);
         } 
 
         useSpawnPoint = true;

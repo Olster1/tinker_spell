@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Timer_namespace;
+using EasyGameManager;
 
 public class MainMenuContols : MonoBehaviour
 {
@@ -96,6 +97,11 @@ public class MainMenuContols : MonoBehaviour
             if(exit) {
               ExitGame();
             } else {  
+              GameManager.manaCount = 100;
+              GameManager.playerHealth = 100;
+              GameManager.senintelHeadCount = 0;
+              GameManager.hasEarth1 = false;
+              GameManager.fuelCellCount = 0;
               fadeoutTimer.turnOff();
               SceneManager.LoadScene(sceneNameToLoad);
               // readyToLoadLevel = true;    
