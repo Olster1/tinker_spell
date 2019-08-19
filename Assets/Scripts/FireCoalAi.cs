@@ -30,13 +30,16 @@ public class FireCoalAi : MonoBehaviour, IHitBox
     private Timer spawnTimer;
     private bool isOut;
     public GameObject attackObj;
-    
+    private HealthBar healthBar;
+    private ItemEmitter itemEmitter;
     // Start is called before the first frame update
     void Start()
     {
+        itemEmitter = Camera.main.GetComponent<ItemEmitter>();
         DebugEntityManager entManager = Camera.main.GetComponent<DebugEntityManager>();
         entManager.AddEntity(gameObject);
 
+        healthBar = transform.Find("Gollum_health-bar").gameObject.GetComponent<HealthBar>();
 
         
         forceUpdator = new ForceUpdator();
@@ -64,6 +67,8 @@ public class FireCoalAi : MonoBehaviour, IHitBox
             forceUpdator.AddForce(force);
             
             this.health -= damage;
+            healthBar.UpdateHealthBar((int)health, (int)startHealth);
+
             // this.redHurtTimer.turnOn();
             
             // Time.timeScale = 0.0f;
@@ -103,6 +108,8 @@ public class FireCoalAi : MonoBehaviour, IHitBox
                  isOut = true;
                  attackObj.SetActive(false);
                  gameObject.GetComponent<ParticleSystem>().Stop();
+                 healthBar.Hide();
+                 itemEmitter.emitAmber(AmberType.AMBER_HEALTH, 4, transform.position);
                 }
                 
             }
@@ -130,6 +137,9 @@ public class FireCoalAi : MonoBehaviour, IHitBox
                 fadeOutTimer.turnOn();
                 gameObject.GetComponent<ParticleSystem>().Play();
                 attackObj.SetActive(true);
+                health = startHealth;
+                healthBar.ResetHealthBar();
+                healthBar.Show();
             }
         } else {
         	Vector2 moveForce = new Vector2();

@@ -217,6 +217,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         RaycastHit2D[] hits = Physics2D.RaycastAll(bottomCenter, Vector2.down, Mathf.Infinity, physicsLayerMask);
         // Debug.DrawLine(bottomCenter + colliderOffset, bottomCenter + jumpRaySize*Vector3.down);
         bool  found = false; 
+        // string name = "";
         for(int i = 0; i < hits.Length; ++i) {
             RaycastHit2D hit = hits[i];
             if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
@@ -224,10 +225,12 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                     shortDist = hit.distance;
                     // Debug.Log("short disr: " + shortDist);
                     found = true;
+                    // name = hit.collider.gameObject.name;
                 } 
             } 
         }
         if(found) {
+            // Debug.Log("name: " + name);
             Vector3 scale = spShadow.gameObject.transform.localScale;
             Vector3 localP = spShadow.gameObject.transform.position;
             localP.y = bottomCenter.y - shortDist + 0.2f;
@@ -694,7 +697,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
         bool isLanding = animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_landing") || animator.GetCurrentAnimatorStateInfo(0).IsName("landing_small");
         
-        
+        // Debug.Log("is Grounded: " + isGrounded);
         if(!isGrounded && isFallingAnim && landingRaySize > 0 && !isLanding) {
             bool isAboutToLand = false;
             

@@ -26,6 +26,7 @@ public class CollectAmber : MonoBehaviour
     private bool gravityAffected;
     private Rigidbody2D amberRb;
     private worldTUI createAmberUIObject;
+    private Timer forceTimer;
 
     public ActivateQuote quoteToActivate;
 
@@ -43,12 +44,14 @@ public class CollectAmber : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        forceTimer = new Timer(0.3f);
+        forceTimer.turnOn();
         GameObject amberUI = GameObject.Find("AmberUI");
         player = GameObject.Find("Player");
         createAmberUIObject = amberUI.GetComponent<worldTUI>();
         thisTrans = gameObject.GetComponent<Transform>();
         startY = thisTrans.position.y;
-        fadeTimer = new Timer(0.5f);
+        fadeTimer = new Timer(0.3f);
         fadeTimer.turnOff();
         audioSrc = gameObject.GetComponent<AudioSource>();
         col = gameObject.GetComponent<BoxCollider2D>();
@@ -74,6 +77,10 @@ public class CollectAmber : MonoBehaviour
 
             } break;
         }
+
+        if(!gravityAffected) {
+            forceTimer.turnOff();
+        }
         
     }
 
@@ -92,8 +99,15 @@ public class CollectAmber : MonoBehaviour
 
             thisTrans.position = new Vector3(thisTrans.position.x, startY + Mathf.Sin(tAt), thisTrans.position.z);
         } else {
-            Vector2 forceToPlayer = player.transform.position - thisTrans.position;
-            amberRb.AddForce(1000*forceToPlayer);
+            if(forceTimer.isOn()) {
+                bool bo = forceTimer.updateTimer(Time.deltaTime);
+                if(bo) {
+                    forceTimer.turnOff();
+                }
+            } else {
+                Vector2 forceToPlayer = player.transform.position - thisTrans.position;
+                amberRb.AddForce(1000*forceToPlayer);
+            }
         }
 
         if(fadeTimer.isOn()) {
@@ -109,39 +123,45 @@ public class CollectAmber : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.tag == "Player" && !fadeTimer.isOn()) {
-            
-            col.enabled = false;
-            audioSrc.Play();
-            fadeTimer.turnOn();
+    void collectAmber() {
+        col.enabled = false;
+        audioSrc.Play();
+        fadeTimer.turnOn();
+        amberRb.simulated = false;
 
-            if(quoteToActivate != null) {
-                quoteToActivate.Activate();
-            }
-
-            switch(type) {
-                case AmberType.AMBER_AMBER: {
-                    createAmberUIObject.createAmberUI(gameObject.transform.position);
-                } break;
-                case AmberType.AMBER_MANA: {
-                    createAmberUIObject.createManaUI(gameObject.transform.position, transform.localScale);
-                } break;
-                case AmberType.AMBER_HEALTH: {
-                    createAmberUIObject.createHealthUI(gameObject.transform.position, transform.localScale);
-                } break;
-                case AmberType.AMBER_SENTINEL_HEAD: {
-                    GameManager.senintelHeadCount++;
-                    createAmberUIObject.createSentinelHeadUI(gameObject.transform.position);
-                } break;
-                default: {
-
-                } break;
-            }
-
-            
-            
+        if(quoteToActivate != null) {
+            quoteToActivate.Activate();
         }
 
+        switch(type) {
+            case AmberType.AMBER_AMBER: {
+                createAmberUIObject.createAmberUI(gameObject.transform.position);
+            } break;
+            case AmberType.AMBER_MANA: {
+                createAmberUIObject.createManaUI(gameObject.transform.position, transform.localScale);
+            } break;
+            case AmberType.AMBER_HEALTH: {
+                createAmberUIObject.createHealthUI(gameObject.transform.position, transform.localScale);
+            } break;
+            case AmberType.AMBER_SENTINEL_HEAD: {
+                GameManager.senintelHeadCount++;
+                createAmberUIObject.createSentinelHeadUI(gameObject.transform.position);
+            } break;
+            default: {
+
+            } break;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other) {
+        if (other.gameObject.tag == "Player" && !fadeTimer.isOn() && !forceTimer.isOn()) {
+            collectAmber();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if (other.gameObject.tag == "Player" && !fadeTimer.isOn() && !forceTimer.isOn()) {
+            collectAmber();
+        }
     }
 }

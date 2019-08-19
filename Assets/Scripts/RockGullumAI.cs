@@ -16,6 +16,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     public float attackForce; 
     private BoxCollider2D thisCollider;
     private Animator thisAnimator;
+
+    public ItemEmitter itemEmitter;
     
     [HideInInspector] public Timer walkTimer;
     private SpriteRenderer spRenderer;
@@ -28,7 +30,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private Timer fadeInTimer;
     [HideInInspector] public Timer redHurtTimer;
     private Vector4 startTint;
-    public GameObject amber;
+    
     public GameObject damageNumbersObject;
     public GameObject genericAttackObject;
     private bool finishedAttack;
@@ -69,10 +71,16 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private float lastVelocity;
     
     public float knockBackForce;
-    public GameObject healthBar;
-    private GameObject healthInnerBar;
-    private SpriteRenderer healthBarSpriteRenderer;
-    private float startScale;
+
+    private HealthBar healthBar;
+
+    private Animator camAnimator;
+
+    // public GameObject healthBar;
+    // private GameObject healthInnerBar;
+    // private SpriteRenderer healthBarSpriteRenderer;
+    // private float startScale;
+
     private int physicsLayerMask;
     private Timer timerForPatrol;
     private Timer spawnFadeTimer;
@@ -135,8 +143,11 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     void Start()
     {
         DebugEntityManager entManager = Camera.main.GetComponent<DebugEntityManager>();
+        itemEmitter = Camera.main.GetComponent<ItemEmitter>();
+        camAnimator = Camera.main.GetComponent<Animator>();
+        
         entManager.AddEntity(gameObject);
-        lagGoodies = new List<LagGoodie>();
+        // lagGoodies = new List<LagGoodie>();
         playerTransform = playerToFollow.GetComponent<Transform>();
         playerMovement = playerToFollow.GetComponent<PlayerMovement>();
         thisCollider= gameObject.GetComponent<BoxCollider2D>();
@@ -145,6 +156,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         thisAnimator = gameObject.GetComponent<Animator>();
         spRenderer= gameObject.GetComponent<SpriteRenderer>();
         
+        healthBar = transform.Find("Gollum_health-bar").gameObject.GetComponent<HealthBar>();
+
         walkTimer = new Timer(1.0f);
         aiState = Ai_State.AI_PATROL;
         ForceToAdd = new Vector2();
@@ -169,13 +182,16 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         timerForPatrol = new Timer(walkTimer.period);
         timerForPatrol.turnOff();
         
-        healthInnerBar = healthBar.transform.Find("health_bar").gameObject;
-        //for color
-        healthBarSpriteRenderer = healthInnerBar.GetComponent<SpriteRenderer>();
-        //
-        startColor = healthBarSpriteRenderer.color;
+        //////
+        // healthInnerBar = healthBar.transform.Find("health_bar").gameObject;
+        // //for color
+        // healthBarSpriteRenderer = healthInnerBar.GetComponent<SpriteRenderer>();
+        // //
+        // startColor = healthBarSpriteRenderer.color;
         
-        startScale = healthInnerBar.transform.localScale.x;
+        // startScale = healthInnerBar.transform.localScale.x;
+
+        /////
         
         physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);// | Physics2D.GetLayerCollisionMask(LayerMask.NameToLayer("EnemyAiCollision"));
         
@@ -196,98 +212,104 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         // }
     }
     
-    public List<LagGoodie> lagGoodies;
+    // public List<LagGoodie> lagGoodies;
     
-    public class LagGoodie {
-        Timer timer;
-        AmberType type;
-        float angle;
+    // public class LagGoodie {
+    //     Timer timer;
+    //     AmberType type;
+    //     float angle;
         
-        public LagGoodie(AmberType type, float lagTime, float angle) {
-            this.type = type;
-            timer = new Timer(lagTime);
-            timer.turnOn();
-            this.angle = angle;
-        }
+    //     public LagGoodie(AmberType type, float lagTime, float angle) {
+    //         this.type = type;
+    //         timer = new Timer(lagTime);
+    //         timer.turnOn();
+    //         this.angle = angle;
+    //     }
         
-        public bool update(RockGullumAI ai) {
-            bool result = false;
-            if(timer.isOn()) {
-                bool finished = timer.updateTimer(Time.deltaTime);
-                if(finished) {
-                    ai.CreateGoodie(type, angle);
-                    result = true;
-                    timer.turnOff();        
-                }
-            }
-            return result;
-        }
-    }
+    //     public bool update(RockGullumAI ai) {
+    //         bool result = false;
+    //         if(timer.isOn()) {
+    //             bool finished = timer.updateTimer(Time.deltaTime);
+    //             if(finished) {
+    //                 ai.CreateGoodie(type, angle);
+    //                 result = true;
+    //                 timer.turnOff();        
+    //             }
+    //         }
+    //         return result;
+    //     }
+    // }
     
-    private void CreateGoodie(AmberType type, float angle = 0.0f) {
+    // private void CreateGoodie(AmberType type, float angle = 0.0f) {
         
-        GameObject objAmber = Instantiate(amber, transform.position,  Quaternion.identity);
-        Rigidbody2D amberRb = objAmber.GetComponent<Rigidbody2D>();
-        CollectAmber amberCollect = objAmber.transform.GetChild(0).gameObject.GetComponent<CollectAmber>();
-        amberCollect.type = (AmberType)type;
+    //     GameObject objAmber = Instantiate(amber, transform.position,  Quaternion.identity);
+    //     Rigidbody2D amberRb = objAmber.GetComponent<Rigidbody2D>();
+    //     CollectAmber amberCollect = objAmber.transform.GetChild(0).gameObject.GetComponent<CollectAmber>();
+    //     amberCollect.type = (AmberType)type;
         
         
         
-        if(type == AmberType.AMBER_HEALTH || type == AmberType.AMBER_MANA) {
-            float randScale = Random.Range(0.7f, 1.3f);
-            objAmber.transform.localScale = new Vector3(randScale, randScale, 1);
-            objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 3;
-        } else if (type == AmberType.AMBER_SENTINEL_HEAD) {
-            objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 4;
-            if(quote != null) {
-                amberCollect.SetQuoteOnCollect(quote);
-            }
-        } else {
-            objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 0;
-        }
-        float randomAngle = angle;
-        if(angle == 0.0f) {
-            randomAngle = Mathf.Lerp(0.25f*Mathf.PI, 0.75f*Mathf.PI, Random.Range(0.0f, 1.0f));
-        }
-        Vector2 newForce = new Vector3(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle));
-        amberRb.bodyType = RigidbodyType2D.Dynamic;
-        float lerpVal = Mathf.Lerp(52000, 60000, Random.Range(0.0f, 1.0f));
-        amberRb.AddForce(lerpVal*newForce);
-    }
+    //     if(type == AmberType.AMBER_HEALTH || type == AmberType.AMBER_MANA) {
+    //         float randScale = Random.Range(0.7f, 1.3f);
+    //         objAmber.transform.localScale = new Vector3(randScale, randScale, 1);
+    //         objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 3;
+    //     } else if (type == AmberType.AMBER_SENTINEL_HEAD) {
+    //         objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 4;
+    //         if(quote != null) {
+    //             amberCollect.SetQuoteOnCollect(quote);
+    //         }
+    //     } else {
+    //         objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 0;
+    //     }
+    //     float randomAngle = angle;
+    //     if(angle == 0.0f) {
+    //         randomAngle = Mathf.Lerp(0.25f*Mathf.PI, 0.75f*Mathf.PI, Random.Range(0.0f, 1.0f));
+    //     }
+    //     Vector2 newForce = new Vector3(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle));
+    //     amberRb.bodyType = RigidbodyType2D.Dynamic;
+    //     float lerpVal = Mathf.Lerp(52000, 60000, Random.Range(0.0f, 1.0f));
+    //     amberRb.AddForce(lerpVal*newForce);
+    // }
     
-    private void emitAmber(AmberType type, int number, float angle = 0.0f, float lagTime = 0.0f) {
-        for(int i = 0; i < number; ++i) {
-            if(lagTime > 0.0f) {
-                lagGoodies.Add(new LagGoodie(type, lagTime, angle));
-            } else {
-                CreateGoodie(type);
-            }
+    // private void emitAmber(AmberType type, int number, float angle = 0.0f, float lagTime = 0.0f) {
+    //     for(int i = 0; i < number; ++i) {
+    //         if(lagTime > 0.0f) {
+    //             lagGoodies.Add(new LagGoodie(type, lagTime, angle));
+    //         } else {
+    //             CreateGoodie(type);
+    //         }
             
-        }
-    }
+    //     }
+    // }
     
     private void releaseGoodies() {
-        emitAmber(AmberType.AMBER_AMBER, 4);
-        emitAmber(AmberType.AMBER_HEALTH, 10);
-        emitAmber(AmberType.AMBER_MANA, 6);
+        itemEmitter.emitAmber(AmberType.AMBER_AMBER, 4, transform.position);
+        itemEmitter.emitAmber(AmberType.AMBER_HEALTH, 10, transform.position);
+        itemEmitter.emitAmber(AmberType.AMBER_MANA, 6, transform.position);
         if(isSentinel && hitCount <= 1) 
         {
-            emitAmber(AmberType.AMBER_SENTINEL_HEAD, 1, 0.5f*Mathf.PI, 1.0f);
+            itemEmitter.emitAmber(AmberType.AMBER_SENTINEL_HEAD, 1, transform.position, quote, 0.5f*Mathf.PI, 1.0f);
         }
     }
     
     public void Dead() {
         transform.position = startP;
+
         health = startHealth;
-        Vector3 tempScale = healthInnerBar.transform.localScale;
-        tempScale.x = startScale;
-        healthInnerBar.transform.localScale = tempScale;
-        healthBarSpriteRenderer.color = startColor;
+
+        healthBar.ResetHealthBar();
+
+        // Vector3 tempScale = healthInnerBar.transform.localScale;
+        // tempScale.x = startScale;
+        // healthInnerBar.transform.localScale = tempScale;
+        // healthBarSpriteRenderer.color = startColor;
+
         respawnTimer.period = (float)Random.Range(3.0f, 10.0f);
         aiState = Ai_State.AI_PATROL;
         respawnTimer.turnOn();
         redHurtTimer.turnOff();
-        healthBar.SetActive(false);
+
+        healthBar.Hide();
     }
     
     public void BeginFadeInTimer() {
@@ -331,25 +353,28 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             // playerMovement.globalPauseTimer.turnOn();
             
             rockHitSound.Play();
+
+            healthBar.UpdateHealthBar(health, startHealth);
             
-            float healthAsPercent = ((float)health / (float)startHealth);
-            healthAsPercent = Mathf.Max(0, healthAsPercent);
-            Vector3 tempScale = healthInnerBar.transform.localScale;
-            tempScale.x = startScale * healthAsPercent;
-            healthInnerBar.transform.localScale = tempScale;
-            Color originalColor = healthBarSpriteRenderer.color;
-            if(healthAsPercent < 0.6f && healthAsPercent > 0.3f) {
-                originalColor = new Vector4(1, 1, 0, 1);
-            } else if(healthAsPercent < 0.3f) {
-                originalColor = Color.red;
-            }
+            // float healthAsPercent = ((float)health / (float)startHealth);
+            // healthAsPercent = Mathf.Max(0, healthAsPercent);
+            // Vector3 tempScale = healthInnerBar.transform.localScale;
+            // tempScale.x = startScale * healthAsPercent;
+            // healthInnerBar.transform.localScale = tempScale;
+            // Color originalColor = healthBarSpriteRenderer.color;
+            // if(healthAsPercent < 0.6f && healthAsPercent > 0.3f) {
+            //     originalColor = new Vector4(1, 1, 0, 1);
+            // } else if(healthAsPercent < 0.3f) {
+            //     originalColor = Color.red;
+            // }
             
-            healthBarSpriteRenderer.color = originalColor;
+            // healthBarSpriteRenderer.color = originalColor;
             
             //Instantiate(hitParticleSystem);
             
             if (this.health < 0)
             {
+               
                 hitCount++;
                 dead = true;
                 thisAnimator.SetTrigger("isDead");
@@ -471,14 +496,14 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     
     private void Update()
     {
-        for(int i = 0; i < lagGoodies.Count; ) {
-            bool rem = lagGoodies[i].update(this);
-            if(rem) {
-                lagGoodies.RemoveAt(i);
-            } else {
-                i++;
-            }
-        }
+        // for(int i = 0; i < lagGoodies.Count; ) {
+        //     bool rem = lagGoodies[i].update(this);
+        //     if(rem) {
+        //         lagGoodies.RemoveAt(i);
+        //     } else {
+        //         i++;
+        //     }
+        // }
 
         if(respawnTimer.isOn()) {
             bool finished = respawnTimer.updateTimer(Time.deltaTime);
@@ -487,7 +512,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                 dead = false;
                 respawnTimer.turnOff();
                 spawnFadeTimer.turnOn();
-                healthBar.SetActive(true);
+                healthBar.Show();
             }
         }
         
@@ -534,6 +559,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                 fadeInTimer.turnOff();
                 releaseGoodies();
                 Dead();
+                camAnimator.SetTrigger("shake1");
                 // Destroy(gameObject);
             }
             
