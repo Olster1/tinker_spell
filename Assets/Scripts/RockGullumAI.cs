@@ -5,6 +5,7 @@ using Timer_namespace;
 using EasyAttackObjectCreator;
 using EasyForceUpdator;
 using UnityEngine.Assertions;
+using UnityEditor;
 public class RockGullumAI : MonoBehaviour, IHitBox
 {
     public GameObject playerToFollow;
@@ -18,11 +19,13 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private Animator thisAnimator;
 
     public ItemEmitter itemEmitter;
+
+    private DirectionElm flipForTurnStack;
     
     [HideInInspector] public Timer walkTimer;
     private SpriteRenderer spRenderer;
     public Vector2 partolDistance;
-    public float attackDistance;
+    public Vector2 attackDistance;
     private Vector2 ForceToAdd;
     [HideInInspector] public int health;
     public int startHealth;
@@ -76,6 +79,9 @@ public class RockGullumAI : MonoBehaviour, IHitBox
 
     private Animator camAnimator;
 
+    //this is to avoid continous flipping with the walk timer
+    private Ai_SubState lstFrameFlip;
+
     // public GameObject healthBar;
     // private GameObject healthInnerBar;
     // private SpriteRenderer healthBarSpriteRenderer;
@@ -113,9 +119,12 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     
     private void getRandomAiSubState() {
         subAiState = (Ai_SubState)((int)Random.Range(0, (int)(Ai_SubState.AI_SUB_COUNT)));
-        // while(subAiState == Ai_SubState.AI_SUB_IDLE) { //for debug testing
-        //     subAiState = (Ai_SubState)((int)Random.Range(0, (int)(Ai_SubState.AI_SUB_COUNT)));
-        // } 
+        // Debug.Log("getting random state" + lstFrameFlip);
+        if(lstFrameFlip != Ai_SubState.AI_SUB_IDLE) {
+            while(subAiState == lstFrameFlip) { //to avoid continously doing turnarounds
+                subAiState = (Ai_SubState)((int)Random.Range(0, (int)(Ai_SubState.AI_SUB_COUNT)));
+            }
+        } 
     }
     
     public void FireRock() {
@@ -147,7 +156,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         camAnimator = Camera.main.GetComponent<Animator>();
         
         entManager.AddEntity(gameObject);
-        // lagGoodies = new List<LagGoodie>();
+        initDirectionStack();
         playerTransform = playerToFollow.GetComponent<Transform>();
         playerMovement = playerToFollow.GetComponent<PlayerMovement>();
         thisCollider= gameObject.GetComponent<BoxCollider2D>();
@@ -158,8 +167,10 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         
         healthBar = transform.Find("Gollum_health-bar").gameObject.GetComponent<HealthBar>();
 
-        walkTimer = new Timer(1.0f);
+        walkTimer = new Timer(2.0f);
         aiState = Ai_State.AI_PATROL;
+        //This is since the gollums start of facing left so 
+        subAiState = Ai_SubState.AI_SUB_LEFT;
         ForceToAdd = new Vector2();
         fadeInTimer = new Timer(0.2f);
         fadeInTimer.turnOff();
@@ -390,9 +401,44 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             }
         }
     }
+
+    public class DirectionElm {
+        public bool direction;
+        public Ai_SubState aiState;
+        public DirectionElm next;
+        public DirectionElm prev;
+    }
+    private void initDirectionStack() {
+        flipForTurnStack = new DirectionElm();
+        flipForTurnStack.next = flipForTurnStack;
+        flipForTurnStack.prev = flipForTurnStack;
+    }
+
+    private void pushDirectionOntoStack(bool flipDir, Ai_SubState aiState) {
+        DirectionElm elm = new DirectionElm();
+        elm.aiState = aiState;
+        elm.direction = flipDir;
+        elm.prev = flipForTurnStack.prev;
+        elm.next = flipForTurnStack;
+
+        flipForTurnStack.prev.next = elm;
+        flipForTurnStack.prev = elm;
+    }
+
+    private bool pullDirectionOffStack() {
+        Assert.IsTrue(flipForTurnStack.next != flipForTurnStack);
+        DirectionElm elm = flipForTurnStack.next;
+        Assert.IsTrue(elm != flipForTurnStack);
+
+        flipForTurnStack.next = elm.next;
+        elm.next.prev = flipForTurnStack;
+
+        return (elm.aiState != Ai_SubState.AI_SUB_LEFT);
+        
+    }
     
     public void enforceFlip() {
-        spRenderer.flipX = flipForTurnAround;
+        spRenderer.flipX = pullDirectionOffStack();
     }
     
     private Vector2 diffVecForAttack;
@@ -629,12 +675,12 @@ public class RockGullumAI : MonoBehaviour, IHitBox
 
     void DoTurnAround(bool lookLeft) {
         // Debug.Log("turn_around");
-        if(lookLeft != spRenderer.flipX) {
+        // if(lookLeft != spRenderer.flipX)
+         {
             if(isSentinel || isRangeGollum) {
                 spRenderer.flipX = lookLeft;
             } else {
-                thisAnimator.SetTrigger("turn_around");
-                flipForTurnAround = lookLeft;        
+                pushDirectionOntoStack(lookLeft, subAiState);
             }
             
         }
@@ -642,6 +688,16 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     // Update is called once per frame
     void FixedUpdate()
     {
+        bool inTurnAround = true;
+        if(!(thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_turn_around") || thisAnimator.GetBool("turn_around"))) {
+            if(flipForTurnStack.next != flipForTurnStack) { //something on the list
+                thisAnimator.SetTrigger("turn_around");
+                Assert.IsTrue(thisAnimator.GetBool("turn_around"));
+                // pull off stack on the first frame of turn around animation
+            } else {
+                inTurnAround = false;
+            }
+        }
         // if(isSentinel) {
         //     Debug.Log("?????");
         // }
@@ -651,7 +707,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
 
             if(!sleeping) {
                 Vector2 diffVec = playerTransform.position - thisTransform.position;
-                spRenderer.color = Color.white;
+                // spRenderer.color = Color.white;
                 // if(isSentinel) {
                 //     Debug.Log("sentinelAttack");
                 // }
@@ -674,7 +730,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                     // spRenderer.color = Color.blue;
                     //spRenderer.color = Color.blue;
                     // Debug.Log("Diff Vec: " + Vector2.SqrMagnitude(diffVec));
-                    if (Vector2.SqrMagnitude(diffVec) < attackDistance)
+                    if (Mathf.Abs(diffVec.x) < attackDistance.x && Mathf.Abs(diffVec.y) < attackDistance.y)
                     {
                         aiState = Ai_State.AI_ATTACK;
                         finishedAttack = false;
@@ -686,8 +742,10 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                         
                         ForceToAdd += accelForce * signToPlayer * Vector2.right;
 
-                        if((signToPlayer > 0) !=  spRenderer.flipX){
+                        if((signToPlayer > 0) != spRenderer.flipX){
+                            subAiState = (signToPlayer > 0) ? Ai_SubState.AI_SUB_RIGHT : Ai_SubState.AI_SUB_LEFT;
                             DoTurnAround(signToPlayer > 0);
+                            walkTimer.turnOn();
                         } 
                     }
                     else
@@ -711,13 +769,16 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                             
                         } else {
                             walkTimer.turnOn();   
-                            Ai_SubState lastState = subAiState;
-                            getRandomAiSubState();
-                             if(lastState != subAiState && (subAiState == Ai_SubState.AI_SUB_RIGHT || subAiState == Ai_SubState.AI_SUB_LEFT)) {
-                                // Debug.Log("finished walktimer 1");
-                                Assert.IsTrue(subAiState != Ai_SubState.AI_SUB_IDLE);
-                                DoTurnAround(subAiState != Ai_SubState.AI_SUB_LEFT);
-                            }
+                            // Ai_SubState lastState = subAiState;
+                            // getRandomAiSubState();
+                            //  if(lastState != subAiState && (subAiState == Ai_SubState.AI_SUB_RIGHT || subAiState == Ai_SubState.AI_SUB_LEFT)) {
+                            //     // if(lastState == Ai_SubState.AI_SUB_IDLE) {
+                            //         Debug.Log("finished walktimer 1: " + subAiState);
+                            //     // }
+                            //     Assert.IsTrue(subAiState != Ai_SubState.AI_SUB_IDLE);
+
+                            //     DoTurnAround(subAiState != Ai_SubState.AI_SUB_LEFT);
+                            // }
                             
                         }
                         bool finished = walkTimer.updateTimer(Time.fixedDeltaTime);
@@ -726,69 +787,90 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                              
                             Ai_SubState lastState = subAiState;
                             getRandomAiSubState();
-                             if(lastState != subAiState && (subAiState == Ai_SubState.AI_SUB_RIGHT || subAiState == Ai_SubState.AI_SUB_LEFT)) {
-                                // Debug.Log("finished walktimer 2: " + subAiState);
-                                Assert.IsTrue(subAiState != Ai_SubState.AI_SUB_IDLE);
-                                DoTurnAround(subAiState != Ai_SubState.AI_SUB_LEFT);
+                            if(lastState != subAiState && (subAiState == Ai_SubState.AI_SUB_RIGHT || subAiState == Ai_SubState.AI_SUB_LEFT)) {
+                                if(lastState == Ai_SubState.AI_SUB_IDLE && ((subAiState == Ai_SubState.AI_SUB_RIGHT && spRenderer.flipX) || (subAiState == Ai_SubState.AI_SUB_LEFT && !spRenderer.flipX))) {
+
+                                } else {
+                                // if(lastState == Ai_SubState.AI_SUB_IDLE) {
+                                    // Debug.Log("finished walktimer 2: " + subAiState);
+                                // }
+                                    // Debug.Log("BLUE");
+                                    // spRenderer.color = Color.blue;
+                                    Assert.IsTrue(subAiState != Ai_SubState.AI_SUB_IDLE);
+                                    DoTurnAround(subAiState != Ai_SubState.AI_SUB_LEFT);
+                                }
                             }
                         }
                         Vector2 colSize = thisCollider.size;
                         Vector3 colOffset = thisCollider.offset;
                         float raySize = 0.5f*colSize.x + rayCastSize;
-                        
-                        switch(subAiState) {
-                            
-                            case Ai_SubState.AI_SUB_IDLE: {
-                                //do nothing
-                            } break;
-                            case Ai_SubState.AI_SUB_LEFT: {
+                        lstFrameFlip = Ai_SubState.AI_SUB_IDLE;
+                        if(!inTurnAround) {
+                            switch(subAiState) {
                                 
-                                ForceToAdd += accelForce * Vector2.left;
-                                //NOTE(ollie): Do we want to use layers instead so we are using just one raycast?? Not sure if this would be faster
-                                RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, Vector2.left, raySize, physicsLayerMask);
-                                Debug.DrawLine(thisCollider.bounds.center, thisCollider.bounds.center + raySize*Vector3.left);
-                                bool found = false;
-                                for(int i = 0; i < hits.Length; ++i) {
-                                    RaycastHit2D hit = hits[i];
-                                    Assert.IsTrue(!found);
-                                    if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
-                                        // Debug.Log(hit.collider.gameObject.name);
-                                        subAiState = Ai_SubState.AI_SUB_RIGHT;
-                                        nameCollider = hit.collider.gameObject.name;
-                                        // Debug.Log("hit left");
-                                        DoTurnAround(true);
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                                
-                                
-                            } break;
-                            case Ai_SubState.AI_SUB_RIGHT: {
-                                ForceToAdd += accelForce * Vector2.right;
-
-                                //NOTE(ollie): Do we want to use layers instead so we are using just one raycast?? Not sure if this would be faster
-                                RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, Vector2.right, raySize, physicsLayerMask);
-                                Debug.DrawLine(thisCollider.bounds.center, thisCollider.bounds.center + raySize*Vector3.right);
-                                // Debug.DrawLine(thisCollider.bounds.center, transform.position + colOffset + raySize*Vector3.right);
-                                for(int i = 0; i < hits.Length; ++i) {
-                                    RaycastHit2D hit = hits[i];
+                                case Ai_SubState.AI_SUB_IDLE: {
+                                    //do nothing
+                                } break;
+                                case Ai_SubState.AI_SUB_LEFT: {
                                     
-                                    if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
-                                        // Debug.Log(hit.collider.gameObject.name);
-                                        subAiState = Ai_SubState.AI_SUB_LEFT;
-                                        nameCollider = hit.collider.gameObject.name;
-                                        DoTurnAround(false);
-                                        // Debug.Log("hit right");
-                                        break;
+                                    ForceToAdd += accelForce * Vector2.left;
+                                    //NOTE(ollie): Do we want to use layers instead so we are using just one raycast?? Not sure if this would be faster
+                                    RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, Vector2.left, raySize, physicsLayerMask);
+                                    Debug.DrawLine(thisCollider.bounds.center, thisCollider.bounds.center + raySize*Vector3.left);
+                                    bool found = false;
+                                    for(int i = 0; i < hits.Length; ++i) {
+                                        RaycastHit2D hit = hits[i];
+                                        Assert.IsTrue(!found);
+                                        if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
+                                            // Debug.Log(hit.collider.gameObject.name);
+                                            subAiState = Ai_SubState.AI_SUB_RIGHT;
+                                            nameCollider = hit.collider.gameObject.name;
+                                            // Debug.Log("hit left");
+                                            // spRenderer.color = Color.yellow;
+                                            // Debug.Log("LEFT");
+                                            DoTurnAround(true);
+                                            // walkTimer.tAt = walkTimer.period;
+                                            found = true;
+                                            lstFrameFlip = Ai_SubState.AI_SUB_LEFT;
+                                            walkTimer.tAt = 0.2f*walkTimer.period;
+                                            // walkTimer.turnOn(); //reset walk timer
+                                            break;
+                                        }
                                     }
-                                }
-                                
-                            } break;
-                            default: {
-                                
-                            } break;
-                        }    
+                                    
+                                    
+                                } break;
+                                case Ai_SubState.AI_SUB_RIGHT: {
+                                    ForceToAdd += accelForce * Vector2.right;
+
+                                    //NOTE(ollie): Do we want to use layers instead so we are using just one raycast?? Not sure if this would be faster
+                                    RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, Vector2.right, raySize, physicsLayerMask);
+                                    Debug.DrawLine(thisCollider.bounds.center, thisCollider.bounds.center + raySize*Vector3.right);
+                                    // Debug.DrawLine(thisCollider.bounds.center, transform.position + colOffset + raySize*Vector3.right);
+                                    for(int i = 0; i < hits.Length; ++i) {
+                                        RaycastHit2D hit = hits[i];
+                                        
+                                        if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
+                                            // Debug.Log(hit.collider.gameObject.name);
+                                            subAiState = Ai_SubState.AI_SUB_LEFT;
+                                            // Debug.Log("RIGHT");
+                                            // spRenderer.color = Color.green;
+                                            nameCollider = hit.collider.gameObject.name;
+                                            DoTurnAround(false);
+                                            walkTimer.tAt = 0.2f*walkTimer.period; //for testing
+                                            lstFrameFlip = Ai_SubState.AI_SUB_RIGHT;
+                                            // Debug.Log("hit right");
+                                            // walkTimer.turnOn(); //reset walk timer
+                                            break;
+                                        }
+                                    }
+                                    
+                                } break;
+                                default: {
+                                    
+                                } break;
+                            }    
+                        }
                     }
                     //spRenderer.color = Color.green;
                     //do nothing for now
@@ -806,5 +888,13 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         }
     }
     
+    void OnDrawGizmos() {
+        if (Selection.Contains (gameObject)) {
+            Gizmos.color = new Color(1, 1, 0, 0.5f);
+            Gizmos.DrawCube(transform.position, new Vector3(2*attackDistance.x, 2*attackDistance.y, 1));
+            Gizmos.color = new Color(0, 0, 1, 0.5f);
+            Gizmos.DrawCube(transform.position, new Vector3(2*partolDistance.x, 2*partolDistance.y, 1));
+        }
+    }
     
 }
