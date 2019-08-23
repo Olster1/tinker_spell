@@ -317,6 +317,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
 
         respawnTimer.period = (float)Random.Range(3.0f, 10.0f);
         aiState = Ai_State.AI_PATROL;
+        walkTimer.turnOn();
+        subAiState = Ai_SubState.AI_SUB_IDLE;
         respawnTimer.turnOn();
         redHurtTimer.turnOff();
 

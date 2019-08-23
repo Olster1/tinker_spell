@@ -9,6 +9,8 @@ public enum LevelStateId {
     LEVEL_1,
     LEVEL_SKILL_TREE,
     LEVEL_PORTAL_ROOM_RETURN,
+    LEVEL_EARTH_LEDGE,
+    LEVEL_1_RETURN,
 
 
     ///////EVERTHING MUST BE ABOVE THIS!!!//////

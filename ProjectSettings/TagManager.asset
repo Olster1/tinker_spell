@@ -14,6 +14,7 @@ TagManager:
   - WorldGeometryEarth
   - WorldGeometryWater
   - WorldGeometrySlope
+  - WorldGeometryNoShadow
   layers:
   - Default
   - TransparentFX
@@ -35,7 +36,7 @@ TagManager:
   - RockIndicator
   - CollisionNotForMagic
   - DestructibleEnviron
-  - 
+  - DriftRepeat
   - 
   - 
   - 
