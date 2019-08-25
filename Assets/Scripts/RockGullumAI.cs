@@ -33,6 +33,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private Timer fadeInTimer;
     [HideInInspector] public Timer redHurtTimer;
     private Vector4 startTint;
+
+    public int level;
     
     public GameObject damageNumbersObject;
     public GameObject genericAttackObject;
@@ -46,6 +48,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     public GameObject attackSwipe;
     
     public GameObject rockObj;
+
+    private BeastryJournal beastJournal;
 
     public Timer respawnTimer;
     
@@ -155,6 +159,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         itemEmitter = Camera.main.GetComponent<ItemEmitter>();
         camAnimator = Camera.main.GetComponent<Animator>();
         
+        beastJournal = Camera.main.GetComponent<BeastryJournal>();
+
         entManager.AddEntity(gameObject);
         initDirectionStack();
         playerTransform = playerToFollow.GetComponent<Transform>();
@@ -359,6 +365,14 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                 this.redHurtTimer.turnOn();
             }
             
+            BeastId beastId = BeastId.ROCK_GOLLUM;
+            if(isRangeGollum) {
+                beastId = BeastId.RANGE_GOLLUM;
+            } else if(isSentinel) {
+                beastId = BeastId.ROCK_SENTINEL;
+            }
+
+            beastJournal.FoundBeast(beastId);
             
             Instantiate(attackSwipe, transform);
             
@@ -725,6 +739,10 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                 else if (aiState == Ai_State.AI_ATTACK)
                 {
                     // spRenderer.color = Color.red;
+                    if(!(thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_attack") || thisAnimator.GetBool("IsAttacking"))) {
+                         endAttack();
+                         finishedAttack = true;
+                    }
                     
                 }
                 else if (aiState == Ai_State.AI_FIND)

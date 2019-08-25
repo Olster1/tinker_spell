@@ -12,6 +12,7 @@ public class DebugEntityManager : MonoBehaviour
 
     [Range(0.1f, 1f)] 
     public float timeScale;
+    private float lastTimeScale;
 
     void Awake() {
          entities = new List<GameObject>();
@@ -41,7 +42,11 @@ public class DebugEntityManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Time.timeScale = timeScale;
+        if(lastTimeScale != timeScale) {
+            Time.timeScale = timeScale;
+        }
+        lastTimeScale = timeScale;
+        
         if(Input.GetKeyDown(KeyCode.F1)) {
             Debug.Log("key 1");
             activate0 = !activate0;

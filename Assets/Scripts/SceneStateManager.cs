@@ -11,6 +11,7 @@ public enum LevelStateId {
     LEVEL_PORTAL_ROOM_RETURN,
     LEVEL_EARTH_LEDGE,
     LEVEL_1_RETURN,
+    LEVEL_JOURNAL,
 
 
     ///////EVERTHING MUST BE ABOVE THIS!!!//////
@@ -106,6 +107,11 @@ public class SceneStateManager : MonoBehaviour
         cam.transform.position = camPos;
     }
 
+    public void ChangeSceneWithId(LevelStateId stateId) {
+        stateToLoad = stateId;
+        ChangeScene();
+    }
+
     void ChangeScene() {
         for(int i = 0; i < levelObjects.Length; ++i) {
             GameObject obj = levelObjects[i];
@@ -113,8 +119,13 @@ public class SceneStateManager : MonoBehaviour
                 obj.SetActive(false);
             }
         }
+
         //turn off the last scene
-        levelObjects[(int)stateToLoad].SetActive(true);    
+        GameObject levelObj = levelObjects[(int)stateToLoad];
+        if(levelObj != null) {
+            levelObj.SetActive(true);
+        }
+            
         GameObject spawnPoint = spawnPointObjs[(int)stateToLoad];
 
 
@@ -122,7 +133,7 @@ public class SceneStateManager : MonoBehaviour
             // player.GetComponent<PlayerMovement>().canControlPlayer = false;
             spell.SetActive(false);
             player.SetActive(false);
-            Debug.Log("player not active");
+            // Debug.Log("player not active");
         } else {
             player.GetComponent<PlayerMovement>().canControlPlayer = true;
             spell.SetActive(true);

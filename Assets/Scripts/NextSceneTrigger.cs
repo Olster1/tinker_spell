@@ -36,6 +36,7 @@ public class NextSceneTrigger : MonoBehaviour
     {
         if(!isAutomatic) {
            if(!playerMovement.autoMoveTimer.isOn() && Input.GetButtonDown("Fire2") && indicator.isOn() && !Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN)) {
+               manager.stateToLoad = levelToLoad;
                if(!withText) {
                    animator.SetTrigger("FadeIn");
                } else {
@@ -44,7 +45,7 @@ public class NextSceneTrigger : MonoBehaviour
                    animator.SetTrigger("FadeWithText");
                }
                 
-                manager.stateToLoad = levelToLoad;
+                
                playerMovement.autoMoveDirection = autoMoveDirection;
                playerMovement.canControlPlayer = false;
                playerMovement.autoMoveTimer.turnOn();
@@ -55,6 +56,7 @@ public class NextSceneTrigger : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D other) {
         GameObject gm = other.gameObject;
       if(isAutomatic && gm.name == "Player" && !playerMovement.autoMoveTimer.isOn()) {
+          manager.stateToLoad = levelToLoad;
           if(!withText) {
               animator.SetTrigger("FadeIn");
           } else {
@@ -62,8 +64,8 @@ public class NextSceneTrigger : MonoBehaviour
               animator.SetTrigger("FadeIn");
               animator.SetTrigger("FadeWithText");
           }
-           
-           manager.stateToLoad = levelToLoad;
+           // Debug.Log(manager.stateToLoad);
+          
           playerMovement.autoMoveDirection = autoMoveDirection;
           playerMovement.canControlPlayer = false;
           playerMovement.autoMoveTimer.turnOn();

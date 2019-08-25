@@ -82,3 +82,6 @@ TagManager:
   - name: Platform
     uniqueID: 3853530639
     locked: 0
+  - name: GameUI
+    uniqueID: 3556599143
+    locked: 0

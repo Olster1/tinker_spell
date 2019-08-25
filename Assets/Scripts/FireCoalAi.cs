@@ -32,12 +32,15 @@ public class FireCoalAi : MonoBehaviour, IHitBox
     public GameObject attackObj;
     private HealthBar healthBar;
     private ItemEmitter itemEmitter;
+    private BeastryJournal beastJournal;
     // Start is called before the first frame update
     void Start()
     {
         itemEmitter = Camera.main.GetComponent<ItemEmitter>();
         DebugEntityManager entManager = Camera.main.GetComponent<DebugEntityManager>();
         entManager.AddEntity(gameObject);
+
+        beastJournal = Camera.main.GetComponent<BeastryJournal>();
 
         healthBar = transform.Find("Gollum_health-bar").gameObject.GetComponent<HealthBar>();
 
@@ -68,6 +71,8 @@ public class FireCoalAi : MonoBehaviour, IHitBox
             
             this.health -= damage;
             healthBar.UpdateHealthBar((int)health, (int)startHealth);
+
+            beastJournal.FoundBeast(BeastId.FIRE_COAL);
 
             // this.redHurtTimer.turnOn();
             
