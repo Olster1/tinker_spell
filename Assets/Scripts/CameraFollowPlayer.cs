@@ -110,7 +110,7 @@ public class CameraFollowPlayer : MonoBehaviour
     void OnDrawGizmos() {
         Gizmos.color = new Color(1, 0, 0, 0.5f);
 
-        Gizmos.DrawCube(transform.position, new Vector3(2*xDiff, 2*yDiff, 1));
+        // Gizmos.DrawCube(transform.position, new Vector3(2*xDiff, 2*yDiff, 1));
     }
 
 }
