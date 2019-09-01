@@ -12,6 +12,7 @@ public enum LevelStateId {
     LEVEL_EARTH_LEDGE,
     LEVEL_1_RETURN,
     LEVEL_JOURNAL,
+    LEVEL_SKILL_TILES,
 
 
     ///////EVERTHING MUST BE ABOVE THIS!!!//////

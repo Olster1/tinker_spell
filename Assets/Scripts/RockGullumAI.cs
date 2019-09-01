@@ -909,12 +909,12 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     }
     
     void OnDrawGizmos() {
-        if (Selection.Contains (gameObject)) {
-            Gizmos.color = new Color(1, 1, 0, 0.5f);
-            Gizmos.DrawCube(transform.position, new Vector3(2*attackDistance.x, 2*attackDistance.y, 1));
-            Gizmos.color = new Color(0, 0, 1, 0.5f);
-            Gizmos.DrawCube(transform.position, new Vector3(2*partolDistance.x, 2*partolDistance.y, 1));
-        }
+        // if (Selection.Contains (gameObject)) {
+        //     Gizmos.color = new Color(1, 1, 0, 0.5f);
+        //     Gizmos.DrawCube(transform.position, new Vector3(2*attackDistance.x, 2*attackDistance.y, 1));
+        //     Gizmos.color = new Color(0, 0, 1, 0.5f);
+        //     Gizmos.DrawCube(transform.position, new Vector3(2*partolDistance.x, 2*partolDistance.y, 1));
+        // }
     }
     
 }
