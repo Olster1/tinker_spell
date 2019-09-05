@@ -15,6 +15,7 @@ TagManager:
   - WorldGeometryWater
   - WorldGeometrySlope
   - WorldGeometryNoShadow
+  - WorldGeometryPlaform
   layers:
   - Default
   - TransparentFX

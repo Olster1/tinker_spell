@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using EasyAttackObjectCreator;
 using ConfigControls_namespace;
 using EasyForceUpdator;
+using EasyPlatform;
 
 public class PlayerMovement : MonoBehaviour, IHitBox
 {
@@ -18,20 +19,24 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         ANIMATION_IDLE2, 
     }
     
-    private Rigidbody2D rigidBody;
+    [HideInInspector] public Rigidbody2D rigidBody;
     public float jumpAccel;
     public float moveAccel;
+
+    [HideInInspector] public PlatformMove currentParent;
 
     public float moveWhileJumpAccel;
     private Animator animator;
     public Image redHurtImage;
-    
+
     private float timeInAir;
     
     public AudioSource hurtBreathing;
 
     public float velocityMargin; 
     
+    private Transform beginParentTransform;
+
     [HideInInspector] public Timer earthTimer;
     [HideInInspector] public Timer waterTimer;
     [HideInInspector] public Timer fireTimer;
@@ -116,6 +121,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     [HideInInspector] public bool usingController;
 
     public float timeToAffectJump;
+
+    private SpringJoint2D springForPlatform;
     
     public Vector2 earthOffset;
     [HideInInspector] public Timer globalPauseTimer;
@@ -126,6 +133,11 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
         animator = gameObject.GetComponent<Animator>();
         boxCollider = gameObject.GetComponent<BoxCollider2D>();
+        springForPlatform = gameObject.GetComponent<SpringJoint2D>();
+
+        beginParentTransform = transform.parent;
+
+        currentParent = null;
         
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         jumpTimer = new Timer(0.5f);
@@ -134,7 +146,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         canControlPlayer = true;
         
         idleAnimationTimer = new Timer(10.0f);
-        
+
         flashTimer = new Timer(1.0f);
         flashTimer.turnOff();
         
@@ -201,8 +213,24 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 if(hit.collider.gameObject.tag == "WorldGeometrySlope") {
                     velMarginToUse = 50.0f;
                 } 
+
                 if(rigidBody.velocity.y <= velMarginToUse) {
                     isGrounded = true;
+
+                    if(hit.collider.gameObject.tag == "WorldGeometryPlaform") {
+                        PlatformMove m = hit.collider.gameObject.GetComponent<PlatformMove>();
+                        if(m.type == PlatformType.PLATFORM_MOVE_LINEAR || m.type == PlatformType.PLATFORM_MOVE_CIRCLE || m.type == PlatformType.PLATFORM_NULL) {
+                            transform.parent = hit.collider.gameObject.transform;
+                            transform.localScale = new Vector3(1.0f/transform.parent.localScale.x, 1.0f/transform.parent.localScale.y, 1.0f/transform.parent.localScale.z);
+                        }
+                        currentParent = m;
+                            
+
+                        m.HitPlatform();
+                        m.playerReference = this;
+                        
+                         
+                    }
                     break;    
                }
                 
@@ -337,6 +365,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     
     public void ResetIdleTrigger() {
         animator.ResetTrigger("endIdle");
+
+
     }
     
     public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
@@ -542,6 +572,16 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
         animator.SetBool("grounded", isGrounded);
 
+        if(!isGrounded) {
+            transform.parent = beginParentTransform;
+            currentParent = null;
+            transform.localScale = new Vector3(1, 1, 1);
+            springForPlatform.enabled = false;
+            springForPlatform.connectedBody = null;
+        }
+
+
+
         // Debug.Log("GROUNDED + " + isGrounded);
         CastShadowRay();
 
@@ -549,7 +589,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
         if(!lastFameGrounded && isGrounded && !isJumping && timeInAir > 0.4f) {
             //landing
-            
+            if(currentParent && currentParent.type == PlatformType.PLATFORM_NULL) {
+                //do boucy effect
+                currentParent.StartSpring();
+            }
             landingSoundSource.Play();
             Instantiate(dustEffect, transform.position - new Vector3(0, 2, 0), Quaternion.identity);
             
@@ -563,6 +606,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
         if(isGrounded && !lastFameGrounded) {
             if(timeInAir > 1.5f) {
+                if(currentParent && currentParent.type == PlatformType.PLATFORM_NULL) {
+                    //do boucy effect
+                    currentParent.StartSpring();
+                }
                 camAnimator.SetTrigger("shake1");
             }
             timeInAir = 0;
@@ -672,13 +719,27 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 landingSoundSource.Play();
                 Instantiate(dustEffect, transform.position - new Vector3(0, 2, 0), Quaternion.identity);
                 animator.SetTrigger("endIdle");
-                animator.SetTrigger("jump");
+                
                 //start timing the jump
                 timeInAir = 0;
                 jumpAudioSrc.Play();
                 Instantiate(dustEffect, transform.position - new Vector3(0, 1, 0), Quaternion.identity);
                 jumpTimer.turnOn();
                 jumpTimer.period = 0.5f;
+
+                if(currentParent && currentParent.type == PlatformType.PLATFORM_NULL) {
+                    //do boucy effect
+                    currentParent.StartSpring();
+                }
+
+                // if(false) //Input.GetKeyDown(KeyCode.LeftShift)) 
+                // {
+                //     animator.SetTrigger("DoubleJump");
+                //     jumpTimer.period = 0.5f;
+                // } else 
+                {
+                    animator.SetTrigger("jump");
+                }
                 // readyingJump = true;
                 
             } else {
