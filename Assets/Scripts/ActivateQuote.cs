@@ -37,6 +37,7 @@ public class ActivateQuote : MonoBehaviour
         TINKER_HEAD,
         SPELL_HEAD,
         TREE_DIETY_HEAD,
+        GOBLIN_HEAD,
     }
 
     public SpriteRenderer sp;
@@ -143,14 +144,22 @@ public class ActivateQuote : MonoBehaviour
                 imageObjs[0].SetActive(true);
                 imageObjs[1].SetActive(false);
                 imageObjs[2].SetActive(false);
+                imageObjs[3].SetActive(false);
             } else if(quoteType == QuoteImage.TREE_DIETY_HEAD) {
                 imageObjs[1].SetActive(true);
                 imageObjs[0].SetActive(false);
                 imageObjs[2].SetActive(false);
+                imageObjs[3].SetActive(false);
             } else if(quoteType == QuoteImage.SPELL_HEAD) {
                 imageObjs[2].SetActive(true);
                 imageObjs[1].SetActive(false);
                 imageObjs[0].SetActive(false);
+                imageObjs[3].SetActive(false);
+            } else if(quoteType == QuoteImage.GOBLIN_HEAD) {
+                imageObjs[2].SetActive(false);
+                imageObjs[1].SetActive(false);
+                imageObjs[0].SetActive(false);
+                imageObjs[3].SetActive(true);
             }
             
             // interact.SetTrigger("Out");

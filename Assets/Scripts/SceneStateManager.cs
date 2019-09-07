@@ -13,6 +13,11 @@ public enum LevelStateId {
     LEVEL_1_RETURN,
     LEVEL_JOURNAL,
     LEVEL_SKILL_TILES,
+    LEVEL_EARTH_CAVE,
+    LEVEL_EARTH_LEDGE_RETURN,
+
+    LEVEL_EARTH_LEDGE_HOWLER_TREE,
+
 
 
     ///////EVERTHING MUST BE ABOVE THIS!!!//////
@@ -29,6 +34,7 @@ public class SceneStateManager : MonoBehaviour
 
     public GameObject[] levelObjects;
     public GameObject[] spawnPointObjs;
+    public bool[] turnSkyOff;
     public Vector2[] offsetCams;
     public bool[] yStuck;
     public float[] cameraZ;
@@ -38,6 +44,8 @@ public class SceneStateManager : MonoBehaviour
     public GameObject spell;
     public GameObject cam;
     public ParticleSystem tailPs;
+
+    public GameObject skyParent;
 
     private Rigidbody2D camRb;
 
@@ -60,6 +68,7 @@ public class SceneStateManager : MonoBehaviour
         Assert.IsTrue(spawnPointObjs.Length == len);
         Assert.IsTrue(offsetCams.Length == len);
         Assert.IsTrue(yStuck.Length == len);
+        Assert.IsTrue(turnSkyOff.Length == len);
 
         camRb = cam.GetComponent<Rigidbody2D>();
         
@@ -154,6 +163,12 @@ public class SceneStateManager : MonoBehaviour
             camRb.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
         }
 
+
+        if(turnSkyOff[(int)stateToLoad]) {
+            skyParent.SetActive(false);
+        } else {
+            skyParent.SetActive(true);
+        }
 
         // camRb.constraints |= RigidbodyConstraints2D.FreezeAll;
 

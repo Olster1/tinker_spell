@@ -46,6 +46,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     public SpellAi spell;
     
     public Timer flashTimer;
+
+    private Timer doubleJumpTimer; //NOTE(ol): To check if player pressed jump twice 
     
     public Animator camAnimator;
     public ParticleSystem ps;
@@ -122,8 +124,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
     public float timeToAffectJump;
 
-    private SpringJoint2D springForPlatform;
-    
     public Vector2 earthOffset;
     [HideInInspector] public Timer globalPauseTimer;
     [HideInInspector] public Timer dieTimer;
@@ -133,7 +133,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
         animator = gameObject.GetComponent<Animator>();
         boxCollider = gameObject.GetComponent<BoxCollider2D>();
-        springForPlatform = gameObject.GetComponent<SpringJoint2D>();
 
         beginParentTransform = transform.parent;
 
@@ -149,6 +148,9 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
         flashTimer = new Timer(1.0f);
         flashTimer.turnOff();
+
+        doubleJumpTimer = new Timer(0.1f);
+        doubleJumpTimer.turnOff();
         
         hurtPulseTimer = new Timer(1.0f);
         hurtPulseTimer.turnOn();
@@ -576,8 +578,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             transform.parent = beginParentTransform;
             currentParent = null;
             transform.localScale = new Vector3(1, 1, 1);
-            springForPlatform.enabled = false;
-            springForPlatform.connectedBody = null;
         }
 
 
@@ -734,7 +734,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
                 // if(false) //Input.GetKeyDown(KeyCode.LeftShift)) 
                 // {
-                //     animator.SetTrigger("DoubleJump");
+                    // animator.SetTrigger("DoubleJump");
                 //     jumpTimer.period = 0.5f;
                 // } else 
                 {

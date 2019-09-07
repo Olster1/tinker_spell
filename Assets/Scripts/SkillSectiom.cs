@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Timer_namespace;
+using EasyGameManager;
 
 public class SkillSectiom : MonoBehaviour, IBlurInterface
 {
@@ -26,6 +27,8 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface
     private Transform lastPage;
     private float hiddenOffset = 37;
 
+    public AudioSource amberDecreaseSound;
+
     private float[] skillAttributes = new float[1]; 
 
 	private LevelStateId lastLevelState;
@@ -38,7 +41,7 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface
     {
         slideTimer = new Timer(0.5f);
         blurPostProcess = Camera.main.GetComponent<BlurPostProcess>();
-        amberTimer = new Timer(0.3f);
+        amberTimer = new Timer(0.1f);
         amberTimer.turnOff();
         SetLocalAxis(index);
     }
@@ -112,9 +115,19 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface
             //     m.loop = false;
             // }
 
-        	if(Input.GetButton("Fire1")) {
-        		skillAttributes[index] += speed*Time.deltaTime;
-
+        	if(Input.GetButton("Fire1") && GameManager.amberCount > 0 && skillAttributes[index] < 1.0f) {
+                if(amberTimer.isOn()) {
+                    bool b = amberTimer.updateTimer(Time.deltaTime);    
+                    if(b) {
+                        GameManager.amberCount--;
+                        skillAttributes[index] += speed*Time.deltaTime;
+                        amberTimer.turnOn();
+                        amberDecreaseSound.Play();
+                    }
+                } else {
+                    amberTimer.turnOn();    
+                }
+                 
         		if(skillAttributes[index] > 1.0f) {
         			skillAttributes[index] = 1.0f;
         		}

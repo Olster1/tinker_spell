@@ -3,7 +3,7 @@ namespace EasyGameManager
 {
     public static class GameManager
     {
-        public static int amberCount;
+        public static int amberCount = 100;
         public static int manaCount = 100;
         public static int playerHealth = 100;
         public static int senintelHeadCount = 0;
