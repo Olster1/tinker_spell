@@ -17,10 +17,17 @@ public class TextWriter : MonoBehaviour
 	private uint hexColor;
 	public Animator aButtonAnimator;
 	public Animator quoteAnimator;
+
+	public Animator dialogEventAnimator;
+	public Animator dialogAcceptButton;
+	public Animator dialogDeclineButton;
+	
 	private Timer fadeOutTimer;
 	public bool isOn;
 	public PlayerMovement player;
 	public AudioSource audioSrc;
+
+	[HideInInspector] public DialogQuestionEvent dialogEvent;
 
 	[HideInInspector] public AudioClip[] clips;
 
@@ -72,7 +79,7 @@ public class TextWriter : MonoBehaviour
         initGlyphInfos();
         //Debug.Log(currentQuote.unfreezePlayer);
         if(!currentQuote.unfreezePlayer) {
-        	Debug.Log("unfreeze player");
+        	// Debug.Log("unfreeze player");
         	player.canControlPlayer = false;
         	Time.timeScale = 0.0f;
         }
@@ -129,6 +136,13 @@ public class TextWriter : MonoBehaviour
 	   //  	if(increment) ++i;
 	   //  }
 
+    	// aButtonAnimator;
+    	// public Animator quoteAnimator;
+
+    	// public Animator dialogEventAnimator;
+    	// public Animator dialogAcceptButton;
+    	// public Animator dialogDeclineButton;
+
 
 
     	textObject = gameObject.GetComponent<Text>();
@@ -140,6 +154,25 @@ public class TextWriter : MonoBehaviour
     	fadeOutTimer = new Timer(0.4f);
     	fadeOutTimer.turnOff();
     	// initGlyphInfos();
+    }
+
+    void EndQuoteSession(bool fadeAButtonOut) {
+    	if(currentQuote.toActivate != null) {
+    		currentQuote.toActivate.SetActive(true);
+    		currentQuote.gameObject.SetActive(false);
+    		currentQuote.toDeactivate.SetActive(false);
+    	}
+    	if(fadeAButtonOut) {
+    		aButtonAnimator.SetTrigger("FadeOut");	
+    	} else {
+    		//NOTE(ol): last one was a dialog option so fade out them
+    		dialogEventAnimator.SetTrigger("FadeOut");
+    		dialogAcceptButton.SetTrigger("FadeOut");
+    		dialogDeclineButton.SetTrigger("FadeOut");
+    	}
+    	
+    	quoteAnimator.SetTrigger("OffscreenOut");
+    	CancelFontWriting();
     }
 
     // Update is called once per frame
@@ -186,30 +219,44 @@ public class TextWriter : MonoBehaviour
 	    		if(finished) {
 	    			textObject.text = stringArray[stringAt];
 	    			showTimer.turnOff();
-	    			aButtonAnimator.SetTrigger("FadeIn");
+	    			
+	    			bool notDialogOptions = true;
+	    			if(stringAt == (stringArray.Length - 1)) {
+	    				if(dialogEvent != null) {
+	    					notDialogOptions = false;
+	    					dialogEventAnimator.SetTrigger("FadeIn");
+	    					dialogAcceptButton.SetTrigger("FadeIn");
+	    					dialogDeclineButton.SetTrigger("FadeIn");
+	    				}
+	    			}
+
+	    			if(notDialogOptions) {
+	    				aButtonAnimator.SetTrigger("FadeIn");
+	    			}
 	    		}
 	    	} else {
 	    		if(Input.GetButtonDown("Jump") || currentQuote.unfreezePlayer) {
 	    			if(!fadeOutTimer.isOn()) {
 			    		if(stringAt < (stringArray.Length - 1)) {
-			    			
-		    				
-
-		    				// Debug.Log("finished show writer" + stringAt);
+			    			//Fade out Timer moves the quote to the next sentence. 
 		    				fadeOutTimer.turnOn();
+		    				aButtonAnimator.SetTrigger("FadeOut");
 		    			} else {
-		    				// fadeOutTimer.turnOn();
-
-		    				if(currentQuote.toActivate != null) {
-		    					currentQuote.toActivate.SetActive(true);
-		    					currentQuote.gameObject.SetActive(false);
-		    					currentQuote.toDeactivate.SetActive(false);
+		    				bool notDialogOptions = true;
+		    				if(dialogEvent != null) {
+		    					notDialogOptions = false;
+		    					dialogEvent.OnAccept();
 		    				}
-		    				
-		    				quoteAnimator.SetTrigger("OffscreenOut");
-		    				CancelFontWriting();
+		    				EndQuoteSession(notDialogOptions);
 		    			}
 		    		}
+	    		}
+
+	    		if(Input.GetButtonDown("Fire1")) {
+	    			if(stringAt == (stringArray.Length - 1) && dialogEvent != null) {
+	    				dialogEvent.OnDecline();
+	    				EndQuoteSession(false);
+	    			} 
 	    		}
 	    		
 	    	}

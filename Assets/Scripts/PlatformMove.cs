@@ -130,7 +130,7 @@ namespace EasyPlatform {
             switch(type) {
                 case PlatformType.PLATFORM_ROTATE: {
                     float addend = time*360;
-                    rb.MoveRotation(transform.rotation.z + addend);
+                    rb.MoveRotation(transform.rotation.z + addend + startRadians);
                 } break;
                 case PlatformType.PLATFORM_MOVE_LINEAR: {
                     float lerpT = 0.5f*((float)Mathf.Sin(2*Mathf.PI*time) + 1.0f);

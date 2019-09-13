@@ -30,6 +30,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     public Image redHurtImage;
 
     private float timeInAir;
+
+    public AudioSource rocketSound;
     
     public AudioSource hurtBreathing;
 
@@ -42,6 +44,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     [HideInInspector] public Timer fireTimer;
     
     public GameObject dustEffect;
+    public ParticleSystem rocketPS;
     
     public SpellAi spell;
     
@@ -888,22 +891,31 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
         float thisJmpAccel = jumpAccel;
         
+
         //NOTE(ollie): This is the jump timer so you get a nice jump. We propotion out the jump force over the jump
         if(jumpTimer.isOn()) {
             bool fin = jumpTimer.updateTimer(Time.fixedDeltaTime);
-            if(Input.GetButton("Jump")) {
-                
-            }
             
-            
-            
+           
             if (!fin && jumpTimer.getCanoncial() < waitPercentToJump) { //has to be before the jump timer is finished 
                 //wait till over a percentage
                 
             } else {
-                if(!Input.GetButton("Jump") && jumpTimer.tAt > timeToAffectJump) {
+
+                if(jumpTimer.getCanoncial() > 0.2f) { //NOTE(ol): Have 0.2 seconds to do a double jump
+                    if(Input.GetButtonDown("Jump") && !animator.GetBool("DoubleJump") && !animator.GetCurrentAnimatorStateInfo(0).IsName("double_jump") && animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_jump") ) {
+                        ForceToAddStruct force = new ForceToAddStruct(0.2f, jumpAccel*Vector2.up);
+                        rocketPS.Play();
+                        forceUpdator.AddForce(force);
+                        animator.SetTrigger("DoubleJump");
+                        rocketSound.Play();
+                    }
+                } else if(!Input.GetButton("Jump") && jumpTimer.tAt > timeToAffectJump) {
                     jumpTimer.turnOff();
-                } else {
+                }
+                 
+
+                if(jumpTimer.isOn()) {
                     movementForce.y = 1;
 
                     float percent = jumpTimer.tAt / maxJumpTime;
@@ -938,6 +950,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         }
         
         movementForce.y *= thisJmpAccel;
-        rigidBody.AddForce(movementForce + f);
+        rigidBody.AddForce(0.02f*(movementForce + f), ForceMode2D.Impulse);
     }
 }

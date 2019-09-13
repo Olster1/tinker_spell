@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Timer_namespace;
 
+
+public enum BodyToFollow {
+    PLAYER_BODY,
+    SPELL_BODY,
+}
 public class CameraFollowPlayer : MonoBehaviour
 {
     public GameObject playerToFollow;
@@ -20,6 +25,9 @@ public class CameraFollowPlayer : MonoBehaviour
     [HideInInspector] public Timer moveDownTimer;
     [HideInInspector] public Vector3 startMovePos;
     public Camera cam;
+
+    public SpringJoint2D[] bodiesToFollow = new SpringJoint2D[2];
+    private int bodyIndexFollowing;
     // Start is called before the first frame update
 
     public Animator animator;
@@ -37,6 +45,9 @@ public class CameraFollowPlayer : MonoBehaviour
 
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
 
+       StopFollowingEntity();
+
+       bodiesToFollow[bodyIndexFollowing].enabled = true;
         
         //this is to fix the sorting when using the perspective camera mode
         cam.transparencySortMode = TransparencySortMode.Orthographic;
@@ -48,9 +59,21 @@ public class CameraFollowPlayer : MonoBehaviour
 
     }
 
-    public void changeEntityToFollow(GameObject obj) {
-        playerToFollow = obj;
-        playerTransform = playerToFollow.GetComponent<Transform>();
+    public void FollowEntity() {
+        bodiesToFollow[bodyIndexFollowing].enabled = true;
+    }
+        
+    public void StopFollowingEntity() {
+       for(int i = 0; i < bodiesToFollow.Length; ++i) {
+            bodiesToFollow[i].enabled = false;
+        }
+    }
+
+    public void changeEntityToFollow(BodyToFollow toFollow) {
+        // playerToFollow = obj;
+        // playerTransform = playerToFollow.GetComponent<Transform>();
+        bodyIndexFollowing = (int)toFollow;
+        bodiesToFollow[bodyIndexFollowing].enabled = true;
     }
 
     // Update is called once per frame
@@ -83,21 +106,21 @@ public class CameraFollowPlayer : MonoBehaviour
     {
         if (followPlayer && !(moveUpTimer.isOn() || moveDownTimer.isOn()))
         {
-            Vector2 forceAccel = new Vector2();
-            Vector3 newPos = new Vector3(playerTransform.position.x, playerTransform.position.y + yOffsetFromPlayer, cameraTransform.position.z);
-            Vector3 difference = newPos - cameraTransform.position;
-            if (Mathf.Abs(difference.x) > xDiff)
-            {
-                forceAccel.x = Mathf.Sign(difference.x)*xForce;
-                // Debug.Log("outside of x region");
-            }
-            if (Mathf.Abs(difference.y) > yDiff)
-            {
-                forceAccel.y = Mathf.Sign(difference.y) * yForce;
-                // Debug.Log("outside of y region");
-            }
-
-            rigidBody.AddForce(forceAccel);
+            // Vector2 forceAccel = new Vector2();
+            // Vector3 newPos = new Vector3(playerTransform.position.x, playerTransform.position.y + yOffsetFromPlayer, cameraTransform.position.z);
+            // Vector3 difference = newPos - cameraTransform.position;
+            // if (Mathf.Abs(difference.x) > xDiff)
+            // {
+            //     forceAccel.x = Mathf.Sign(difference.x)*xForce;
+            //     // Debug.Log("outside of x region");
+            // }
+            // if (Mathf.Abs(difference.y) > yDiff)
+            // {
+            //     forceAccel.y = Mathf.Sign(difference.y) * yForce;
+            //     // Debug.Log("outside of y region");
+            // }
+            // float factor = Mathf.SmoothStep(0.1f, 2.0f, Mathf.Min(1.0f, difference.magnitude/10.0f));
+            // rigidBody.AddForce(factor*forceAccel, ForceMode2D.Impulse);
 
             // Vector2 newCamPos = Time.fixedDeltaTime * Time.fixedDeltaTime * forceAccel + Time.fixedDeltaTime * cameraVelocity + new Vector2(cameraTransform.position.x, cameraTransform.position.y);
             // cameraVelocity += Time.fixedDeltaTime * forceAccel;

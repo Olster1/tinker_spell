@@ -31,6 +31,8 @@ public class ActivateQuote : MonoBehaviour
     public GameObject toActivate;
     public GameObject toDeactivate;
 
+    public DialogQuestionEvent eventToCall;
+
     public AudioClip[] clips;
 
     public enum QuoteImage {
@@ -137,6 +139,7 @@ public class ActivateQuote : MonoBehaviour
             firstPlay = true;
             quoteAnimator.SetTrigger("OffscreenIn");   
             writer.stringArray = dialog;
+            writer.dialogEvent = eventToCall;
             writer.clips = clips;
             
             writer.currentQuote = this;

@@ -16,6 +16,7 @@ TagManager:
   - WorldGeometrySlope
   - WorldGeometryNoShadow
   - WorldGeometryPlaform
+  - Spell
   layers:
   - Default
   - TransparentFX
@@ -38,7 +39,7 @@ TagManager:
   - CollisionNotForMagic
   - DestructibleEnviron
   - DriftRepeat
-  - 
+  - IgnoreEverything
   - 
   - 
   - 

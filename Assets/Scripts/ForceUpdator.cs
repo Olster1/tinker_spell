@@ -25,6 +25,12 @@ namespace EasyForceUpdator {
 	    	forcesToAdd = new List<ForceToAddStruct>();
 	    }
 
+	    public void ClearForces() {
+	    	for(int i = 0; i < forcesToAdd.Count;) {
+    	        forcesToAdd.RemoveAt(i);
+	    	}
+	    }
+
 	    public Vector2 update() {
 	    	Vector2 forceToAdd = new Vector2(0, 0);
 	    	for(int i = 0; i < forcesToAdd.Count;) {

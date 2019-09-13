@@ -9,12 +9,12 @@ public class GoToSkillTree : MonoBehaviour
 	public CameraFollowPlayer cam;
 	public HoverMovement hover;
 
-    private SkillSectiom skillSection;
+    private ExperienceManager skillSection;
 
     // Start is called before the first frame update
     void Start()
     {
-        skillSection = Camera.main.GetComponent<SkillSectiom>();
+        skillSection = Camera.main.GetComponent<ExperienceManager>();
     }
 
     // Update is called once per frame
@@ -42,7 +42,9 @@ public class GoToSkillTree : MonoBehaviour
     		// PlayerMovement playerMovement = gm.GetComponent<PlayerMovement>();
       //       playerMovement.canControlPlayer = false;
             // hover.fadeOut();
-    	   skillSection.EnterSkillSection();
+    	   // skillSection.EnterSkillSection();
+            skillSection.GoToTinkerLevelUp();
+
         }
 
     }

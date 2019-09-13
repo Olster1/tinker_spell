@@ -15,10 +15,9 @@ public enum LevelStateId {
     LEVEL_SKILL_TILES,
     LEVEL_EARTH_CAVE,
     LEVEL_EARTH_LEDGE_RETURN,
-
     LEVEL_EARTH_LEDGE_HOWLER_TREE,
-
-
+    HELICOPTER_LEVEL,
+    LEVEL_TINKER_LEVEL_UP,
 
     ///////EVERTHING MUST BE ABOVE THIS!!!//////
     LEVEL_COUNT
@@ -31,23 +30,27 @@ public class SceneStateManager : MonoBehaviour
     public class LevelObject {
         
     }
-
+    private Animator animator;
     public GameObject[] levelObjects;
     public GameObject[] spawnPointObjs;
     public bool[] turnSkyOff;
     public Vector2[] offsetCams;
     public bool[] yStuck;
     public float[] cameraZ;
+    public bool[] spellLevel;
     public LevelStateId stateToLoad;
     public GameObject player;
     private PlayerMovement playerMovement;
     public GameObject spell;
+    private SpellAi spellAi;
     public GameObject cam;
     public ParticleSystem tailPs;
 
     public GameObject skyParent;
 
     private Rigidbody2D camRb;
+
+    private CameraFollowPlayer camBehaviour;
 
     public EarthMoveValidator earthValidator;
 
@@ -61,16 +64,22 @@ public class SceneStateManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {	
+        animator = gameObject.GetComponent<Animator>();
         playerMovement = player.GetComponent<PlayerMovement>();
         Assert.IsNotNull(playerMovement);
+
+        spellAi = spell.GetComponent<SpellAi>();
 
         int len = levelObjects.Length;
         Assert.IsTrue(spawnPointObjs.Length == len);
         Assert.IsTrue(offsetCams.Length == len);
         Assert.IsTrue(yStuck.Length == len);
         Assert.IsTrue(turnSkyOff.Length == len);
+        Assert.IsTrue(spellLevel.Length == len);
 
         camRb = cam.GetComponent<Rigidbody2D>();
+
+        camBehaviour = cam.GetComponent<CameraFollowPlayer>();
         
         useSpawnPoint = true;
         ChangeScene();
@@ -119,7 +128,7 @@ public class SceneStateManager : MonoBehaviour
 
     public void ChangeSceneWithId(LevelStateId stateId) {
         stateToLoad = stateId;
-        ChangeScene();
+        animator.SetTrigger("FadeIn");
     }
 
     void ChangeScene() {
@@ -146,11 +155,32 @@ public class SceneStateManager : MonoBehaviour
             // Debug.Log("player not active");
         } else {
             player.GetComponent<PlayerMovement>().canControlPlayer = true;
+
             spell.SetActive(true);
             player.SetActive(true);
             tailPs.Clear();
 
             // tailPs.Play();
+        }
+
+        if(spawnPoint != null) { 
+            if(spellLevel[(int)stateToLoad]) {
+                  player.GetComponent<PlayerMovement>().canControlPlayer = false;
+                  player.SetActive(false);
+                  spellAi.controllingSpell = true;
+                  spellAi.isSpellLevel = true;
+                  spellAi.rigidBody.simulated = true;
+                  spellAi.rbCol.enabled = true;
+                  camBehaviour.changeEntityToFollow(BodyToFollow.SPELL_BODY);
+                  spellAi.ClearForcesForSpell();
+            } else {
+                spellAi.ClearForcesForSpell();
+                camBehaviour.changeEntityToFollow(BodyToFollow.PLAYER_BODY);
+                spellAi.controllingSpell = false;
+                spellAi.isSpellLevel = false;
+                spellAi.rigidBody.simulated = false;
+                spellAi.rbCol.enabled = false;
+            }
         }
 
         // //clear grounded count to get rid of any unresolved counts
@@ -163,6 +193,8 @@ public class SceneStateManager : MonoBehaviour
             camRb.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
         }
 
+
+        camBehaviour.StopFollowingEntity();
 
         if(turnSkyOff[(int)stateToLoad]) {
             skyParent.SetActive(false);

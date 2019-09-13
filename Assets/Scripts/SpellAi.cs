@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using ConfigControls_namespace;
 using Timer_namespace;
+using EasyForceUpdator;
+using UnityEngine.Assertions;
 
-public class SpellAi : MonoBehaviour
+public class SpellAi : MonoBehaviour, IHitBox
 {
 	public GameObject playerObj;
 	private Transform playerTransform;
@@ -28,15 +30,30 @@ public class SpellAi : MonoBehaviour
     private Vector3 startPos;
     private Vector3 endPos;
     [HideInInspector] public bool flipForDive;
-    [HideInInspector] public bool controllingSpell;
+    public bool controllingSpell;
     private Vector2 movementForce;
     public float moveAccel;
     public CameraFollowPlayer cam;
+    public bool isSpellLevel;
+
+    public float reboundForce;
+
+    public GameObject damageNumbersObject;
+
+    private Timer flashTimer;
+
+    private ForceUpdator forceUpdator;
 
     public Rigidbody2D rigidBody;
     // Start is called before the first frame update
     void Start()
     {
+        flashTimer = new Timer(1.0f);
+        flashTimer.turnOff();
+
+        forceUpdator = new ForceUpdator();
+
+
         playerTransform = playerObj.GetComponent<Transform>();
         thisTransform =  gameObject.GetComponent<Transform>();
         thisAnimator =  gameObject.GetComponent<Animator>();
@@ -49,12 +66,34 @@ public class SpellAi : MonoBehaviour
         centerTimer = new Timer(0.3f);
         centerTimer.turnOff();
         beginOffset = offset;
-        controllingSpell = false;
+        // controllingSpell = false;
         movementForce = new Vector2(0, 0);
     }
 
     public void InitEarthMove() {
         playerMovement.CreateEarthMove();
+    }
+
+    public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
+        if(controllingSpell &&  !flashTimer.isOn()) {
+
+            //NOTE(ol): Tell player they got hit
+            flashTimer.turnOn();
+            //
+
+            //NOTE(ol): Create the damage number to let player know
+            GameObject damageNumObj = Instantiate(damageNumbersObject,  transform.position, Quaternion.identity);
+            DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
+            damageNum.initializeObject(damage, type);
+            //
+
+            //NOTE(ol): Apply rebound force
+            Vector2 dir = (Vector2)transform.position - position;
+            dir.Normalize();
+            ForceToAddStruct force = new ForceToAddStruct(0.1f, reboundForce*dir);
+            forceUpdator.AddForce(force);
+            ////
+        }
     }
 
     public void flipSprite() {
@@ -125,56 +164,77 @@ public class SpellAi : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(flashTimer.isOn()) {
+            bool flashDone = flashTimer.updateTimer(Time.deltaTime);
+            
+            float alpha = (float)0.5f*Mathf.Cos(10*Mathf.PI*flashTimer.getCanoncial()) + 0.5f;
+            //Debug.Log(alpha);
+            Assert.IsTrue(alpha >= 0.0f && alpha <= 1.0f);
+            Color tempColor = thisSpriteRenderer.color;
+            tempColor.a = alpha;
+            thisSpriteRenderer.color = tempColor;
+            if(flashDone) {
+                flashTimer.turnOff();
+                
+            }
+        }
+
         thisAnimator.SetFloat("run_speed", velocity.magnitude);
 
-        if(Input.GetButtonDown("Fire3")) {
-            //This may need some work!!
-            playerMovement.canControlPlayer = !playerMovement.canControlPlayer;
-            controllingSpell = !playerMovement.canControlPlayer;
+        if(!isSpellLevel) {
+            if(Input.GetButtonDown("Fire3")) {
+                //This may need some work!!
+                playerMovement.canControlPlayer = !playerMovement.canControlPlayer;
+                controllingSpell = !playerMovement.canControlPlayer;
 
-            if(controllingSpell) {
-                cam.changeEntityToFollow(gameObject);
-                rigidBody.simulated = true;
-                rbCol.enabled = true;
+                if(controllingSpell) {
+                    cam.changeEntityToFollow(BodyToFollow.SPELL_BODY);
+                    rigidBody.simulated = true;
+                    rbCol.enabled = true;
+                } else {
+                    cam.changeEntityToFollow(BodyToFollow.PLAYER_BODY);
+                    rigidBody.simulated = false;
+                    rbCol.enabled = false;
+                    ClearForcesForSpell();
+                }
+            }
+
+
+            bool isInFireAnimation = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("spell_fire_twirl");
+            if (Input.GetButton("Fire1") && Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN) && !isInFireAnimation && playerMovement.canControlPlayer)
+            {
+                thisAnimator.SetTrigger("exit_run");
+                thisAnimator.SetTrigger("fire_twirl");
+                offset.x = 0;
+                enterPlayerTransform();
+            }
+
+            if(isInFireAnimation) {
+                float normalTime = thisAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            	float tAt = (float)(2*Mathf.PI*normalTime + (0.25*Mathf.PI));
+                if(normalTime > 0.35f && normalTime < 0.8f) {
+                    GoInFrontOfPlayer();
+                } else if(normalTime >= 0.8f) {
+                    GoBehindOfPlayer();
+                }
+            	Vector2 offsetVal = new Vector2(Mathf.Cos(tAt), -Mathf.Sin(tAt));
+            	offsetVal *= circleSize;
+                // transform.localPosition = offsetVal;
+            	// thisCollider.offset = startOffset + offsetVal;
+
             } else {
-                cam.changeEntityToFollow(playerObj);
-                rigidBody.simulated = false;
-                rbCol.enabled = false;
+                
+            	// thisCollider.offset = startOffset;
             }
-        }
-
-
-        bool isInFireAnimation = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("spell_fire_twirl");
-        if (Input.GetButton("Fire1") && Input.GetButton(ConfigControls.SPELLS_TRIGGER_BTN) && !isInFireAnimation && playerMovement.canControlPlayer)
-        {
-            thisAnimator.SetTrigger("exit_run");
-            thisAnimator.SetTrigger("fire_twirl");
-            offset.x = 0;
-            enterPlayerTransform();
-        }
-
-        if(isInFireAnimation) {
-            float normalTime = thisAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime;
-        	float tAt = (float)(2*Mathf.PI*normalTime + (0.25*Mathf.PI));
-            if(normalTime > 0.35f && normalTime < 0.8f) {
-                GoInFrontOfPlayer();
-            } else if(normalTime >= 0.8f) {
-                GoBehindOfPlayer();
-            }
-        	Vector2 offsetVal = new Vector2(Mathf.Cos(tAt), -Mathf.Sin(tAt));
-        	offsetVal *= circleSize;
-            // transform.localPosition = offsetVal;
-        	// thisCollider.offset = startOffset + offsetVal;
-
-        } else {
-            
-        	// thisCollider.offset = startOffset;
         }
 
         bool isWalking = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("spell_run");;
         if(isWalking) {
             SetFlipForWalk();
-        } 
+        }
+
+        // Debug.Log("is spell level: " + isSpellLevel); 
+        // Debug.Log("controlling spell: " + controllingSpell); 
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -194,6 +254,10 @@ public class SpellAi : MonoBehaviour
         thisAnimator.ResetTrigger("exit_run");
     }
 
+    public void ClearForcesForSpell() {
+        forceUpdator.ClearForces();
+    }
+
     void FixedUpdate()
     {
         if(!(thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("spell_dive") || thisAnimator.GetBool("earth_dive"))) {
@@ -209,11 +273,15 @@ public class SpellAi : MonoBehaviour
                 thisTransform.position = new Vector3(thisTransform.position.x + dt*velocity.x, thisTransform.position.y + dt*velocity.y, thisTransform.position.z);
             // }
             } else {
+                
                 float xMove = Input.GetAxis("Horizontal");
                 float yMove = Input.GetAxis("Vertical");
+                // Debug.Log("x value" + xMove);
                 movementForce.x = xMove * moveAccel;
                 movementForce.y = yMove * moveAccel;
-                rigidBody.AddForce(movementForce);
+                Vector2 f = forceUpdator.update();
+
+                rigidBody.AddForce(movementForce + f);
                 velocity = rigidBody.velocity;
             }
         }
