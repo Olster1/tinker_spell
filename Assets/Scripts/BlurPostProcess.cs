@@ -104,7 +104,7 @@ public class BlurPostProcess : MonoBehaviour
 
 	    	if(renderToImage) {
 	    		SaveToTexture(src);
-	    		blurInterface.Activate();
+	    		blurInterface.Activate(true);
 
 	    	}
 

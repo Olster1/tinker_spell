@@ -24,7 +24,6 @@ public class ActivateQuote : MonoBehaviour
     public bool hasJournalItem;
     public string journalItemName;
     public string journalItemSynopsis;
-    public int journalItemId;
 
     public GameObject[] imageObjs;
 
@@ -113,8 +112,8 @@ public class ActivateQuote : MonoBehaviour
     }
 
     public void EndQuote() {
-        if(hasJournalItem && !journal.hasJournalItem(journalItemId)) {
-            journal.AddJournalItem(journalItemName, journalItemSynopsis);
+        if(hasJournalItem && !journal.hasJournalItem(gameObject.GetInstanceID())) {
+            journal.AddJournalItem(journalItemName, journalItemSynopsis, gameObject.GetInstanceID());
 
         }
     } 

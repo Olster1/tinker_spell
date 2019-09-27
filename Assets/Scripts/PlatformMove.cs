@@ -166,7 +166,7 @@ namespace EasyPlatform {
 
                         float lerpT = (float)Mathf.Sin(Mathf.PI*springTimer.getCanoncial());
                         Vector3 newP = Vector3.Lerp(tempStartP, tempStartP - new Vector3(0, bounceScale, 0), lerpT);
-                        Debug.Log("updateing spring");
+                        // Debug.Log("updateing spring");
                         transform.position = newP;
                         if(b) {
                             springTimer.turnOff();

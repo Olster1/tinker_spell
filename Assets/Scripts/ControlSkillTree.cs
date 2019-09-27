@@ -37,11 +37,9 @@ public class ControlSkillTree : MonoBehaviour
 	        }
         }
         if(Input.GetButtonDown("Fire1")) {
-            cam.moveDownTimer.turnOn();
-            
             playerMovement.canControlPlayer = true;
             sceneManager.useSpawnPoint = false;
-            sceneManager.stateToLoad = lastLevelToLoad;
+            sceneManager.SetStateToLoad(lastLevelToLoad);
             sceneAnimator.SetTrigger("FadeIn");
         }
         

@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 3290683336
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: c1ef816c2753928eb4e2f08a85234cc4
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ea5a42e0fd8ea905efa7aa926a3b8944
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/new_sprites/portal_level/portal painting foreground.png
+- Assets/new_sprites/portal_level/portal painting foreground complete.png
+Dependencies: []

@@ -39,6 +39,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     
     private Transform beginParentTransform;
 
+    private ExperienceManager xpManager;
+
     [HideInInspector] public Timer earthTimer;
     [HideInInspector] public Timer waterTimer;
     [HideInInspector] public Timer fireTimer;
@@ -180,7 +182,11 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         validPosTimer = new Timer(0.1f);
         
         Time.timeScale = 1.0f;
+
+        xpManager = Camera.main.GetComponent<ExperienceManager>();
         
+        GameManager.playerHealth = xpManager.maxHealth;
+        GameManager.updateHealth = true;
     }
     
     public void CreateUpwardAttackObject() {
@@ -192,7 +198,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         Vector2 startPos = (Vector2)boxCollider.bounds.center + new Vector2(0, 0.5f*boxCollider.size.y + 0.1f);        
         Vector2 localStartPos = (Vector2)transform.InverseTransformPoint(startPos);
         AttackObjectCreator.initAttackObject(attackObj, localStartPos, localStartPos, 
-                                             EnemyType.ENEMY_GOOD, 0.5f, 22, 36);
+                                             EnemyType.ENEMY_GOOD, 0.5f, xpManager.strength, xpManager.strength + xpManager.strengthDiff);
         
     }
     
@@ -291,7 +297,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         Vector2 startPos = (Vector2)boxCollider.bounds.center + new Vector2(signOfMovement*(0.5f*boxCollider.size.y + 0.1f), 0);        
         Vector2 localStartPos = (Vector2)transform.InverseTransformPoint(startPos);
         AttackObjectCreator.initAttackObject(attackObj, localStartPos, localStartPos, 
-                                             EnemyType.ENEMY_GOOD, 0.5f, 22, 36);
+                                             EnemyType.ENEMY_GOOD, 0.5f, xpManager.strength, xpManager.strength + xpManager.strengthDiff);
         
     }
 
@@ -303,7 +309,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         Vector2 startPos = (Vector2)boxCollider.bounds.center + new Vector2(signOfMovement*(0.5f*boxCollider.size.y + 0.1f), 0);        
         Vector2 localStartPos = (Vector2)transform.InverseTransformPoint(startPos);
         AttackObjectCreator.initAttackObject(attackObj, localStartPos, localStartPos, 
-                                             EnemyType.ENEMY_GOOD, 0.5f, 15, 22);
+                                             EnemyType.ENEMY_GOOD, 0.5f, xpManager.strength, xpManager.strength + 5);
         
     }
     
@@ -334,7 +340,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         Vector2 startPos = (Vector2)boxCollider.bounds.center + new Vector2(signOfMovement*0.5f*boxCollider.size.x + signOfMovement*0.1f, 0.5f*boxCollider.size.y + 0.1f);        
         Vector2 localStartPos = (Vector2)transform.InverseTransformPoint(startPos);
         AttackObjectCreator.initAttackObject(attackObj, localStartPos, localStartPos, 
-                                             EnemyType.ENEMY_GOOD, 1.0f, 22, 36);
+                                             EnemyType.ENEMY_GOOD, 1.0f, xpManager.strength, xpManager.strength + 5);
         
         originalBoxSize = boxCollider.size;
         
@@ -380,6 +386,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             // bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
             if (enemyType == EnemyType.ENEMY_EVIL) 
             {
+                //NOTE: This is our shield effect
+                Assert.IsTrue(xpManager.defence <= 100.0f);
+                damage = (int)(damage - (xpManager.defence/100.0f)*damage);
+                //
                 flashTimer.turnOn();
                 GameObject damageNumObj = Instantiate(damageNumbersObject,  transform.position, Quaternion.identity);
                 DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
@@ -387,9 +397,13 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 
                 Vector2 dir = (Vector2)transform.position - position;
                 dir.Normalize();
+
+                float forceToApply = reboundForce;
+                if(!isGrounded) {
+                    forceToApply = 0.8f*reboundForce;
+                }
                 
-                
-                ForceToAddStruct force = new ForceToAddStruct(0.1f, reboundForce*dir);
+                ForceToAddStruct force = new ForceToAddStruct(0.1f, forceToApply*dir);
                 forceUpdator.AddForce(force);
                 // thisAnimator.SetTrigger("WasHit");
                 
@@ -400,17 +414,17 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 ps.Play();
                 
                 
-                if(GameManager.playerHealth < 50) {
-                    if(!redHurtImage.enabled) {
-                        redHurtImage.enabled = true;
-                    }
+                if(GameManager.playerHealth < (0.5f*xpManager.maxHealth)) { 
+                    // if(!redHurtImage.enabled) {
+                    //     redHurtImage.enabled = true;
+                    // }
                     if(!hurtBreathing.isPlaying) {
                         hurtBreathing.Play();
                     }
                     hurtBreathing.volume = Mathf.Lerp(1.0f, 0.7f, GameManager.playerHealth/50.0f);
                     
-                    redHurtImage.material.SetFloat("_Amount", Mathf.Lerp(0.1f, 0.0f, GameManager.playerHealth/100.0f));
-                    hurtPulseTimer.turnOn();
+                    // redHurtImage.material.SetFloat("_Amount", Mathf.Lerp(0.1f, 0.0f, GameManager.playerHealth/100.0f));
+                    // hurtPulseTimer.turnOn();
                 }
                 //Instantiate(hitParticleSystem);
                 
@@ -418,7 +432,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 {
                     hurtBreathing.Stop();
                     Time.timeScale = 0.0f;
-                    GameManager.playerHealth = 100;
+                    GameManager.playerHealth = xpManager.maxHealth;
                     redHurtImage.enabled = false;
                     GameManager.updateHealth = true;
                 }

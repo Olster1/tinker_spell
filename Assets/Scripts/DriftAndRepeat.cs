@@ -22,7 +22,7 @@ public class DriftAndRepeat : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D other) {
     	GameObject gm = other.gameObject;
-    	if(gm == parent) {
+    	if(gm == parent.gameObject) {
     		transform.localPosition = parent.lastObj.transform.localPosition + parent.offset;
     		parent.lastObj = gameObject;
     	}

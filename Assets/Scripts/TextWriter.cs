@@ -230,7 +230,7 @@ public class TextWriter : MonoBehaviour
 	    				}
 	    			}
 
-	    			if(notDialogOptions) {
+	    			if(notDialogOptions && !currentQuote.unfreezePlayer) {
 	    				aButtonAnimator.SetTrigger("FadeIn");
 	    			}
 	    		}
@@ -240,7 +240,9 @@ public class TextWriter : MonoBehaviour
 			    		if(stringAt < (stringArray.Length - 1)) {
 			    			//Fade out Timer moves the quote to the next sentence. 
 		    				fadeOutTimer.turnOn();
-		    				aButtonAnimator.SetTrigger("FadeOut");
+		    				if(!currentQuote.unfreezePlayer) {
+		    					aButtonAnimator.SetTrigger("FadeOut");
+		    				}
 		    			} else {
 		    				bool notDialogOptions = true;
 		    				if(dialogEvent != null) {

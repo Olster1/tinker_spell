@@ -20,7 +20,15 @@ public class RockGullumAI : MonoBehaviour, IHitBox
 
     public ItemEmitter itemEmitter;
 
+    private ExperienceManager xpManager;
+
     private DirectionElm flipForTurnStack;
+
+    //NOTE: These are so the ai doesn't keep falling into the same state over again
+    private float[] aiTimeStamps = new float[(int)Ai_SubState.AI_SUB_COUNT];
+    private float patrolTimeStamp;
+    private float minTimeBetweenStates = 2.0f;
+    ///
     
     [HideInInspector] public Timer walkTimer;
     private SpriteRenderer spRenderer;
@@ -83,9 +91,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
 
     private Animator camAnimator;
 
-    //this is to avoid continous flipping with the walk timer
-    private Ai_SubState lstFrameFlip;
-
     // public GameObject healthBar;
     // private GameObject healthInnerBar;
     // private SpriteRenderer healthBarSpriteRenderer;
@@ -122,13 +127,37 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     public Ai_SubState subAiState;
     
     private void getRandomAiSubState() {
-        subAiState = (Ai_SubState)((int)Random.Range(0, (int)(Ai_SubState.AI_SUB_COUNT)));
-        // Debug.Log("getting random state" + lstFrameFlip);
-        if(lstFrameFlip != Ai_SubState.AI_SUB_IDLE) {
-            while(subAiState == lstFrameFlip) { //to avoid continously doing turnarounds
-                subAiState = (Ai_SubState)((int)Random.Range(0, (int)(Ai_SubState.AI_SUB_COUNT)));
+        int bufferSize = 0;
+        Ai_SubState[] tempBuffer = new Ai_SubState[(int)Ai_SubState.AI_SUB_COUNT];
+
+        //NOTE: Only use this if we don't put anything in the buffer
+        float biggestInterval = 0;
+        int indexForBiggestInterval = (int)Ai_SubState.AI_SUB_IDLE;
+        for(int i = 0; i < tempBuffer.Length; ++i) {
+            float timeStamp = aiTimeStamps[i];
+            if((Time.time - timeStamp) > minTimeBetweenStates) {
+                //NOTE(ol): Gather the valid states
+                // Debug.Log((Ai_SubState)i);
+               tempBuffer[bufferSize++] = (Ai_SubState)i;  
+            } else {
+                //NOTE: This is to find the biggest interval i.e. the state last used the buffer
+                float interval = Time.time - timeStamp;
+                if(interval > biggestInterval) {
+                    biggestInterval = interval;
+                    indexForBiggestInterval = i;
+                }
             }
-        } 
+        }
+
+        if(bufferSize <= 0) { //NOTE(ol): All states are invalid. Default to idle state. 
+            Ai_SubState newState = (Ai_SubState)indexForBiggestInterval;
+            SetSubAiState(newState, newState); //could use this: 
+        } else {
+            int indexIntoBuffer = Random.Range(0, bufferSize);
+            SetSubAiState(tempBuffer[indexIntoBuffer], tempBuffer[indexIntoBuffer]);
+        }
+
+        
     }
     
     public void FireRock() {
@@ -158,7 +187,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         DebugEntityManager entManager = Camera.main.GetComponent<DebugEntityManager>();
         itemEmitter = Camera.main.GetComponent<ItemEmitter>();
         camAnimator = Camera.main.GetComponent<Animator>();
-        
+
+        xpManager = Camera.main.GetComponent<ExperienceManager>();
         beastJournal = Camera.main.GetComponent<BeastryJournal>();
 
         entManager.AddEntity(gameObject);
@@ -170,13 +200,21 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         thisRigidbody = gameObject.GetComponent<Rigidbody2D>();
         thisAnimator = gameObject.GetComponent<Animator>();
         spRenderer= gameObject.GetComponent<SpriteRenderer>();
+
+        //NOTE: Just making sure this are set to zero
+        for(int iTime = 0; iTime < aiTimeStamps.Length; ++iTime) {
+            aiTimeStamps[iTime] = 0;
+        }
+        patrolTimeStamp = 0;
+
+        /////
         
         healthBar = transform.Find("Gollum_health-bar").gameObject.GetComponent<HealthBar>();
 
         walkTimer = new Timer(2.0f);
         aiState = Ai_State.AI_PATROL;
         //This is since the gollums start of facing left so 
-        subAiState = Ai_SubState.AI_SUB_LEFT;
+        SetSubAiState(Ai_SubState.AI_SUB_LEFT, Ai_SubState.AI_SUB_LEFT);
         ForceToAdd = new Vector2();
         fadeInTimer = new Timer(0.2f);
         fadeInTimer.turnOff();
@@ -300,7 +338,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     // }
     
     private void releaseGoodies() {
-        itemEmitter.emitAmber(AmberType.AMBER_AMBER, 4, transform.position);
+        itemEmitter.emitAmber(AmberType.AMBER_AMBER, Random.Range(4, 4 + (int)(xpManager.luck*10)), transform.position);
         itemEmitter.emitAmber(AmberType.AMBER_HEALTH, 10, transform.position);
         itemEmitter.emitAmber(AmberType.AMBER_MANA, 6, transform.position);
         if(isSentinel && hitCount <= 1) 
@@ -324,7 +362,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         respawnTimer.period = (float)Random.Range(3.0f, 10.0f);
         aiState = Ai_State.AI_PATROL;
         walkTimer.turnOn();
-        subAiState = Ai_SubState.AI_SUB_IDLE;
+        SetSubAiState(Ai_SubState.AI_SUB_IDLE, Ai_SubState.AI_SUB_IDLE);
         respawnTimer.turnOn();
         redHurtTimer.turnOff();
 
@@ -352,6 +390,9 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
         if (!isHit && enemyType == EnemyType.ENEMY_GOOD && !dead && !fadeInTimer.isOn()) 
         {
+            float xpPointsToAdd = 5;
+            
+
             GameObject damageNumObj = Instantiate(damageNumbersObject,   transform.position, Quaternion.identity);
             DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
             damageNum.initializeObject(damage, type);
@@ -401,7 +442,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             
             if (this.health < 0)
             {
-               
+                xpPointsToAdd = 10; //More xp points for when you destroy an enemy
                 hitCount++;
                 dead = true;
                 thisAnimator.SetTrigger("isDead");
@@ -415,6 +456,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                 }
                 
             }
+            xpManager.AddXpPoints(xpPointsToAdd + (int)(xpManager.luck*xpPointsToAdd));
         }
     }
 
@@ -514,8 +556,14 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         aiState = Ai_State.AI_PATROL;
         walkTimer.turnOn();
         timerForPatrol.turnOn();
-        subAiState = (diffVec.x > 0) ? Ai_SubState.AI_SUB_LEFT : Ai_SubState.AI_SUB_RIGHT;
-        DoTurnAround(subAiState != Ai_SubState.AI_SUB_LEFT);
+        patrolTimeStamp = Time.time;
+        Ai_SubState newState = (diffVec.x > 0) ? Ai_SubState.AI_SUB_LEFT : Ai_SubState.AI_SUB_RIGHT;
+        SetSubAiState(newState, (diffVec.x < 0) ? Ai_SubState.AI_SUB_LEFT : Ai_SubState.AI_SUB_RIGHT);
+        if(ShouldDoTurnAround(subAiState)) 
+        {
+            DoTurnAround(subAiState != Ai_SubState.AI_SUB_LEFT);
+        }
+        
         finishedAttack = true;
         
         
@@ -689,6 +737,26 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         
     }
 
+    //These are for the turn arounds since we actually want to do the opposite, 
+    //i.e. if we flipped to go right, we actually don't want to head left again, 
+    //since we hit a wall in that direction approx 1 second ago
+    private void SetSubAiState(Ai_SubState st, Ai_SubState timeStampState) {
+       subAiState = st;
+       //NOTE(ol): Set the time stamp
+       Assert.IsTrue((int)timeStampState < (int)Ai_SubState.AI_SUB_COUNT);
+       aiTimeStamps[(int)timeStampState] = Time.time;
+       //
+    }
+
+    private bool IsAllowedToFind() {
+        bool result = (Time.time - patrolTimeStamp) > minTimeBetweenStates;
+        return result;
+    }
+    private void SetFindState() {
+        patrolTimeStamp = Time.time;
+        aiState = Ai_State.AI_FIND;
+    }
+
     void DoTurnAround(bool lookLeft) {
         // Debug.Log("turn_around");
         // if(lookLeft != spRenderer.flipX)
@@ -700,6 +768,28 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             }
             
         }
+    }
+
+    bool ShouldDoTurnAround(Ai_SubState newState) {
+        bool result = false;
+        if(newState != Ai_SubState.AI_SUB_IDLE) {
+            if(flipForTurnStack.prev != flipForTurnStack) {
+                //something on the stack
+                //Get the last directional flip
+                DirectionElm elm = flipForTurnStack.prev;
+                Assert.IsTrue(elm.aiState != Ai_SubState.AI_SUB_IDLE);
+                if(elm.aiState != newState) {
+                    Assert.IsTrue(elm.aiState != Ai_SubState.AI_SUB_LEFT || elm.aiState != Ai_SubState.AI_SUB_RIGHT);
+                    Assert.IsTrue(newState != Ai_SubState.AI_SUB_LEFT || newState != Ai_SubState.AI_SUB_RIGHT);
+                    result = true;
+                }
+            } else if((newState == Ai_SubState.AI_SUB_LEFT && spRenderer.flipX) || (newState == Ai_SubState.AI_SUB_RIGHT && !spRenderer.flipX)) {
+                result = true;
+
+            }
+        }
+
+        return result;
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -762,14 +852,20 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                         
                         ForceToAdd += accelForce * signToPlayer * Vector2.right;
 
-                        if((signToPlayer > 0) != spRenderer.flipX){
-                            subAiState = (signToPlayer > 0) ? Ai_SubState.AI_SUB_RIGHT : Ai_SubState.AI_SUB_LEFT;
-                            DoTurnAround(signToPlayer > 0);
-                            walkTimer.turnOn();
+                        Ai_SubState newSubAiState = (signToPlayer > 0) ? Ai_SubState.AI_SUB_RIGHT : Ai_SubState.AI_SUB_LEFT;
+                        if(newSubAiState != subAiState){
+                            SetSubAiState(newSubAiState, subAiState);
                         } 
+
+                        if(ShouldDoTurnAround(subAiState)) {
+                            DoTurnAround(signToPlayer > 0);
+                        }
+
+                        walkTimer.turnOn();
                     }
                     else
                     {
+                        patrolTimeStamp = Time.time;
                         aiState = Ai_State.AI_PATROL;
                     }
                 }
@@ -780,51 +876,38 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                     if(finishedForPatrol) {
                         timerForPatrol.turnOff();
                     }
-                    if (Mathf.Abs(diffVec.x) < partolDistance.x && Mathf.Abs(diffVec.y) < partolDistance.y && !timerForPatrol.isOn())
+                    if (Mathf.Abs(diffVec.x) < partolDistance.x && Mathf.Abs(diffVec.y) < partolDistance.y && !timerForPatrol.isOn() && IsAllowedToFind())
                     {
-                        aiState = Ai_State.AI_FIND;
+                        SetFindState();
                     } else 
                     {
                         if(walkTimer.isOn()) {
                             
                         } else {
                             walkTimer.turnOn();   
-                            // Ai_SubState lastState = subAiState;
-                            // getRandomAiSubState();
-                            //  if(lastState != subAiState && (subAiState == Ai_SubState.AI_SUB_RIGHT || subAiState == Ai_SubState.AI_SUB_LEFT)) {
-                            //     // if(lastState == Ai_SubState.AI_SUB_IDLE) {
-                            //         Debug.Log("finished walktimer 1: " + subAiState);
-                            //     // }
-                            //     Assert.IsTrue(subAiState != Ai_SubState.AI_SUB_IDLE);
-
-                            //     DoTurnAround(subAiState != Ai_SubState.AI_SUB_LEFT);
-                            // }
-                            
                         }
                         bool finished = walkTimer.updateTimer(Time.fixedDeltaTime);
                         if(finished) {
                             walkTimer.turnOn();
                              
-                            Ai_SubState lastState = subAiState;
                             getRandomAiSubState();
-                            if(lastState != subAiState && (subAiState == Ai_SubState.AI_SUB_RIGHT || subAiState == Ai_SubState.AI_SUB_LEFT)) {
-                                if(lastState == Ai_SubState.AI_SUB_IDLE && ((subAiState == Ai_SubState.AI_SUB_RIGHT && spRenderer.flipX) || (subAiState == Ai_SubState.AI_SUB_LEFT && !spRenderer.flipX))) {
+                            if(ShouldDoTurnAround(subAiState)) {
+                                Assert.IsTrue(subAiState != Ai_SubState.AI_SUB_IDLE);
+                                DoTurnAround(subAiState != Ai_SubState.AI_SUB_LEFT);
 
-                                } else {
-                                // if(lastState == Ai_SubState.AI_SUB_IDLE) {
-                                    // Debug.Log("finished walktimer 2: " + subAiState);
-                                // }
-                                    // Debug.Log("BLUE");
-                                    // spRenderer.color = Color.blue;
-                                    Assert.IsTrue(subAiState != Ai_SubState.AI_SUB_IDLE);
-                                    DoTurnAround(subAiState != Ai_SubState.AI_SUB_LEFT);
-                                }
                             }
+                            // if(lastState != subAiState && (subAiState == Ai_SubState.AI_SUB_RIGHT || subAiState == Ai_SubState.AI_SUB_LEFT)) {
+                            //     if(lastState == Ai_SubState.AI_SUB_IDLE && ((subAiState == Ai_SubState.AI_SUB_RIGHT && spRenderer.flipX) || (subAiState == Ai_SubState.AI_SUB_LEFT && !spRenderer.flipX))) {
+
+                            //     } else {
+                            //         Assert.IsTrue(subAiState != Ai_SubState.AI_SUB_IDLE);
+                            //         DoTurnAround(subAiState != Ai_SubState.AI_SUB_LEFT);
+                            //     }
+                            // }
                         }
                         Vector2 colSize = thisCollider.size;
                         Vector3 colOffset = thisCollider.offset;
                         float raySize = 0.5f*colSize.x + rayCastSize;
-                        lstFrameFlip = Ai_SubState.AI_SUB_IDLE;
                         if(!inTurnAround) {
                             switch(subAiState) {
                                 
@@ -834,7 +917,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                                 case Ai_SubState.AI_SUB_LEFT: {
                                     
                                     ForceToAdd += accelForce * Vector2.left;
-                                    //NOTE(ollie): Do we want to use layers instead so we are using just one raycast?? Not sure if this would be faster
                                     RaycastHit2D[] hits = Physics2D.RaycastAll(thisCollider.bounds.center, Vector2.left, raySize, physicsLayerMask);
                                     Debug.DrawLine(thisCollider.bounds.center, thisCollider.bounds.center + raySize*Vector3.left);
                                     bool found = false;
@@ -842,18 +924,12 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                                         RaycastHit2D hit = hits[i];
                                         Assert.IsTrue(!found);
                                         if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
-                                            // Debug.Log(hit.collider.gameObject.name);
-                                            subAiState = Ai_SubState.AI_SUB_RIGHT;
+                                            SetSubAiState(Ai_SubState.AI_SUB_RIGHT, Ai_SubState.AI_SUB_LEFT);
                                             nameCollider = hit.collider.gameObject.name;
-                                            // Debug.Log("hit left");
-                                            // spRenderer.color = Color.yellow;
-                                            // Debug.Log("LEFT");
                                             DoTurnAround(true);
-                                            // walkTimer.tAt = walkTimer.period;
                                             found = true;
-                                            lstFrameFlip = Ai_SubState.AI_SUB_LEFT;
+                                            //NOTE(ol): This is so it keeps walking after is hits something for a little bit
                                             walkTimer.tAt = 0.2f*walkTimer.period;
-                                            // walkTimer.turnOn(); //reset walk timer
                                             break;
                                         }
                                     }
@@ -871,16 +947,10 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                                         RaycastHit2D hit = hits[i];
                                         
                                         if(hit && hit.collider.gameObject != gameObject && !hit.collider.isTrigger) {
-                                            // Debug.Log(hit.collider.gameObject.name);
-                                            subAiState = Ai_SubState.AI_SUB_LEFT;
-                                            // Debug.Log("RIGHT");
-                                            // spRenderer.color = Color.green;
+                                            SetSubAiState(Ai_SubState.AI_SUB_LEFT, Ai_SubState.AI_SUB_RIGHT);
                                             nameCollider = hit.collider.gameObject.name;
                                             DoTurnAround(false);
-                                            walkTimer.tAt = 0.2f*walkTimer.period; //for testing
-                                            lstFrameFlip = Ai_SubState.AI_SUB_RIGHT;
-                                            // Debug.Log("hit right");
-                                            // walkTimer.turnOn(); //reset walk timer
+                                            walkTimer.tAt = 0.2f*walkTimer.period; //this makes it walk for a little longer after it collides with something
                                             break;
                                         }
                                     }
@@ -895,7 +965,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                     //spRenderer.color = Color.green;
                     //do nothing for now
                 } else if(aiState == Ai_State.AI_NULL) {
-                    aiState = Ai_State.AI_FIND;
+                    aiState = Ai_State.AI_PATROL;
                 }
                 
             }

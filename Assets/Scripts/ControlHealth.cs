@@ -13,11 +13,20 @@ public class ControlHealth : MonoBehaviour
 	public float newScale;
 	public Vector3 originalScale;
 	private Timer timer;
+
+    private ExperienceManager xpManager;
+    private float originalMaxScale; 
     // Start is called before the first frame update
     void Start()
     {
         originalScale = trans.localScale;
         timer = new Timer(0.2f);
+
+        xpManager = Camera.main.GetComponent<ExperienceManager>();
+
+        originalMaxScale = maxScale;
+        maxScale *= ((float)xpManager.maxHealth / (float)GameManager.totalMaxHealthInGame);
+
     }
 
     // Update is called once per frame
@@ -26,7 +35,10 @@ public class ControlHealth : MonoBehaviour
     	if(GameManager.updateHealth) {
     		timer.turnOn();
     		oldScale = trans.localScale.x;
-    		newScale = (GameManager.playerHealth/100.0f)*maxScale;
+
+            maxScale = originalMaxScale*((float)xpManager.maxHealth / (float)GameManager.totalMaxHealthInGame);
+    		
+            newScale = (GameManager.playerHealth/xpManager.maxHealth)*maxScale;
     		GameManager.updateHealth = false;
     	}
 

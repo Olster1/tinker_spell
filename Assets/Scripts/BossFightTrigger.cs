@@ -23,6 +23,7 @@ public class BossFightTrigger : MonoBehaviour
   public RectTransform anim2;
   private Timer blackBarsTimer;
   private bool bbOut;
+  private ExperienceManager xpManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,6 +31,8 @@ public class BossFightTrigger : MonoBehaviour
         active = true;
         blackBarsTimer = new Timer(1.0f);
         blackBarsTimer.turnOff();
+
+        xpManager = Camera.main.GetComponent<ExperienceManager>();
     }
 
     // Update is called once per frame
@@ -78,7 +81,7 @@ public class BossFightTrigger : MonoBehaviour
     	mixer.SetSound(musicId);
     	cam.followPlayer = true;
       //restore player health
-      GameManager.playerHealth = 100;
+      GameManager.playerHealth = xpManager.maxHealth;
       GameManager.updateHealth = true;
       bbOut = true;
       blackBarsTimer.turnOn();

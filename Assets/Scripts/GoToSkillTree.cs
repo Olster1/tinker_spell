@@ -31,11 +31,13 @@ public class GoToSkillTree : MonoBehaviour
     void OnTriggerExit2D(Collider2D other) {
     	hover.fadeOut();
     }
+
+    
 	
     void OnTriggerStay2D(Collider2D other) {
     	// Assert.IsTrue(false);
     	GameObject gm = other.gameObject;
-    	if(Input.GetButtonDown("Fire1") && gm.name == "Player") {
+    	if(Input.GetButtonDown("Fire1") && gm.name == "Player" && !skillSection.controller.isActive) {
     		// cam.moveUpTimer.turnOn();
     		// cam.startMovePos = cam.transform.position;
     		// cam.levelToLoad = LevelStateId.LEVEL_SKILL_TREE;

@@ -100,7 +100,7 @@ public class MainMenuContols : MonoBehaviour
               GameManager.manaCount = 100;
               GameManager.playerHealth = 100;
               GameManager.senintelHeadCount = 0;
-              GameManager.hasEarth1 = false;
+              GameManager.hasEarth1 = true;
               GameManager.fuelCellCount = 0;
               fadeoutTimer.turnOff();
               SceneManager.LoadScene(sceneNameToLoad);

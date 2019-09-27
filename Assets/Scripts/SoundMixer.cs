@@ -11,13 +11,14 @@ public class SoundMixer : MonoBehaviour
 		PORTAL_ROOM, 
 		JJ_EXPLORE, 
 		JJ_BOSS, 
-		JJ_NATURE, 
+		JJ_NATURE,
+        SKILL_SECTION, 
 		MUSIC_COUNT
 	}
 
 	public AudioClip[] clips;
 
-	[HideInInspector] MusicId currentId;
+	[HideInInspector] public MusicId currentId;
 
 	public AudioSource[] sources;
 

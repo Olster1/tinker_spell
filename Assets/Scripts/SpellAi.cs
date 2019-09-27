@@ -181,7 +181,8 @@ public class SpellAi : MonoBehaviour, IHitBox
 
         thisAnimator.SetFloat("run_speed", velocity.magnitude);
 
-        if(!isSpellLevel) {
+        // if(!isSpellLevel) 
+        {
             if(Input.GetButtonDown("Fire3")) {
                 //This may need some work!!
                 playerMovement.canControlPlayer = !playerMovement.canControlPlayer;
@@ -263,14 +264,17 @@ public class SpellAi : MonoBehaviour, IHitBox
         if(!(thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("spell_dive") || thisAnimator.GetBool("earth_dive"))) {
             if(!controllingSpell) {
             // if(!centerTimer.isOn()) {
+                Vector3 lstPos = thisTransform.position;
+                thisTransform.position = Vector3.Lerp(thisTransform.position, (playerTransform.position + offset), 0.125f);
+
             	float dt = Time.fixedDeltaTime;
-            	Vector3 diffPos = (playerTransform.position + offset) - thisTransform.position;
-            	Vector2 diffPos2 = Vector3.Normalize(diffPos);
-                if(diffPos.magnitude > diffSize) {
-                    velocity += accelPower*diffPos2*dt;
-                }
-                velocity -= dragFactor*velocity;
-                thisTransform.position = new Vector3(thisTransform.position.x + dt*velocity.x, thisTransform.position.y + dt*velocity.y, thisTransform.position.z);
+            	// Vector3 diffPos =  - ;
+            	// Vector2 diffPos2 = Vector3.Normalize(diffPos);
+             //    if(diffPos.magnitude > diffSize) {
+             //        velocity += accelPower*diffPos2*dt;
+             //    }
+                velocity =  (Vector2)((1.0f / dt)*(thisTransform.position - lstPos));
+                // thisTransform.position = new Vector3(thisTransform.position.x + dt*velocity.x, thisTransform.position.y + dt*velocity.y, thisTransform.position.z);
             // }
             } else {
                 

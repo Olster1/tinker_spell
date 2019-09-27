@@ -42,7 +42,7 @@ public class NextSceneTrigger : MonoBehaviour
     }
 
     public void GoToNextScene() {
-      manager.stateToLoad = levelToLoad;
+      manager.SetStateToLoad(levelToLoad);
       if(!withText) {
           animator.SetTrigger("FadeIn");
       } else {

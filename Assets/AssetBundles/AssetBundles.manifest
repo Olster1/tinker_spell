@@ -1,0 +1,13 @@
+ManifestFileVersion: 0
+CRC: 2932167264
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: cave_area
+      Dependencies: {}
+    Info_1:
+      Name: rock_ledge
+      Dependencies: {}
+    Info_2:
+      Name: portal_room
+      Dependencies: {}

@@ -43,7 +43,7 @@ public class BeastItem {
 	}
 }
 
-public class BeastryJournal : MonoBehaviour
+public class BeastryJournal : MonoBehaviour, IBlurInterface, IMenuItemInterface
 {
 	[HideInInspector] public bool isActive;
 	
@@ -80,16 +80,23 @@ public class BeastryJournal : MonoBehaviour
 
 	private Timer slideTimer;
 
-	private LevelStateId lastLevelState;
 	public SceneStateManager sceneManager;
 
+    private SkillSectiom skillSection;
+
 	public float referenceSize;
+
+    private BlurPostProcess blurPostProcess;
+    public SpriteRenderer blurSprite;
+
+    public UISelection sideBarMenuSelection;
 
 	public class CacheTransform {
 		public Vector3 scale;
 		public Vector3 position;
 	}
 
+    private bool gotFocus;
 	private CacheTransform[] cachedTransforms;
 
 	// this is the safe zone outside of the camera view to animate towards
@@ -110,6 +117,10 @@ public class BeastryJournal : MonoBehaviour
 
     void Start() {
     	cachedTransforms = new CacheTransform[(int)BeastId.TOTAL_BEAST_COUNT];
+
+        skillSection = Camera.main.GetComponent<SkillSectiom>();
+
+        blurPostProcess = Camera.main.GetComponent<BlurPostProcess>();
 
     	for(int i = 0; i < (int)BeastId.TOTAL_BEAST_COUNT; ++i) {
     		CacheTransform item = cachedTransforms[i] = new CacheTransform();
@@ -148,6 +159,28 @@ public class BeastryJournal : MonoBehaviour
     	beasts[(int)id].found = true;
     }
 
+    public void GetFocus() {
+        isActive = true;
+        glowTimer.turnOn();
+        gotFocus = true;
+    }
+
+    public void EnterMenu() {
+        Activate(false);
+    }
+
+    public void ExitMenu() {
+        ExitJournal(false);
+    }
+
+    public void ExitFocus() {
+       sideBarMenuSelection.Display(UICurrentSelection.UI_BEASTERY, true);
+       glowTimer.turnOff();
+       SpriteRenderer sp = GetIndicator(xCoord, yCoord);
+       sp.color = Color.white;
+       isActive = false;
+    }
+
     public int GetMappedIndex(int x, int y) {
     	int result = x + (y*numOfColums);
     	return result;
@@ -159,57 +192,76 @@ public class BeastryJournal : MonoBehaviour
     	return sp;
     }
 
-    public void ExitJournal() {
+    public void ExitJournal(bool exitWholeJournal) {
+
+        if(exitWholeJournal) {
+            blurSprite.enabled = false;    
+            uiHud.SetActive(true);
+            sceneManager.useSpawnPoint = false;
+            sceneManager.ChangeSceneWithId(sideBarMenuSelection.gameWorldLevelState);
+            sideBarMenuSelection.Hide();
+        }
+        
+        enterTransform = null;
+        pageRustleAudio.Play();
 		slideTimer.turnOn();
-		uiHud.SetActive(true);
-		sceneManager.useSpawnPoint = false;
-		sceneManager.ChangeSceneWithId(lastLevelState);
 		exitTransform = currentPage;
 		isActive = false;
+    }
+
+    public void Activate(bool comingFromWorld) {
+        if(comingFromWorld) {
+             sideBarMenuSelection.Display(UICurrentSelection.UI_BEASTERY, false);
+             blurSprite.enabled = true;
+             sideBarMenuSelection.gameWorldLevelState = sceneManager.GetCurrentLevelState();
+        }
+       
+        slideTimer.turnOn();
+        enterTransform = null;
+        exitTransform = null;       
+        pageRustleAudio.Play();
+
+        currentPage = enterTransform = pages[0];
+        //reset the board
+        for(int i = 0; i < (int)BeastId.TOTAL_BEAST_COUNT; ++i) {
+            BeastItem item = beasts[i];
+            GameObject spObj = objs[i].transform.GetChild(0).gameObject;
+            SpriteRenderer sp = spObj.GetComponent<SpriteRenderer>();
+            sp.color = Color.white;
+            CacheTransform trans = cachedTransforms[i];
+            if(item.found) {
+                sp.sprite = defaultSprites[i];
+                spObj.transform.localScale = trans.scale;
+                spObj.transform.localPosition = trans.position;
+
+            } else {
+                sp.sprite = hiddenSprite;
+                spObj.transform.localScale = new Vector3(0.1f, 0.1f, 1);
+                spObj.transform.localPosition = new Vector3(0, 0, trans.position.z);
+            }
+        }
+        xCoord = 0;
+        yCoord = 0;
+        glowTimer.turnOn();
+        pageIndex = 0;
+        
+        sceneManager.useSpawnPoint = false;
+        sceneManager.ChangeSceneWithId(LevelStateId.LEVEL_JOURNAL);
+        isActive = true;
     }
     // Update is called once per frame
     void Update()
     {
     	if(Input.GetButtonDown("Submit")) {
-    		slideTimer.turnOn();
-    		enterTransform = null;
-			exitTransform = null;    	
-			pageRustleAudio.Play();
-
-    		if(!isActive) { 
-    			isActive = true;
-    			uiHud.SetActive(false);
-    			currentPage = enterTransform = pages[0];
-    			//reset the board
-	    		for(int i = 0; i < (int)BeastId.TOTAL_BEAST_COUNT; ++i) {
-	    			BeastItem item = beasts[i];
-	    			GameObject spObj = objs[i].transform.GetChild(0).gameObject;
-	    			SpriteRenderer sp = spObj.GetComponent<SpriteRenderer>();
-	    			sp.color = Color.white;
-	    			CacheTransform trans = cachedTransforms[i];
-	    			if(item.found) {
-	    				sp.sprite = defaultSprites[i];
-	    				spObj.transform.localScale = trans.scale;
-	    				spObj.transform.localPosition = trans.position;
-
-					} else {
-						sp.sprite = hiddenSprite;
-						spObj.transform.localScale = new Vector3(0.1f, 0.1f, 1);
-	    				spObj.transform.localPosition = new Vector3(0, 0, trans.position.z);
-					}
-	    		}
-	    		xCoord = 0;
-	    		yCoord = 0;
-	    		glowTimer.turnOn();
-	    		pageIndex = 0;
-	    		lastLevelState = sceneManager.stateToLoad;
-	    		sceneManager.useSpawnPoint = false;
-	    		sceneManager.ChangeSceneWithId(LevelStateId.LEVEL_JOURNAL);
-
-	    	} else {
-	    		ExitJournal();
-	    	}
-
+            if(sceneManager.IsInGame()) {
+                if(!isActive) { 
+                    isActive = true;
+                    uiHud.SetActive(false);
+                    blurPostProcess.StartBlur(this);
+                }
+            } else {
+                ExitJournal(true);
+            }
     	}
 
 	    if(slideTimer.isOn()) {
@@ -241,64 +293,69 @@ public class BeastryJournal : MonoBehaviour
         	bool upKeyDown = Input.GetKeyDown(KeyCode.UpArrow);
         	bool downKeyDown = Input.GetKeyDown(KeyCode.DownArrow);
         	
-        	if(xAxis > threshold || rightKeyDown) {
-        		if(xIsNew || rightKeyDown) {
-        			xCoord++;
-        			if(xCoord >= numOfColums || GetMappedIndex(xCoord, yCoord) >= (int)BeastId.TOTAL_BEAST_COUNT) {
-        				xCoord--;
-        			} else {
-        				moveAudio.Play();
-        				GetIndicator(xCoord - 1, yCoord).color = Color.white;
-        				glowTimer.turnOn();
-        			}
+            if(!gotFocus) {
+            	if(xAxis > threshold || rightKeyDown) {
+            		if(xIsNew || rightKeyDown) {
+            			xCoord++;
+            			if(xCoord >= numOfColums || GetMappedIndex(xCoord, yCoord) >= (int)BeastId.TOTAL_BEAST_COUNT) {
+            				xCoord--;
+            			} else {
+            				moveAudio.Play();
+            				GetIndicator(xCoord - 1, yCoord).color = Color.white;
+            				glowTimer.turnOn();
+            			}
 
-        			xIsNew = false;
-        		}
-        	} 
+            			xIsNew = false;
+            		}
+            	} 
 
-        	
-        	if(yAxis < -threshold || downKeyDown) {
-        		if(yIsNew || downKeyDown) {
-        			yCoord++;
-        			if(yCoord >= numOfRows || GetMappedIndex(xCoord, yCoord) >= (int)BeastId.TOTAL_BEAST_COUNT) {
-        				yCoord--;
-        			} else {
-        				moveAudio.Play();
-        				GetIndicator(xCoord, yCoord -1).color = Color.white;
-        				glowTimer.turnOn();
-        			}
-        			yIsNew = false;
-        		}
-        	} 
+            	
+            	if(yAxis < -threshold || downKeyDown) {
+            		if(yIsNew || downKeyDown) {
+            			yCoord++;
+            			if(yCoord >= numOfRows || GetMappedIndex(xCoord, yCoord) >= (int)BeastId.TOTAL_BEAST_COUNT) {
+            				yCoord--;
+            			} else {
+            				moveAudio.Play();
+            				GetIndicator(xCoord, yCoord -1).color = Color.white;
+            				glowTimer.turnOn();
+            			}
+            			yIsNew = false;
+            		}
+            	} 
 
-        	if(xAxis < -threshold || leftKeyDown) {
-        		if(xIsNew || leftKeyDown) {
-        			xCoord--;
-        			if(xCoord < 0) {
-        				xCoord = 0;
-        			} else {
-        				moveAudio.Play();
-        				GetIndicator(xCoord + 1, yCoord).color = Color.white;
-        				glowTimer.turnOn();
-        			}
-        			xIsNew = false;
-        		}
-        	} 
+            	if(xAxis < -threshold || leftKeyDown) {
+            		if(xIsNew || leftKeyDown) {
+            			xCoord--;
+            			if(xCoord < 0) {
+            				xCoord = 0;
+                            ExitFocus();
+            			} else {
+            				moveAudio.Play();
+            				GetIndicator(xCoord + 1, yCoord).color = Color.white;
+            				glowTimer.turnOn();
+            			}
+            			xIsNew = false;
+            		}
+            	} 
 
-        	
-        	if(yAxis > threshold || upKeyDown) {
-        		if(yIsNew || upKeyDown) {
-        			yCoord--;
-        			if(yCoord < 0) {
-        				yCoord = 0;
-        			} else {
-        				moveAudio.Play();
-        				GetIndicator(xCoord, yCoord + 1).color = Color.white;
-        				glowTimer.turnOn();
-        			}
-        			yIsNew = false;
-        		}
-        	} 
+            	
+            	if(yAxis > threshold || upKeyDown) {
+            		if(yIsNew || upKeyDown) {
+            			yCoord--;
+            			if(yCoord < 0) {
+            				yCoord = 0;
+            			} else {
+            				moveAudio.Play();
+            				GetIndicator(xCoord, yCoord + 1).color = Color.white;
+            				glowTimer.turnOn();
+            			}
+            			yIsNew = false;
+            		}
+            	} 
+            }
+
+            gotFocus = false;
 
         	//Reset the stick values
         	if(xAxis < lowerThreshold  && xAxis > -lowerThreshold) {
@@ -313,7 +370,7 @@ public class BeastryJournal : MonoBehaviour
         		yIsNew = true;
         	}
 
-        	if(Input.GetButtonDown("Fire1")) {
+        	if(Input.GetButtonDown("Jump")) {
         		if(currentPage != closeupBeastPage && beasts[GetMappedIndex(xCoord, yCoord)].found) {
 	        		slideTimer.turnOn();
 	        		lastPage = currentPage;
@@ -332,7 +389,7 @@ public class BeastryJournal : MonoBehaviour
         		}
         	}
 
-        	if(Input.GetButtonDown("Fire3")) {
+        	if(Input.GetButtonDown("Fire1")) {
 	        	if(currentPage == closeupBeastPage) {
 	        		slideTimer.turnOn();
 	        		enterTransform = lastPage;
@@ -340,7 +397,7 @@ public class BeastryJournal : MonoBehaviour
 
 	        		currentPage = lastPage;
         		} else {
-        			ExitJournal();
+        			ExitJournal(true);
         			
         		}
         	}

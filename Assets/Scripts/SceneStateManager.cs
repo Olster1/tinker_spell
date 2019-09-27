@@ -18,6 +18,7 @@ public enum LevelStateId {
     LEVEL_EARTH_LEDGE_HOWLER_TREE,
     HELICOPTER_LEVEL,
     LEVEL_TINKER_LEVEL_UP,
+    LEVEL_QUESTS,
 
     ///////EVERTHING MUST BE ABOVE THIS!!!//////
     LEVEL_COUNT
@@ -33,12 +34,12 @@ public class SceneStateManager : MonoBehaviour
     private Animator animator;
     public GameObject[] levelObjects;
     public GameObject[] spawnPointObjs;
+    public GameObject[] cameraSpawnPoints;
     public bool[] turnSkyOff;
-    public Vector2[] offsetCams;
     public bool[] yStuck;
     public float[] cameraZ;
     public bool[] spellLevel;
-    public LevelStateId stateToLoad;
+    private LevelStateId stateToLoad;
     public GameObject player;
     private PlayerMovement playerMovement;
     public GameObject spell;
@@ -72,7 +73,7 @@ public class SceneStateManager : MonoBehaviour
 
         int len = levelObjects.Length;
         Assert.IsTrue(spawnPointObjs.Length == len);
-        Assert.IsTrue(offsetCams.Length == len);
+        Assert.IsTrue(cameraSpawnPoints.Length == len);
         Assert.IsTrue(yStuck.Length == len);
         Assert.IsTrue(turnSkyOff.Length == len);
         Assert.IsTrue(spellLevel.Length == len);
@@ -115,23 +116,48 @@ public class SceneStateManager : MonoBehaviour
         playerMovement.ResetPositionFromFall();   
     }
 
+    public bool IsInGame() {
+        bool result = !(stateToLoad == LevelStateId.LEVEL_QUESTS || stateToLoad == LevelStateId.LEVEL_JOURNAL || stateToLoad == LevelStateId.LEVEL_SKILL_TILES);
+        return result;
+    }
+
     void ResetFromSpawnPoint(GameObject spawnPoint) {
         player.transform.position = spawnPoint.transform.position;
         earthValidator.ResetColliders();
 
-        Vector2 offsetCam = offsetCams[(int)stateToLoad];
         Vector3 spellOffset = new Vector3(0, 1, 0);
         spell.transform.position = spawnPoint.transform.position + spellOffset;
-        Vector3 camPos = new Vector3(spawnPoint.transform.position.x + offsetCam.x, spawnPoint.transform.position.y + offsetCam.y, cameraZ[(int)stateToLoad]);
-        cam.transform.position = camPos;
+
+        GameObject camSpawnP = cameraSpawnPoints[(int)stateToLoad];
+        if(camSpawnP) {
+            Vector3 camSpawnPos = camSpawnP.transform.position;
+            Vector3 camPos = new Vector3(camSpawnPos.x, camSpawnPos.y, cameraZ[(int)stateToLoad]);
+            cam.transform.position = camPos;
+        } else {
+            cam.transform.position = spawnPoint.transform.position;
+        }
     }
 
     public void ChangeSceneWithId(LevelStateId stateId) {
         stateToLoad = stateId;
+        ChangeScene();
+    }
+
+    public void ChangeSceneWithIdFade(LevelStateId stateId) {
+        stateToLoad = stateId;
         animator.SetTrigger("FadeIn");
     }
 
+    public void SetStateToLoad(LevelStateId stateId) {
+        stateToLoad = stateId;
+    }
+
+    public LevelStateId GetCurrentLevelState() {
+        return stateToLoad;
+    }
+
     void ChangeScene() {
+        // Debug.Log("loading: " + stateToLoad);
         for(int i = 0; i < levelObjects.Length; ++i) {
             GameObject obj = levelObjects[i];
             if(obj != null && i != (int)stateToLoad) {
@@ -181,6 +207,9 @@ public class SceneStateManager : MonoBehaviour
                 spellAi.rigidBody.simulated = false;
                 spellAi.rbCol.enabled = false;
             }
+            camBehaviour.FollowEntity();
+        } else {
+            camBehaviour.StopFollowingEntity();
         }
 
         // //clear grounded count to get rid of any unresolved counts
@@ -188,13 +217,11 @@ public class SceneStateManager : MonoBehaviour
         // //
         
         if(yStuck[(int)stateToLoad]) {
-            camRb.constraints |= RigidbodyConstraints2D.FreezePositionY;
+            camBehaviour.SetYStuck(true);
         } else {
-            camRb.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
+            camBehaviour.SetYStuck(false);
         }
 
-
-        camBehaviour.StopFollowingEntity();
 
         if(turnSkyOff[(int)stateToLoad]) {
             skyParent.SetActive(false);
@@ -205,9 +232,12 @@ public class SceneStateManager : MonoBehaviour
         // camRb.constraints |= RigidbodyConstraints2D.FreezeAll;
 
         if(spawnPoint != null && useSpawnPoint) {
-
+            camBehaviour.StopFollowingEntity();
             ResetFromSpawnPoint(spawnPoint);
-        } 
+        } else {
+            // camBehaviour.StopFollowingEntity();
+            // camBehaviour.FollowEntity();
+        }
 
         useSpawnPoint = true;
 

@@ -4,7 +4,7 @@ using UnityEngine;
 using Timer_namespace;
 using EasyGameManager;
 
-public class SkillSectiom : MonoBehaviour, IBlurInterface
+public class SkillSectiom : MonoBehaviour, IBlurInterface, IMenuItemInterface
 {
 
 	public SceneStateManager sceneManager;
@@ -14,12 +14,16 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface
 	private int index;
 	public int maxIndex;
 
+    private BeastryJournal beastJournal;
+
 	public Transform[] trans = new Transform[1];
     public ParticleSystem[] bubbles = new ParticleSystem[1]; 
 
 	public float speed; 
     private Timer slideTimer;
     private Timer amberTimer;
+
+    [HideInInspector] public bool isEnabled;
 
     private Transform enterTransform;
     private Transform exitTransform;
@@ -31,11 +35,11 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface
 
     private float[] skillAttributes = new float[1]; 
 
-	private LevelStateId lastLevelState;
-
     private BlurPostProcess blurPostProcess;
 
     public SpriteRenderer blurSprite;
+
+    public UISelection sideBarMenuSelection;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,29 +48,61 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface
         amberTimer = new Timer(0.1f);
         amberTimer.turnOff();
         SetLocalAxis(index);
+        isEnabled = false;
+
+        beastJournal = Camera.main.GetComponent<BeastryJournal>();
     }
 
-    public void ExitSkillSection() {
+    public void ExitSkillSection(bool exitToWorld) {
+        if(exitToWorld) {
+            sideBarMenuSelection.Hide();
+            uiHud.SetActive(true);
+            sceneManager.useSpawnPoint = false;
+            sceneManager.ChangeSceneWithId(sideBarMenuSelection.gameWorldLevelState);
+             blurSprite.enabled = false;
+        }
+        
 		slideTimer.turnOn();
-		uiHud.SetActive(true);
-		sceneManager.useSpawnPoint = false;
-		sceneManager.ChangeSceneWithId(lastLevelState);
 		exitTransform = currentPage;
         enterTransform = null;
 		isActive = false;
-        blurSprite.enabled = false;
+        isEnabled = false;
     }
 
 
     public void EnterSkillSection() {
-        blurPostProcess.StartBlur(this);
-
+        if(!isEnabled && !beastJournal.isActive) {
+            isEnabled = true;
+            blurPostProcess.StartBlur(this);    
+        }
     }
 
-    public void Activate() {
-        blurSprite.enabled = true;
-    	uiHud.SetActive(false);
-    	lastLevelState = sceneManager.stateToLoad;
+    public void GetFocus() {
+        isActive = true;
+    }
+
+    public void EnterMenu() {
+        Debug.Log("ENTERING SKILL SECTION");
+        Activate(false);
+    }
+
+    public void ExitFocus() {
+        isActive = false;
+        sideBarMenuSelection.Display(UICurrentSelection.UI_SPELL_SKILL, true);
+    }
+
+    public void ExitMenu() {
+        ExitSkillSection(false);
+    }
+
+    public void Activate(bool comingFromWorld) {
+        if(comingFromWorld) {
+            blurSprite.enabled = true;
+            uiHud.SetActive(false);
+            sideBarMenuSelection.gameWorldLevelState = sceneManager.GetCurrentLevelState();    
+            sideBarMenuSelection.Display(UICurrentSelection.UI_SPELL_SKILL, false);
+        }
+        
 		sceneManager.useSpawnPoint = false;
 		sceneManager.ChangeSceneWithId(LevelStateId.LEVEL_SKILL_TILES);
 		enterTransform = currentPage;
@@ -88,11 +124,20 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface
     // Update is called once per frame
     void Update()
     {
+
+        if(Input.GetButtonDown("Cancel")) {
+            if(isEnabled) {
+                ExitSkillSection(true);
+            } else {
+                EnterSkillSection();
+            }
+        }
         if(slideTimer.isOn()) {
             bool finished = slideTimer.updateTimer(Time.unscaledDeltaTime);
             if(enterTransform != null) {
                 Vector3 pos = Vector3.Lerp(new Vector3(-hiddenOffset, 0, enterTransform.localPosition.z), new Vector3(0, 0, enterTransform.localPosition.z), Mathf.Sin(slideTimer.getCanoncial()*0.5f*Mathf.PI));
                 enterTransform.localPosition = pos;
+                Debug.Log("SPELL SKILL TREE");
             } 
 
             if(exitTransform != null) {
@@ -147,7 +192,7 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface
             
 
             if(Input.GetButton("Fire2")) {
-                ExitSkillSection();
+                ExitSkillSection(true);
             }
         }
     }

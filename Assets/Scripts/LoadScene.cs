@@ -23,14 +23,14 @@ public class LoadScene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(fadeTimer.isOn()) {
-          bool b = fadeTimer.updateTimer(Time.deltaTime);
-          float f = fadeTimer.getCanoncial();
-          sp.color = new Color(1, 1, 1, 1.0f - f);
-          if(b) {
-            fadeTimer.turnOff();
-          }
-        }
+        // if(fadeTimer.isOn()) {
+        //   bool b = fadeTimer.updateTimer(Time.deltaTime);
+        //   float f = fadeTimer.getCanoncial();
+        //   sp.color = new Color(1, 1, 1, 1.0f - f);
+        //   if(b) {
+        //     fadeTimer.turnOff();
+        //   }
+        // }
     }
 
     public void LoadNewScene() {
@@ -45,11 +45,11 @@ public class LoadScene : MonoBehaviour
        // While the asynchronous operation to load the new scene is not yet complete, continue waiting until it's done.
        while (!async.isDone) {
        		if(async.progress > 0.5f && !fadeTimer.isOn()) {
-            fadeTimer.turnOn();
+            // fadeTimer.turnOn();
        		// 	panelFade.SetTrigger("FadeOut");
        		// 	setTrigger = true;
        		}
-           yield return null;
+          yield return null;
        }
 
 

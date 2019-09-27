@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IBlurInterface
 {
-    void Activate();
+    void Activate(bool comingFromWorld);
 }

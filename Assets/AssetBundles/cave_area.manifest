@@ -1,0 +1,30 @@
+ManifestFileVersion: 0
+CRC: 1955207899
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a0dfa4dc72166bd77e9271bfc08bce7c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ea5a42e0fd8ea905efa7aa926a3b8944
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/new_sprites/new_cave_level/3.png
+- Assets/new_sprites/new_cave_level/goblin/back light.png
+- Assets/new_sprites/new_cave_level/goblin/5.png
+- Assets/new_sprites/new_cave_level/bridge 1.png
+- Assets/new_sprites/new_cave_level/sky.png
+- Assets/new_sprites/new_cave_level/bridge 2.png
+- Assets/new_sprites/new_cave_level/goblin/1.png
+- Assets/new_sprites/new_cave_level/goblin/goblin_head.png
+- Assets/new_sprites/new_cave_level/goblin/3.png
+- Assets/new_sprites/new_cave_level/goblin/4.png
+- Assets/new_sprites/new_cave_level/1.png
+- Assets/new_sprites/new_cave_level/2.png
+- Assets/new_sprites/new_cave_level/goblin/2.png
+Dependencies: []
