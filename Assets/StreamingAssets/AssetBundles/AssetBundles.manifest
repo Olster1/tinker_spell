@@ -1,0 +1,43 @@
+ManifestFileVersion: 0
+CRC: 172098071
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: cave_area
+      Dependencies: {}
+    Info_1:
+      Name: rock_ledge
+      Dependencies: {}
+    Info_2:
+      Name: portal_room
+      Dependencies: {}
+    Info_3:
+      Name: tinker_idle_animations
+      Dependencies:
+        Dependency_0: tinker_idle_eye_blinking
+        Dependency_1: tinker_idle_gun
+        Dependency_2: tinker_idle_gun_tail
+        Dependency_3: tinker_idle_sword
+        Dependency_4: tinker_idle_sword_tail
+        Dependency_5: tinker_idle_tail
+    Info_4:
+      Name: tinker_idle_eye_blinking
+      Dependencies: {}
+    Info_5:
+      Name: tinker_idle_gun
+      Dependencies: {}
+    Info_6:
+      Name: tinker_idle_gun_tail
+      Dependencies: {}
+    Info_7:
+      Name: tinker_idle_sword
+      Dependencies: {}
+    Info_8:
+      Name: tinker_idle_sword_tail
+      Dependencies: {}
+    Info_9:
+      Name: tinker_idle_tail
+      Dependencies: {}
+    Info_10:
+      Name: teleporter_spiral_animation
+      Dependencies: {}

@@ -1,0 +1,28 @@
+ManifestFileVersion: 0
+CRC: 414586564
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d11002e2e991efad0feb98c9584e3f29
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 872f54559b8772c38fa07b8b8c2fb6ec
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Eye Blinking/EyeBlinking0007.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Eye Blinking/EyeBlinking0004.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Eye Blinking/EyeBlinking0002.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Eye Blinking/EyeBlinking0006.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Eye Blinking/EyeBlinking0003.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Eye Blinking/eye_blinking.anim
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Eye Blinking/EyeBlinking0005.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Eye Blinking/EyeBlinking0001.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Eye Blinking/EyeBlinking0000.png
+Dependencies: []

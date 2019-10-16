@@ -71,6 +71,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     
     public bool isSentinel;
     public bool isRangeGollum;
+    public bool isHowler;
     
     public Vector2 earthOffset;
     
@@ -393,7 +394,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             float xpPointsToAdd = 5;
             
 
-            GameObject damageNumObj = Instantiate(damageNumbersObject,   transform.position, Quaternion.identity);
+            GameObject damageNumObj = Instantiate(damageNumbersObject, transform.position, Quaternion.identity);
             DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
             damageNum.initializeObject(damage, type);
             
@@ -411,6 +412,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                 beastId = BeastId.RANGE_GOLLUM;
             } else if(isSentinel) {
                 beastId = BeastId.ROCK_SENTINEL;
+            } else if(isHowler) {
+                beastId = BeastId.HOWLER_MALE;
             }
 
             beastJournal.FoundBeast(beastId);
@@ -447,7 +450,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                 dead = true;
                 thisAnimator.SetTrigger("isDead");
                 
-                if(isSentinel || isRangeGollum) {
+                if(isSentinel || isRangeGollum || isHowler) {
                     
                     fadeInTimer.turnOn();
                 }
@@ -691,7 +694,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
             // bool isDying = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_die");
             
-            
+                
             thisAnimator.SetFloat("WalkSpeed", thisRigidbody.velocity.x);
             
             // bool isInTurnAround = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_turn_around");
@@ -761,7 +764,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         // Debug.Log("turn_around");
         // if(lookLeft != spRenderer.flipX)
          {
-            if(isSentinel || isRangeGollum) {
+            if(isSentinel || isRangeGollum || isHowler) {
                 spRenderer.flipX = lookLeft;
             } else {
                 pushDirectionOntoStack(lookLeft, subAiState);

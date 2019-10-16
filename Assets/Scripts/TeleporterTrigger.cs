@@ -7,18 +7,27 @@ using UnityEngine.SceneManagement;
 
 public class TeleporterTrigger : MonoBehaviour
 {
-	public SpriteRenderer interactSp;
 	private Timer timer;
 	private bool shown;
 	public string sceneNameToLoad;
 	public PlayerMovement player;
 	public Image fadePanel;
+    private MyAssetBundleManager assetManager;
 	
     // Start is called before the first frame update
     void Start()
     {
         timer = new Timer(1.4f);
         timer.turnOff();
+
+        //Loading the animation spiral
+        assetManager = Camera.main.GetComponent<MyAssetBundleManager>();
+        MyAssetBundle a = assetManager.LoadBundle("AssetBundles/teleporter_spiral_animation");
+        // assetManager.LoadAllAssetsOfType(a, typeof(Sprite));
+        // assetManager.LoadAllAssetsOfType(a, typeof(Animation));
+        Object[] controller = assetManager.GetAssetsOfType(a, typeof(UnityEngine.RuntimeAnimatorController));  
+        gameObject.GetComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)controller[0];
+        ////
     }
 
     // Update is called once per frame

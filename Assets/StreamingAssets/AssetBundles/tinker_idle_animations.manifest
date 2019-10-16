@@ -1,0 +1,53 @@
+ManifestFileVersion: 0
+CRC: 2124767582
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: af5bb103f86e8bf63aaf7d80a66f2fb1
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: a46f4256c000538141d1f73587956a67
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail003.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail018.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail010.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail021.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail020.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail012.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail017.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail002.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blink_tail.anim
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail019.png
+- Assets/new_sprites/tinker/Player.controller
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail022.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail014.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail008.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail004.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail009.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail005.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail023.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail001.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail007.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail011.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail000.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail015.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail016.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail006.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/blink Tail/blinktail013.png
+Dependencies:
+- C:/Users/olive/Documents/tinker_spell/Assets/AssetBundles/tinker_idle_eye_blinking
+- C:/Users/olive/Documents/tinker_spell/Assets/AssetBundles/tinker_idle_gun
+- C:/Users/olive/Documents/tinker_spell/Assets/AssetBundles/tinker_idle_gun_tail
+- C:/Users/olive/Documents/tinker_spell/Assets/AssetBundles/tinker_idle_sword
+- C:/Users/olive/Documents/tinker_spell/Assets/AssetBundles/tinker_idle_sword_tail
+- C:/Users/olive/Documents/tinker_spell/Assets/AssetBundles/tinker_idle_tail

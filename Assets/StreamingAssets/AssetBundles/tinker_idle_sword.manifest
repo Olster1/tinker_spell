@@ -1,0 +1,46 @@
+ManifestFileVersion: 0
+CRC: 1710900257
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: c274713055d95844237a4f1c554cc260
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 872f54559b8772c38fa07b8b8c2fb6ec
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0024.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0001.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0017.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0000.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0012.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0013.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0014.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0006.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0015.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0016.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0019.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0018.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0020.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0011.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/sword.anim
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0003.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0007.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0025.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0008.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0021.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0010.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0022.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0023.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0002.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0009.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0004.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Sword/frame0005.png
+Dependencies: []

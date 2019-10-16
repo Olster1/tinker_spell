@@ -8,5 +8,5 @@ public interface IMenuItemInterface
     void GetFocus();
     void ExitFocus();
     void EnterMenu();
-    void ExitMenu();
+    void ExitMenu(bool exitToWorld);
 }

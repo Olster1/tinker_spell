@@ -7,6 +7,8 @@ public class JournalItemManager : MonoBehaviour
 {
 	public Text titleText;
 	public Text synopsisText;
+    public Image face;
+    public Image glowRenderer;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +20,14 @@ public class JournalItemManager : MonoBehaviour
     }
     public void SetDescription(string s) {
     	synopsisText.text = s;
+    }
+
+    public void SetSpriteFace(Sprite sprite) {
+        face.sprite = sprite;
+    }
+
+    public Image GetGlowRenderer() {
+        return glowRenderer;
     }
     public void SetCompletionState(bool c) {
     	if(c) {

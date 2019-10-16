@@ -9,6 +9,7 @@ public class DamageNumber : MonoBehaviour
 	public SpriteRenderer[] spriteRenderers;
 	public Sprite[] spriteNumbersMellee;
     public Sprite[] spriteNumbersEarth;
+    public SpriteRenderer missRenderer;
 	private Timer aliveTimer;
 	public float aliveTime;
 	private int numberToDisplay;
@@ -26,43 +27,52 @@ public class DamageNumber : MonoBehaviour
     //did this because i think start func is called on instaiate() call, but the number to display isn't set
     public void initializeObject(int damage, string type) {
     	numberToDisplay = damage;
-    	
-    	this.type = type;
 
-    	aliveTimer = new Timer(aliveTime);         
-    	aliveTimer.turnOn();
+        this.type = type;
 
-    	bool hadSigNum = false;
-    	//set the number sprites
-    	//decrease because we want to see the most significant number
-    	for(int i = (spriteRenderers.Length - 1); i >= 0; --i) {
-    		SpriteRenderer renderer = spriteRenderers[i];
-    		int exponent = i;
-    		int retrievedNumber = numberToDisplay % (int)(Mathf.Pow(10, exponent + 1));
-    		retrievedNumber = retrievedNumber / (int)(Mathf.Pow(10, exponent));
-    		
-    		if(retrievedNumber == 0) {
-    			if(!hadSigNum) {
-    				renderer.enabled = false;
-    				continue;	
-    			}
-    			
-    		} else {
-    			hadSigNum = true;
-    		}
-    		Assert.IsTrue(retrievedNumber >= 0 && retrievedNumber < 10);
-            if(type.Equals("mellee")) {
-                renderer.sprite = spriteNumbersMellee[retrievedNumber];
-            } else if (type.Equals("earth")) {
-                renderer.sprite = spriteNumbersMellee[retrievedNumber];
-                // renderer.sprite = spriteNumbersEarth[retrievedNumber];
-            } else {
-                renderer.sprite = spriteNumbersMellee[retrievedNumber];
+        aliveTimer = new Timer(aliveTime);         
+        aliveTimer.turnOn();
+
+        if(damage < 0) {
+            for(int i = (spriteRenderers.Length - 1); i >= 0; --i) {
+                SpriteRenderer renderer = spriteRenderers[i];
+                renderer.enabled = false;
             }
 
-    		
-    		startColor = renderer.color;
+            missRenderer.enabled = true;
+        } else {
+            missRenderer.enabled = false;
+    	   bool hadSigNum = false;
+            //set the number sprites
+            //decrease because we want to see the most significant number
+            for(int i = (spriteRenderers.Length - 1); i >= 0; --i) {
+                SpriteRenderer renderer = spriteRenderers[i];
+                int exponent = i;
+                int retrievedNumber = numberToDisplay % (int)(Mathf.Pow(10, exponent + 1));
+                retrievedNumber = retrievedNumber / (int)(Mathf.Pow(10, exponent));
+                
+                if(retrievedNumber == 0) {
+                    if(!hadSigNum) {
+                        renderer.enabled = false;
+                        continue;   
+                    }
+                    
+                } else {
+                    hadSigNum = true;
+                }
+                Assert.IsTrue(retrievedNumber >= 0 && retrievedNumber < 10);
+                   if(type.Equals("mellee")) {
+                       renderer.sprite = spriteNumbersMellee[retrievedNumber];
+                   } else if (type.Equals("earth")) {
+                       renderer.sprite = spriteNumbersMellee[retrievedNumber];
+                       // renderer.sprite = spriteNumbersEarth[retrievedNumber];
+                   } else {
+                       renderer.sprite = spriteNumbersMellee[retrievedNumber];
+                   }
 
+                
+                startColor = renderer.color;
+            }
     	}
     	velocity = new Vector3(0, 1, 0);
     	velocity *= speed;

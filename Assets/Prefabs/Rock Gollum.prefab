@@ -173,7 +173,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.55733585, y: 0.7444169}
-    oldSize: {x: 9.45, y: 8.059999}
+    oldSize: {x: 9.45, y: 8.06}
     newSize: {x: 9.45, y: 8.059999}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -198,11 +198,12 @@ MonoBehaviour:
   hitPs: {fileID: 3859417302317968039, guid: 35199ae5e47f04c3da2b9353598f1650, type: 3}
   accelForce: 10000
   attackForce: 60000
+  itemEmitter: {fileID: 0}
   partolDistance: {x: 5, y: 1}
-  attackDistance: 50
+  attackDistance: {x: 0, y: 0}
   health: 3
   startHealth: 100
-  amber: {fileID: 0}
+  level: 0
   damageNumbersObject: {fileID: 4352203236051628151, guid: 3d07795d9ae794617bd1de79b6065cc0,
     type: 3}
   genericAttackObject: {fileID: 6368268402639536057, guid: b9589d6f131aa4c59a0216c8079786f3,
@@ -223,7 +224,6 @@ MonoBehaviour:
   sleeping: 0
   rayCastSize: 1
   knockBackForce: 0
-  healthBar: {fileID: 8212999913690830142}
   dead: 0
   aiState: 0
   subAiState: 0
@@ -356,12 +356,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31f25e6de04f244479963f1e6abbba0c, type: 3}
---- !u!1 &8212999913690830142 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4750791256936799519, guid: 31f25e6de04f244479963f1e6abbba0c,
-    type: 3}
-  m_PrefabInstance: {fileID: 3464495795697666081}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7760462150546996678 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6604229406746703335, guid: 31f25e6de04f244479963f1e6abbba0c,

@@ -19,6 +19,8 @@ public enum LevelStateId {
     HELICOPTER_LEVEL,
     LEVEL_TINKER_LEVEL_UP,
     LEVEL_QUESTS,
+    LEVEL_MINI_MAP,
+    LEVEL_DRILL_ROOM,
 
     ///////EVERTHING MUST BE ABOVE THIS!!!//////
     LEVEL_COUNT
@@ -39,7 +41,7 @@ public class SceneStateManager : MonoBehaviour
     public bool[] yStuck;
     public float[] cameraZ;
     public bool[] spellLevel;
-    private LevelStateId stateToLoad;
+    public LevelStateId stateToLoad;
     public GameObject player;
     private PlayerMovement playerMovement;
     public GameObject spell;
@@ -117,7 +119,7 @@ public class SceneStateManager : MonoBehaviour
     }
 
     public bool IsInGame() {
-        bool result = !(stateToLoad == LevelStateId.LEVEL_QUESTS || stateToLoad == LevelStateId.LEVEL_JOURNAL || stateToLoad == LevelStateId.LEVEL_SKILL_TILES);
+        bool result = !(stateToLoad == LevelStateId.LEVEL_QUESTS || stateToLoad == LevelStateId.LEVEL_JOURNAL || stateToLoad == LevelStateId.LEVEL_SKILL_TILES || stateToLoad == LevelStateId.LEVEL_TINKER_LEVEL_UP || stateToLoad == LevelStateId.LEVEL_MINI_MAP);
         return result;
     }
 

@@ -14,14 +14,11 @@ using EasyPlatform;
 public class PlayerMovement : MonoBehaviour, IHitBox
 {
     
-    public enum IdleAnimation {
-        ANIMATION_IDLE1, 
-        ANIMATION_IDLE2, 
-    }
-    
     [HideInInspector] public Rigidbody2D rigidBody;
     public float jumpAccel;
     public float moveAccel;
+
+    private MyAssetBundleManager assetManager;
 
     [HideInInspector] public PlatformMove currentParent;
 
@@ -102,9 +99,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     
     public float jumpRaySize;
     
-    public AnimatorOverrideController[] idleAnimations;
-    private Timer idleAnimationTimer;
-    
     private int physicsLayerMask;
     
     public float attackForceUp;
@@ -125,6 +119,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     
     private ForceUpdator forceUpdator;
 
+    public ParticleSystem dustParticleSystem; 
+
     [HideInInspector] public bool usingController;
 
     public float timeToAffectJump;
@@ -141,6 +137,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
         beginParentTransform = transform.parent;
 
+        isGrounded = true;
+
         currentParent = null;
         
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
@@ -149,8 +147,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         autoMoveTimer = new Timer(autoMoveTime);
         canControlPlayer = true;
         
-        idleAnimationTimer = new Timer(10.0f);
-
         flashTimer = new Timer(1.0f);
         flashTimer.turnOff();
 
@@ -184,11 +180,36 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         Time.timeScale = 1.0f;
 
         xpManager = Camera.main.GetComponent<ExperienceManager>();
+        assetManager = Camera.main.GetComponent<MyAssetBundleManager>();
+
+        
+
+        // LoadSpritesAndAnimationsFromBundle("AssetBundles/tinker_idle_eye_blinking");
+        // LoadSpritesAndAnimationsFromBundle("AssetBundles/tinker_idle_gun");
+        // LoadSpritesAndAnimationsFromBundle("AssetBundles/tinker_idle_gun_tail");
+        // LoadSpritesAndAnimationsFromBundle("AssetBundles/tinker_idle_sword");
+        // LoadSpritesAndAnimationsFromBundle("AssetBundles/tinker_idle_sword_tail");
+        // LoadSpritesAndAnimationsFromBundle("AssetBundles/tinker_idle_tail");
+
+        // LoadSpritesAndAnimationsFromBundle("AssetBundles/tinker_idle_animations", true);
+
+
         
         GameManager.playerHealth = xpManager.maxHealth;
         GameManager.updateHealth = true;
     }
     
+
+    private void LoadSpritesAndAnimationsFromBundle(string name, bool hasController = false) {
+        MyAssetBundle a = assetManager.LoadBundle(name);
+        // a.LoadAllAssets(typeof(Sprite));
+        // a.LoadAllAssets(typeof(Animation));
+        if(hasController) {
+            Object[] controller = assetManager.GetAssetsOfType(a, typeof(UnityEngine.RuntimeAnimatorController));  
+            animator.runtimeAnimatorController = (RuntimeAnimatorController)controller[0];
+        }
+        
+    }
     public void CreateUpwardAttackObject() {
         ForceToAddStruct force = new ForceToAddStruct(0.2f, attackForceUp*Vector2.up);
         forceUpdator.AddForce(force);
@@ -203,12 +224,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     }
     
     public void checkSwap() {
-        // if(swapAnimation) {
-        //     Debug.Log("Swapped animation");
-        //     Assert.IsTrue((int)toSwapTo < idleAnimations.Length);
-        //     AnimatorOverrideController newController = idleAnimations[(int)toSwapTo];
-        //     animator.runtimeAnimatorController = newController;
-        // }
     }
     
     public bool CastGroundedRay(Vector3 colliderOffset) {
@@ -386,45 +401,49 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             // bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
             if (enemyType == EnemyType.ENEMY_EVIL) 
             {
-                //NOTE: This is our shield effect
-                Assert.IsTrue(xpManager.defence <= 100.0f);
-                damage = (int)(damage - (xpManager.defence/100.0f)*damage);
-                //
-                flashTimer.turnOn();
                 GameObject damageNumObj = Instantiate(damageNumbersObject,  transform.position, Quaternion.identity);
                 DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
                 damageNum.initializeObject(damage, type);
-                
-                Vector2 dir = (Vector2)transform.position - position;
-                dir.Normalize();
-
-                float forceToApply = reboundForce;
-                if(!isGrounded) {
-                    forceToApply = 0.8f*reboundForce;
-                }
-                
-                ForceToAddStruct force = new ForceToAddStruct(0.1f, forceToApply*dir);
-                forceUpdator.AddForce(force);
-                // thisAnimator.SetTrigger("WasHit");
-                
-                GameManager.playerHealth -= damage;
-                GameManager.updateHealth = true;
-                Time.timeScale = 0.0f;
-                globalPauseTimer.turnOn();
-                ps.Play();
-                
-                
-                if(GameManager.playerHealth < (0.5f*xpManager.maxHealth)) { 
-                    // if(!redHurtImage.enabled) {
-                    //     redHurtImage.enabled = true;
-                    // }
-                    if(!hurtBreathing.isPlaying) {
-                        hurtBreathing.Play();
-                    }
-                    hurtBreathing.volume = Mathf.Lerp(1.0f, 0.7f, GameManager.playerHealth/50.0f);
+                if(damage < 0) {
+                    //is miss
+                } else {
+                    //NOTE: This is our shield effect
+                    Assert.IsTrue(xpManager.defence <= 100.0f);
+                    damage = (int)(damage - (xpManager.defence/100.0f)*damage);
+                    //
+                    flashTimer.turnOn();
                     
-                    // redHurtImage.material.SetFloat("_Amount", Mathf.Lerp(0.1f, 0.0f, GameManager.playerHealth/100.0f));
-                    // hurtPulseTimer.turnOn();
+                    Vector2 dir = (Vector2)transform.position - position;
+                    dir.Normalize();
+
+                    float forceToApply = reboundForce;
+                    if(!isGrounded) {
+                        forceToApply = 0.8f*reboundForce;
+                    }
+                    
+                    ForceToAddStruct force = new ForceToAddStruct(0.1f, forceToApply*dir);
+                    forceUpdator.AddForce(force);
+                    // thisAnimator.SetTrigger("WasHit");
+                    
+                    GameManager.playerHealth -= damage;
+                    GameManager.updateHealth = true;
+                    Time.timeScale = 0.0f;
+                    globalPauseTimer.turnOn();
+                    ps.Play();
+                    
+                    
+                    if(GameManager.playerHealth < (0.5f*xpManager.maxHealth)) { 
+                        // if(!redHurtImage.enabled) {
+                        //     redHurtImage.enabled = true;
+                        // }
+                        if(!hurtBreathing.isPlaying) {
+                            hurtBreathing.Play();
+                        }
+                        hurtBreathing.volume = Mathf.Lerp(1.0f, 0.7f, GameManager.playerHealth/50.0f);
+                        
+                        // redHurtImage.material.SetFloat("_Amount", Mathf.Lerp(0.1f, 0.0f, GameManager.playerHealth/100.0f));
+                        // hurtPulseTimer.turnOn();
+                    }
                 }
                 //Instantiate(hitParticleSystem);
                 
@@ -488,6 +507,10 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
     }
     
+
+    public void FastStopDustEffect() {
+        dustParticleSystem.Play();
+    }
     
     
     public void flipSprite() {
@@ -859,7 +882,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         } else if(canControlPlayer) {
             if(!animator.GetCurrentAnimatorStateInfo(0).IsName("idle_attack")) {
                 
-                float controllerX = Input.GetAxis("Horizontal");
+                float controllerX = Input.GetAxisRaw("Horizontal");
                 if(Mathf.Abs(controllerX) > 0.25f) {
                      
                      Vector2 unitVec = new Vector2(1, 0);
@@ -868,9 +891,9 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 
                         // Debug.Log("ni Vector2" + unitVec);
                     }
-
-                    movementForce += unitVec*Mathf.Sign(controllerX)*Mathf.Max(Mathf.Abs(controllerX), 0.8f);
-
+                    if (Mathf.Abs(controllerX) > 0.9f) {
+                        movementForce += unitVec*Mathf.Sign(controllerX)*Mathf.Max(Mathf.Abs(controllerX), 0.8f);
+                    }
                     usingController = true;
                 }
             }

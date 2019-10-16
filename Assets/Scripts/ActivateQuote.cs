@@ -122,6 +122,7 @@ public class ActivateQuote : MonoBehaviour
         if(!setManual) {
             if(!writer.showText) {
                 if (other.gameObject.tag == "Player" && (Input.GetButtonDown("Fire1") || (automatic && !played && !firstPlay))) {
+                    Debug.Log("Activated");
                     Activate();
                 }
 

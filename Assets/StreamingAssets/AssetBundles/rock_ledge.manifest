@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 552649938
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e5b6f04a22554cf1855082942ac0682a
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ea5a42e0fd8ea905efa7aa926a3b8944
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/new_sprites/area2/fg1.png
+- Assets/new_sprites/area2/platform tile.png
+- Assets/new_sprites/area2/bg tile 1.png
+- Assets/new_sprites/area2/bg tile 3.png
+- Assets/new_sprites/area2/clouds_move_BG.png
+- Assets/new_sprites/area2/fg.png
+- Assets/new_sprites/area2/bg tile 2.png
+- Assets/new_sprites/area2/midground 1.png
+Dependencies: []

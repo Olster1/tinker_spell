@@ -29,6 +29,8 @@ namespace EasyPlatform {
         public float startRadians;
         private bool falledApart;
 
+        public ParticleSystem dustParticleEffect;
+
         public float bounceScale;
 
         private Timer respawnTimer;
@@ -79,9 +81,14 @@ namespace EasyPlatform {
         }
 
         public void StartSpring() {
+             dustParticleEffect.Play();    
+            if(dustParticleEffect != null) {
+               
+            }
             if(!springTimer.isOn()) 
             {
                 springTimer.turnOn();
+
             } else {
                 if(springTimer.getCanoncial() > 0.5f) {
                     springTimer.tAt = springTimer.period - springTimer.tAt;     
@@ -137,15 +144,6 @@ namespace EasyPlatform {
                     Vector3 newP = Vector3.Lerp(startPos.position, endPos.position, lerpT);
                     if(playerReference != null) {
                         if(playerReference.currentParent == this) {
-                            // Vector3 normVec = (endPos.position - startPos.position);
-                            // normVec.Normalize();
-                            // Vector3 dir = lastP - newP;
-                            // if(Vector2.Dot(normVec, dir) > 0) {
-                            //     normVec = (startPos.position - endPos.position);
-                            // } 
-                            
-                            // normVec.Normalize();
-                            // playerReference.rigidBody.AddForce(Mathf.Lerp(0, 7000, lerpT)*normVec);    
                         } else {
                             playerReference = null;
                         }

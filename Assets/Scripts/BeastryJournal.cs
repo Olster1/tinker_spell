@@ -86,7 +86,7 @@ public class BeastryJournal : MonoBehaviour, IBlurInterface, IMenuItemInterface
 
 	public float referenceSize;
 
-    private BlurPostProcess blurPostProcess;
+    
     public SpriteRenderer blurSprite;
 
     public UISelection sideBarMenuSelection;
@@ -120,7 +120,7 @@ public class BeastryJournal : MonoBehaviour, IBlurInterface, IMenuItemInterface
 
         skillSection = Camera.main.GetComponent<SkillSectiom>();
 
-        blurPostProcess = Camera.main.GetComponent<BlurPostProcess>();
+        
 
     	for(int i = 0; i < (int)BeastId.TOTAL_BEAST_COUNT; ++i) {
     		CacheTransform item = cachedTransforms[i] = new CacheTransform();
@@ -169,12 +169,12 @@ public class BeastryJournal : MonoBehaviour, IBlurInterface, IMenuItemInterface
         Activate(false);
     }
 
-    public void ExitMenu() {
-        ExitJournal(false);
+    public void ExitMenu(bool exitWholeJournal) {
+        ExitJournal(exitWholeJournal);
     }
 
     public void ExitFocus() {
-       sideBarMenuSelection.Display(UICurrentSelection.UI_BEASTERY, true);
+       sideBarMenuSelection.Display(UICurrentSelection.UI_BEASTERY, true, null);
        glowTimer.turnOff();
        SpriteRenderer sp = GetIndicator(xCoord, yCoord);
        sp.color = Color.white;
@@ -199,7 +199,7 @@ public class BeastryJournal : MonoBehaviour, IBlurInterface, IMenuItemInterface
             uiHud.SetActive(true);
             sceneManager.useSpawnPoint = false;
             sceneManager.ChangeSceneWithId(sideBarMenuSelection.gameWorldLevelState);
-            sideBarMenuSelection.Hide();
+            sideBarMenuSelection.Hide(currentPage);
         }
         
         enterTransform = null;
@@ -210,8 +210,11 @@ public class BeastryJournal : MonoBehaviour, IBlurInterface, IMenuItemInterface
     }
 
     public void Activate(bool comingFromWorld) {
+
+        currentPage = pages[0];
+        
         if(comingFromWorld) {
-             sideBarMenuSelection.Display(UICurrentSelection.UI_BEASTERY, false);
+             sideBarMenuSelection.Display(UICurrentSelection.UI_BEASTERY, false, currentPage);
              blurSprite.enabled = true;
              sideBarMenuSelection.gameWorldLevelState = sceneManager.GetCurrentLevelState();
         }
@@ -220,8 +223,8 @@ public class BeastryJournal : MonoBehaviour, IBlurInterface, IMenuItemInterface
         enterTransform = null;
         exitTransform = null;       
         pageRustleAudio.Play();
+        enterTransform = currentPage;
 
-        currentPage = enterTransform = pages[0];
         //reset the board
         for(int i = 0; i < (int)BeastId.TOTAL_BEAST_COUNT; ++i) {
             BeastItem item = beasts[i];
@@ -252,17 +255,7 @@ public class BeastryJournal : MonoBehaviour, IBlurInterface, IMenuItemInterface
     // Update is called once per frame
     void Update()
     {
-    	if(Input.GetButtonDown("Submit")) {
-            if(sceneManager.IsInGame()) {
-                if(!isActive) { 
-                    isActive = true;
-                    uiHud.SetActive(false);
-                    blurPostProcess.StartBlur(this);
-                }
-            } else {
-                ExitJournal(true);
-            }
-    	}
+    	
 
 	    if(slideTimer.isOn()) {
 	        bool finished = slideTimer.updateTimer(Time.unscaledDeltaTime);
@@ -278,6 +271,7 @@ public class BeastryJournal : MonoBehaviour, IBlurInterface, IMenuItemInterface
 
 	        if(finished) {
 	            slideTimer.turnOff();
+                sideBarMenuSelection.SetDefaultParent();
 	        }
 	    }
 

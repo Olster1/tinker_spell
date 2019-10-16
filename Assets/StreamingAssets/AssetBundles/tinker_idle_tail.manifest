@@ -1,0 +1,43 @@
+ManifestFileVersion: 0
+CRC: 199374916
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: e58ea84caa76aa726f935aa5036fcbc3
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 872f54559b8772c38fa07b8b8c2fb6ec
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails000.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails013.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails021.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails001.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails002.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails012.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails018.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails009.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails011.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/tails.anim
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails003.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails017.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails005.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails016.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails019.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails015.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails010.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails022.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails004.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails020.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails014.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails007.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails006.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Tails/Tails008.png
+Dependencies: []

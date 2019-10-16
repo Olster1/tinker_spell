@@ -1,0 +1,43 @@
+ManifestFileVersion: 0
+CRC: 1536641213
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 058bf7ac08dfa687658ec10e0ecc2c74
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 872f54559b8772c38fa07b8b8c2fb6ec
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes011.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes008.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes002.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes013.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes019.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes017.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes003.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes007.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/gun_tail_eyes.anim
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes015.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes009.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes014.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes006.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes021.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes018.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes022.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes010.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes001.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes000.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes020.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes005.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes016.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes004.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun Tails Eyes/GunTailEyes012.png
+Dependencies: []

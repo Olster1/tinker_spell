@@ -1,0 +1,43 @@
+ManifestFileVersion: 0
+CRC: 827949403
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a3296b93b9a1053f508421194526d467
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 872f54559b8772c38fa07b8b8c2fb6ec
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun015.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun002.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun004.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun009.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun017.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun019.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun003.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun008.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun016.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun000.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun012.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun007.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun018.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun014.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun021.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun001.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun011.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/gun.anim
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun006.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun022.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun020.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun010.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun013.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/Gun/Gun005.png
+Dependencies: []

@@ -1,0 +1,66 @@
+ManifestFileVersion: 0
+CRC: 2287696245
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 5c8524bad148b174465c899f1dc984d0
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 872f54559b8772c38fa07b8b8c2fb6ec
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0042.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0026.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/sword_tail_blink.anim
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0021.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0039.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0008.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0001.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0035.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0012.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0036.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0005.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0044.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0009.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0045.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0033.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0014.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0038.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0015.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0006.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0024.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0028.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0022.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0002.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0013.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0018.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0017.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0020.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0041.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0029.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0037.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0019.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0034.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0032.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0016.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0011.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0025.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0000.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0027.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0031.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0023.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0007.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0004.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0043.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0030.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0040.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0010.png
+- Assets/new_sprites/tinker/tinker_idle/SingularFrames/SwordTail Blink/frame0003.png
+Dependencies: []
