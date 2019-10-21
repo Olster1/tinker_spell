@@ -60,7 +60,7 @@ public class Journal : MonoBehaviour, IMenuItemInterface, IBlurInterface
     public GameObject journalItemPrefab;
     public GameObject uiHud;
 
-    public float hiddenOffset;
+    private float hiddenOffset;
     private bool xIsNew;
     private bool yIsNew;
     // Start is called before the first frame update
@@ -106,6 +106,12 @@ public class Journal : MonoBehaviour, IMenuItemInterface, IBlurInterface
       pageRustleAudio.Play();
 
       currentPage = enterTransform = listOfQuests;
+
+      float height = (Camera.main.orthographicSize / sceneManager.defaultOrthoSize);
+      currentPage.localScale = Vector3.one * height;
+      singleQuest.localScale = Vector3.one * height;
+      hiddenOffset = height*sceneManager.defaultSafeZone;
+
 
       if(fromWorld) {
           blurSprite.enabled = true;

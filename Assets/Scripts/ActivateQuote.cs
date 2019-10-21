@@ -121,8 +121,7 @@ public class ActivateQuote : MonoBehaviour
     private void OnTriggerStay2D(Collider2D other) {
         if(!setManual) {
             if(!writer.showText) {
-                if (other.gameObject.tag == "Player" && (Input.GetButtonDown("Fire1") || (automatic && !played && !firstPlay))) {
-                    Debug.Log("Activated");
+                if (other.gameObject.tag == "Player" && (Input.GetButtonDown("Fire4") || (automatic && !played && !firstPlay))) {
                     Activate();
                 }
 

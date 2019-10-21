@@ -84,9 +84,6 @@ public class BeastryJournal : MonoBehaviour, IBlurInterface, IMenuItemInterface
 
     private SkillSectiom skillSection;
 
-	public float referenceSize;
-
-    
     public SpriteRenderer blurSprite;
 
     public UISelection sideBarMenuSelection;
@@ -100,7 +97,7 @@ public class BeastryJournal : MonoBehaviour, IBlurInterface, IMenuItemInterface
 	private CacheTransform[] cachedTransforms;
 
 	// this is the safe zone outside of the camera view to animate towards
-	public static int hiddenOffset = 37;//game units  
+	private float hiddenOffset;//game units  
 
 	public Sprite hiddenSprite;
 	public BeastItem[] beasts = new BeastItem[(int)BeastId.TOTAL_BEAST_COUNT];
@@ -212,6 +209,12 @@ public class BeastryJournal : MonoBehaviour, IBlurInterface, IMenuItemInterface
     public void Activate(bool comingFromWorld) {
 
         currentPage = pages[0];
+
+        float height = (Camera.main.orthographicSize / sceneManager.defaultOrthoSize);
+        closeupBeastPage.localScale = Vector3.one * height;
+        pages[0].localScale = Vector3.one * height;
+
+        hiddenOffset = height*sceneManager.defaultSafeZone;
         
         if(comingFromWorld) {
              sideBarMenuSelection.Display(UICurrentSelection.UI_BEASTERY, false, currentPage);

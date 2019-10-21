@@ -57,13 +57,15 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface, IMenuItemInterface
     private Timer slideTimer;
     private Timer amberTimer;
 
+    public InstructionCardEvent instructionEvent;
+
     [HideInInspector] public bool isEnabled;
 
     private Transform enterTransform;
     private Transform exitTransform;
     public Transform currentPage;
     private Transform lastPage;
-    private float hiddenOffset = 37;
+    private float hiddenOffset;
 
     public AudioSource amberDecreaseSound;
 
@@ -116,13 +118,6 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface, IMenuItemInterface
     }
 
 
-    public void EnterSkillSection() {
-        if(!isEnabled && !beastJournal.isActive) {
-            isEnabled = true;
-            blurPostProcess.StartBlur(this);    
-        }
-    }
-
     public void GetFocus() {
         isActive = true;
         growthStates[0].Activate(true);
@@ -142,6 +137,11 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface, IMenuItemInterface
     }
 
     public void Activate(bool comingFromWorld) {
+
+        float height = (Camera.main.orthographicSize / sceneManager.defaultOrthoSize);
+        currentPage.localScale = Vector3.one * height;
+        hiddenOffset = height*sceneManager.defaultSafeZone;
+
         if(comingFromWorld) {
             blurSprite.enabled = true;
             uiHud.SetActive(false);
@@ -175,13 +175,6 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface, IMenuItemInterface
     void Update()
     {
 
-        // if(Input.GetButtonDown("Cancel")) {
-        //     if(isEnabled) {
-        //         ExitSkillSection(true);
-        //     } else {
-        //         EnterSkillSection();
-        //     }
-        // }
         if(slideTimer.isOn()) {
             bool finished = slideTimer.updateTimer(Time.unscaledDeltaTime);
             if(enterTransform != null) {
@@ -279,6 +272,7 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface, IMenuItemInterface
                  
         		if(skillAttributes[index] > 1.0f) {
         			skillAttributes[index] = 1.0f;
+                    instructionEvent.Run();
         		}
 
         		SetLocalAxis(index);

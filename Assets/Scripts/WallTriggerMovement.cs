@@ -27,14 +27,14 @@ public class WallTriggerMovement : MonoBehaviour, IHitBox
 
     public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
         
-      // Debug.Log("was hit");
+      Debug.Log("was hit");
        if (enemyType == EnemyType.ENEMY_GOOD) 
        {	
-       		// Debug.Log("is GOOD");
-       		// Debug.Log(type);
+       		Debug.Log("is GOOD");
+       		Debug.Log(type);
            if(type.Equals("earth")) {
-           		// Debug.Log("was Earth");
-           		// animator.SetTrigger("open");
+           		Debug.Log("was Earth");
+           		animator.SetTrigger("open");
               box.enabled = false;
               spRender.enabled = false;
               childObject.SetActive(true);

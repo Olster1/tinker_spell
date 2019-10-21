@@ -113,6 +113,7 @@ public class FireCoalAi : MonoBehaviour, IHitBox
                  isOut = true;
                  attackObj.SetActive(false);
                  gameObject.GetComponent<ParticleSystem>().Stop();
+                 thisCollider.enabled = false;
                  healthBar.Hide();
                  itemEmitter.emitAmber(AmberType.AMBER_HEALTH, 4, transform.position);
                 }
@@ -145,6 +146,7 @@ public class FireCoalAi : MonoBehaviour, IHitBox
                 health = startHealth;
                 healthBar.ResetHealthBar();
                 healthBar.Show();
+                thisCollider.enabled = true;
             }
         } else {
         	Vector2 moveForce = new Vector2();

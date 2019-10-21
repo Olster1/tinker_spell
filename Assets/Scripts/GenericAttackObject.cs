@@ -10,8 +10,6 @@ public enum EnemyType {
 
 public class GenericAttackObject : MonoBehaviour
 {
-
-
 	public float minDamage;
 	public float maxDamage;
 	private BoxCollider2D attackCollider;

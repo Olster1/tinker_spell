@@ -43,7 +43,7 @@ public class MiniMap : MonoBehaviour, IMenuItemInterface, IBlurInterface
 	private float zoomSpeed;
 	private bool wasDownInMap;
 
-	private float hiddenOffset = 37;
+	private float hiddenOffset;
 
 	private Vector3 mapOffset;
 
@@ -65,6 +65,11 @@ public class MiniMap : MonoBehaviour, IMenuItemInterface, IBlurInterface
     }
 
     public void Activate(bool fromWorld) {
+
+      float height = (Camera.main.orthographicSize / sceneManager.defaultOrthoSize);
+      mapTransform.localScale = Vector3.one * height;
+      hiddenOffset = height*sceneManager.defaultSafeZone;
+
     	if(fromWorld) {
 		    blurSprite.enabled = true;
 		    uiHud.SetActive(false);
@@ -152,8 +157,6 @@ public class MiniMap : MonoBehaviour, IMenuItemInterface, IBlurInterface
 
           float scale = Time.deltaTime*zoomSpeed;
 
-          Debug.Log("x axis: " + xAxisRight);
-          Debug.Log("y axis: " + yAxisRight);
           if(!slideTimer.isOn()) {
           	//Prevent Drift!!
           	if(Mathf.Abs(xAxisRight) < threshold) {

@@ -58,9 +58,13 @@ public class UISelection : MonoBehaviour
 
     private Transform originalParent;
 
+    public Transform backingGradient;
+
+    private Vector3 backingOriginalScale;
     // Start is called before the first frame update
     void Start()
     {
+        backingOriginalScale = backingGradient.localScale;
         blurPostProcess = Camera.main.GetComponent<BlurPostProcess>();
         anim = gameObject.GetComponent<Animator>();
         glowTimer = new Timer(1.0f);
@@ -86,6 +90,10 @@ public class UISelection : MonoBehaviour
 			isActive = true;
             gradientBlackBackground.SetTrigger("fadeIn");
 			// anim.SetTrigger("Show");
+
+            float height = (Camera.main.orthographicSize / sceneManager.defaultOrthoSize);
+            transform.localScale = Vector3.one * height;
+            backingGradient.localScale = backingOriginalScale * height;
 		}
 
 		currentSelection = s_;
@@ -150,7 +158,7 @@ public class UISelection : MonoBehaviour
                     uiHud.SetActive(false);
 
                     Debug.Log(lastMenuState);
-                    blurPostProcess.StartBlur(blurInterfaces[(int)lastMenuState]);
+                    blurPostProcess.StartBlur(blurInterfaces[(int)lastMenuState], 0);
                 }
             } else {
                 ExitCurrentJournal(true);

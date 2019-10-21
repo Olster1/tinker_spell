@@ -7,7 +7,6 @@ using Timer_namespace;
 public enum LevelStateId {
     LEVEL_PORTAL_ROOM,
     LEVEL_1,
-    LEVEL_SKILL_TREE,
     LEVEL_PORTAL_ROOM_RETURN,
     LEVEL_EARTH_LEDGE,
     LEVEL_1_RETURN,
@@ -21,26 +20,36 @@ public enum LevelStateId {
     LEVEL_QUESTS,
     LEVEL_MINI_MAP,
     LEVEL_DRILL_ROOM,
+    LEVEL_INSTRUCTION_CARD,
 
     ///////EVERTHING MUST BE ABOVE THIS!!!//////
     LEVEL_COUNT
+}
+
+[System.Serializable]
+public class LevelState {
+    public LevelStateId id;
+
+    public GameObject levelObject;
+    public GameObject spawnPointObj;
+    public GameObject cameraSpawnPoint;
+    public bool turnSkyOff;
+    public bool yStuck;
+    public bool spellLevel;
 }
 
 
 
 public class SceneStateManager : MonoBehaviour
 {
-    public class LevelObject {
-        
-    }
+
+    private IDictionary<LevelStateId, LevelState> levels;
+    //we use this one to fill it out then fill out the dictionary so doesn't matter what order  
+    //they are declared in
+    public LevelState[] levelInputs = new LevelState[(int)LevelStateId.LEVEL_COUNT]; 
+    //
+
     private Animator animator;
-    public GameObject[] levelObjects;
-    public GameObject[] spawnPointObjs;
-    public GameObject[] cameraSpawnPoints;
-    public bool[] turnSkyOff;
-    public bool[] yStuck;
-    public float[] cameraZ;
-    public bool[] spellLevel;
     public LevelStateId stateToLoad;
     public GameObject player;
     private PlayerMovement playerMovement;
@@ -48,6 +57,8 @@ public class SceneStateManager : MonoBehaviour
     private SpellAi spellAi;
     public GameObject cam;
     public ParticleSystem tailPs;
+    [HideInInspector] public float defaultOrthoSize;
+    [HideInInspector] public float defaultSafeZone;
 
     public GameObject skyParent;
 
@@ -67,18 +78,24 @@ public class SceneStateManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {	
+        levels = new Dictionary<LevelStateId, LevelState>();
+
+        for(int i = 0; i < levelInputs.Length; ++i) {
+            LevelState s = levelInputs[i];
+            levels.Add(s.id, s);
+
+            Debug.Log(s.id);
+            Debug.Log(levels[s.id].id);
+
+        }
+
+        defaultOrthoSize = 10.0f;
+        defaultSafeZone = 37;
         animator = gameObject.GetComponent<Animator>();
         playerMovement = player.GetComponent<PlayerMovement>();
         Assert.IsNotNull(playerMovement);
 
         spellAi = spell.GetComponent<SpellAi>();
-
-        int len = levelObjects.Length;
-        Assert.IsTrue(spawnPointObjs.Length == len);
-        Assert.IsTrue(cameraSpawnPoints.Length == len);
-        Assert.IsTrue(yStuck.Length == len);
-        Assert.IsTrue(turnSkyOff.Length == len);
-        Assert.IsTrue(spellLevel.Length == len);
 
         camRb = cam.GetComponent<Rigidbody2D>();
 
@@ -119,7 +136,7 @@ public class SceneStateManager : MonoBehaviour
     }
 
     public bool IsInGame() {
-        bool result = !(stateToLoad == LevelStateId.LEVEL_QUESTS || stateToLoad == LevelStateId.LEVEL_JOURNAL || stateToLoad == LevelStateId.LEVEL_SKILL_TILES || stateToLoad == LevelStateId.LEVEL_TINKER_LEVEL_UP || stateToLoad == LevelStateId.LEVEL_MINI_MAP);
+        bool result = !(stateToLoad == LevelStateId.LEVEL_QUESTS || stateToLoad == LevelStateId.LEVEL_JOURNAL || stateToLoad == LevelStateId.LEVEL_SKILL_TILES || stateToLoad == LevelStateId.LEVEL_TINKER_LEVEL_UP || stateToLoad == LevelStateId.LEVEL_MINI_MAP || stateToLoad == LevelStateId.LEVEL_INSTRUCTION_CARD);
         return result;
     }
 
@@ -130,10 +147,10 @@ public class SceneStateManager : MonoBehaviour
         Vector3 spellOffset = new Vector3(0, 1, 0);
         spell.transform.position = spawnPoint.transform.position + spellOffset;
 
-        GameObject camSpawnP = cameraSpawnPoints[(int)stateToLoad];
+        GameObject camSpawnP = levels[stateToLoad].cameraSpawnPoint;
         if(camSpawnP) {
             Vector3 camSpawnPos = camSpawnP.transform.position;
-            Vector3 camPos = new Vector3(camSpawnPos.x, camSpawnPos.y, cameraZ[(int)stateToLoad]);
+            Vector3 camPos = new Vector3(camSpawnPos.x, camSpawnPos.y, -10);
             cam.transform.position = camPos;
         } else {
             cam.transform.position = spawnPoint.transform.position;
@@ -159,21 +176,22 @@ public class SceneStateManager : MonoBehaviour
     }
 
     void ChangeScene() {
-        // Debug.Log("loading: " + stateToLoad);
-        for(int i = 0; i < levelObjects.Length; ++i) {
-            GameObject obj = levelObjects[i];
-            if(obj != null && i != (int)stateToLoad) {
+        //turn off the last scenes
+        for(int i = 0; i < levelInputs.Length; ++i) {
+            GameObject obj = levelInputs[i].levelObject;
+            if(obj != null && levelInputs[i].id != stateToLoad) {
                 obj.SetActive(false);
             }
         }
 
-        //turn off the last scene
-        GameObject levelObj = levelObjects[(int)stateToLoad];
+        //turn on new scene
+        LevelState lvlState = levels[stateToLoad];
+        GameObject levelObj = lvlState.levelObject;
         if(levelObj != null) {
             levelObj.SetActive(true);
         }
             
-        GameObject spawnPoint = spawnPointObjs[(int)stateToLoad];
+        GameObject spawnPoint = lvlState.spawnPointObj;
 
 
         if(spawnPoint == null) {
@@ -192,7 +210,7 @@ public class SceneStateManager : MonoBehaviour
         }
 
         if(spawnPoint != null) { 
-            if(spellLevel[(int)stateToLoad]) {
+            if(lvlState.spellLevel) {
                   player.GetComponent<PlayerMovement>().canControlPlayer = false;
                   player.SetActive(false);
                   spellAi.controllingSpell = true;
@@ -218,14 +236,14 @@ public class SceneStateManager : MonoBehaviour
         // playerGroundedScript.groundedCount = 0;
         // //
         
-        if(yStuck[(int)stateToLoad]) {
+        if(lvlState.yStuck) {
             camBehaviour.SetYStuck(true);
         } else {
             camBehaviour.SetYStuck(false);
         }
 
 
-        if(turnSkyOff[(int)stateToLoad]) {
+        if(lvlState.turnSkyOff) {
             skyParent.SetActive(false);
         } else {
             skyParent.SetActive(true);

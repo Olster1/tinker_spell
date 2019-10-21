@@ -58,7 +58,7 @@
                 col.b = 0;
                 col.a = 0;
 
-                float min = lerp(_Amount - (0.5f*_Amount), _Amount, _tAt);
+                float min = lerp(0.0f, _Amount, _tAt);
                 float max = 1.0f - min;
 
                 if(i.uv.x < min) {

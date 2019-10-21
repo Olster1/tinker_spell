@@ -3,7 +3,7 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _hitOffset ("hitOffset", Range (0.0, 1.0)) = 0.0
+        _hitOffset ("hitOffset", Float) = 0.0
 
     }
     SubShader
@@ -86,9 +86,10 @@
                 v2f o;
 
                 float4 temp = mul(unity_ObjectToWorld, v.vertex);
-                float noise = ((1.5f*fbm(0.1f*temp.xy + 4*_Time.x))) - 1.0f;
-                float x = lerp(0, noise + _hitOffset, v.uv.y);
-                float4 offset = float4(x, v.vertex.y, v.vertex.z, v.vertex.w);
+                float amplitude = 1.5f*(_hitOffset);
+                float noise = (amplitude*fbm(0.1f*temp.xy + 4*_Time.x)) - 0.5f*amplitude;
+                float x = lerp(0, noise, v.uv.y);
+                float4 offset = float4(x, 0, 0, 0);
                 float4 modelVertex = v.vertex + offset;
                 o.vertex = UnityObjectToClipPos(modelVertex);
                 o.uv = v.uv;

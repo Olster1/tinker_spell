@@ -13,7 +13,7 @@ public class DeformOnEnter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {   
-        swayTimer = new Timer(1.0f);
+        swayTimer = new Timer(2.0f);
         swayTimer.turnOff();
     }
 
@@ -23,8 +23,9 @@ public class DeformOnEnter : MonoBehaviour
         if(swayTimer.isOn()) {
             bool b = swayTimer.updateTimer(Time.deltaTime);
             float f = Mathf.Sin(Mathf.PI*swayTimer.getCanoncial());
-            // sp.material.SetFloat("_hitOffset", direction*2*f);
+            sp.material.SetFloat("_hitOffset", f + 1.0f);
             if(b) {
+                sp.material.SetFloat("_hitOffset", 1.0f);
                 swayTimer.turnOff();
             }
         }

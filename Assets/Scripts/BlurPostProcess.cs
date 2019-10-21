@@ -10,7 +10,8 @@ public class BlurPostProcess : MonoBehaviour
 	public Material mat;
 	private Vector2 res;
 
-	public SpriteRenderer spRenderer;
+    private int spriteImageIndex;
+	public SpriteRenderer[] spRenderer = new SpriteRenderer[2];
 
 	private Texture2D textureSaved;
 	private bool renderToImage;
@@ -22,9 +23,10 @@ public class BlurPostProcess : MonoBehaviour
     	iterations = 8;
     }
 
-    public void StartBlur(IBlurInterface i ) {
+    public void StartBlur(IBlurInterface i, int blurIndex) {
     	blurInterface = i;
     	renderToImage = true;
+        spriteImageIndex = blurIndex;
     }
     // Update is called once per frame
     void Update()
@@ -52,6 +54,7 @@ public class BlurPostProcess : MonoBehaviour
         // }
     }
 
+
     void SetUniforms(bool isHorizontal) {
     	mat.SetInt("_Horizontal", (isHorizontal ? 1 : 0));
     }
@@ -69,7 +72,7 @@ public class BlurPostProcess : MonoBehaviour
         //get it the size of the screen
         float ratio = src.width / (pointMax.x - pointMin.x);
 
-        spRenderer.sprite = Sprite.Create(textureSaved, new Rect(0, 0, src.width, src.height), new Vector2(0.5f, 0.5f), ratio, 0);
+        spRenderer[spriteImageIndex].sprite = Sprite.Create(textureSaved, new Rect(0, 0, src.width, src.height), new Vector2(0.5f, 0.5f), ratio, 0);
 	}
 
     void OnRenderImage(RenderTexture src, RenderTexture dest) {

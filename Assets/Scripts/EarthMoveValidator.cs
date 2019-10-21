@@ -45,7 +45,7 @@ public class EarthMoveValidator : MonoBehaviour
         	for(int i = 0; i < hits.Length; ++i) {
         	    RaycastHit2D hitObj = hits[i];
                 // Debug.Log(hitObj.collider.gameObject.tag);
-        	    if(hitObj.collider.gameObject != gameObject && !hitObj.collider.isTrigger && (hitObj.collider.gameObject.tag == "WorldGeometryEarth" || hitObj.collider.gameObject.tag == "PlatformGeometryEarth")) {
+        	    if(hitObj.collider.gameObject != gameObject && !hitObj.collider.isTrigger && (hitObj.collider.gameObject.tag == "WorldGeometryEarth" || hitObj.collider.gameObject.tag == "WorldGeometryPlatform" || hitObj.collider.gameObject.tag == "PlatformGeometryEarth")) {
                     result = true;
         	        break;
         	    }

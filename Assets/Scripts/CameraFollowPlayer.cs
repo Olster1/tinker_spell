@@ -59,6 +59,32 @@ public class CameraFollowPlayer : MonoBehaviour
 
     // Update is called once per frame
     void LateUpdate() {
+        float threshold = 0.5f;
+        float lowerThreshold = 0.25f;
+
+        // float xAxisRight = Input.GetAxis("RightVertical");
+        float yAxisRight = Input.GetAxis("RightHorizontal");
+
+
+        //Prevent Drift!!
+        // if(Mathf.Abs(xAxisRight) < threshold) {
+        //     xAxisRight = 0;
+        // }
+
+        if(manager.IsInGame()) {
+            if(Mathf.Abs(yAxisRight) < threshold) {
+                yAxisRight = 0;
+            }
+
+            if(yAxisRight > threshold) {
+                cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, 20, Time.deltaTime);
+            } else if(yAxisRight < -threshold) {
+                cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, 4, Time.deltaTime);
+            }
+        } 
+        
+
+
         if (followPlayer) {
             Vector3 newPos = new Vector3(playerTransform.position.x, playerTransform.position.y, cameraTransform.position.z);
             float x = Mathf.SmoothStep(cameraTransform.position.x, newPos.x, moveSpeed);

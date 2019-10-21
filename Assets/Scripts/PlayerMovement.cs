@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
 {
     
     [HideInInspector] public Rigidbody2D rigidBody;
+    public float doubleJumpAccel;
     public float jumpAccel;
     public float moveAccel;
 
@@ -49,8 +50,6 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     
     public Timer flashTimer;
 
-    private Timer doubleJumpTimer; //NOTE(ol): To check if player pressed jump twice 
-    
     public Animator camAnimator;
     public ParticleSystem ps;
 
@@ -116,6 +115,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     private bool flipForEarthMove;
     
     private float shadowP;
+
+    private bool didDoubleJump;
     
     private ForceUpdator forceUpdator;
 
@@ -140,6 +141,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         isGrounded = true;
 
         currentParent = null;
+
+        didDoubleJump = false;
         
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         jumpTimer = new Timer(0.5f);
@@ -150,10 +153,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         flashTimer = new Timer(1.0f);
         flashTimer.turnOff();
 
-        doubleJumpTimer = new Timer(0.1f);
-        doubleJumpTimer.turnOff();
-        
-        hurtPulseTimer = new Timer(1.0f);
+        hurtPulseTimer = new Timer(0.5f);
         hurtPulseTimer.turnOn();
         
         forceUpdator = new ForceUpdator();
@@ -161,7 +161,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);
         
         
-        globalPauseTimer = new Timer(0.1f);
+        globalPauseTimer = new Timer(0.5f);
+        globalPauseTimer.turnOff();
         dieTimer = new Timer(0.7f);
         dieTimer.turnOff();
         ParticleSystem.MainModule main = ps.main;
@@ -302,14 +303,14 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     }
     
     public void CreateSidewardAttack() {
-        float signOfMovement = Mathf.Sign(rigidBody.velocity.x);
+        float signOfMovement = spriteRenderer.flipX ? -1 : 1;//Mathf.Sign(rigidBody.velocity.x);
         
         ForceToAddStruct force = new ForceToAddStruct(0.1f, Vector2.right*signOfMovement*attackForceUp);
         forceUpdator.AddForce(force);
         
         GameObject attackObj = Instantiate(genericAttackObject, transform);
         
-        Vector2 startPos = (Vector2)boxCollider.bounds.center + new Vector2(signOfMovement*(0.5f*boxCollider.size.y + 0.1f), 0);        
+        Vector2 startPos = (Vector2)boxCollider.bounds.center + new Vector2(signOfMovement*(0.5f*boxCollider.size.y + 0.1f), 1);        
         Vector2 localStartPos = (Vector2)transform.InverseTransformPoint(startPos);
         AttackObjectCreator.initAttackObject(attackObj, localStartPos, localStartPos, 
                                              EnemyType.ENEMY_GOOD, 0.5f, xpManager.strength, xpManager.strength + xpManager.strengthDiff);
@@ -321,7 +322,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
         GameObject attackObj = Instantiate(genericAttackObject, transform);
         
-        Vector2 startPos = (Vector2)boxCollider.bounds.center + new Vector2(signOfMovement*(0.5f*boxCollider.size.y + 0.1f), 0);        
+        Vector2 startPos = (Vector2)boxCollider.bounds.center + new Vector2(signOfMovement*(0.5f*boxCollider.size.y + 0.1f), 1);        
         Vector2 localStartPos = (Vector2)transform.InverseTransformPoint(startPos);
         AttackObjectCreator.initAttackObject(attackObj, localStartPos, localStartPos, 
                                              EnemyType.ENEMY_GOOD, 0.5f, xpManager.strength, xpManager.strength + 5);
@@ -431,18 +432,18 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                     globalPauseTimer.turnOn();
                     ps.Play();
                     
+                    if(!redHurtImage.enabled) {
+                        redHurtImage.enabled = true;
+                    }
+
+                    redHurtImage.material.SetFloat("_Amount", Mathf.Lerp(0.1f, 0.0f, GameManager.playerHealth/100.0f));
+                    hurtPulseTimer.turnOn();
                     
                     if(GameManager.playerHealth < (0.5f*xpManager.maxHealth)) { 
-                        // if(!redHurtImage.enabled) {
-                        //     redHurtImage.enabled = true;
-                        // }
                         if(!hurtBreathing.isPlaying) {
                             hurtBreathing.Play();
                         }
                         hurtBreathing.volume = Mathf.Lerp(1.0f, 0.7f, GameManager.playerHealth/50.0f);
-                        
-                        // redHurtImage.material.SetFloat("_Amount", Mathf.Lerp(0.1f, 0.0f, GameManager.playerHealth/100.0f));
-                        // hurtPulseTimer.turnOn();
                     }
                 }
                 //Instantiate(hitParticleSystem);
@@ -570,21 +571,24 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         
         if(hurtPulseTimer.isOn()) {
             bool hrtDone = hurtPulseTimer.updateTimer(Time.deltaTime);
-            float alpha = (float)-Mathf.Cos(2*Mathf.PI*hurtPulseTimer.getCanoncial()) + 1.0f;
+            float alpha = Mathf.SmoothStep(0, 1, Mathf.Sin(Mathf.PI*hurtPulseTimer.getCanoncial()));
             redHurtImage.material.SetFloat("_tAt", alpha);
             if(hrtDone) {
-                hurtPulseTimer.turnOn();
+                hurtPulseTimer.turnOff();
+                redHurtImage.enabled = false;
             } 
         }
         
         //this is the global pause timer
         if(globalPauseTimer.isOn()) {
-            bool fin = globalPauseTimer.updateTimer(Time.unscaledDeltaTime);
-            // Time.timeScale = Mathf.Lerp(0.0f, 0.3f, globalPauseTimer.getCanoncial());
-            if(fin) {
-                globalPauseTimer.turnOff();
-                Time.timeScale = 1.0f;
-            }
+            globalPauseTimer.turnOff();
+            Time.timeScale = 1.0f;
+            // bool fin = globalPauseTimer.updateTimer(Time.unscaledDeltaTime);
+            // // Time.timeScale = Mathf.Lerp(0.0f, 0.3f, globalPauseTimer.getCanoncial());
+            // if(fin) {
+            //     globalPauseTimer.turnOff();
+            //     Time.timeScale = 1.0f;
+            // }
         }
         
         if(dieTimer.isOn()) {
@@ -645,6 +649,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         animator.SetFloat("timeInAir", timeInAir);
         
         if(isGrounded && !lastFameGrounded) {
+            didDoubleJump = false;
             if(timeInAir > 1.5f) {
                 if(currentParent && currentParent.type == PlatformType.PLATFORM_NULL) {
                     //do boucy effect
@@ -669,17 +674,18 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 //MAGIC MOVES 
 
                 if(Input.GetButtonDown("Fire2") && isGrounded && GameManager.hasEarth1 && !earthTimer.isOn()) {
-                    // if(earthMoveValidator.isOk() >= 0) {
-                        earthAttackLevel = 2;//earthMoveValidator.isOk();
+                    int earthLevel = earthMoveValidator.isOk();
+                    if(earthLevel >= 0) {
+                        earthAttackLevel = earthLevel;
                         spell.thisAnimator.SetTrigger("exit_run");
                         flipForEarthMove = spriteRenderer.flipX;
                         spell.flipForDive = spriteRenderer.flipX;
                         spell.thisAnimator.SetTrigger("earth_dive");
                         camAnimator.SetTrigger("zoom");
                         earthMoveValidator.turnOff();
-                    // } else {
-                    //     earthMoveValidator.turnOn();
-                    // }
+                    } else {
+                        earthMoveValidator.turnOn();
+                    }
                 } 
             } else {
                 earthMoveValidator.turnOff();
@@ -938,16 +944,7 @@ public class PlayerMovement : MonoBehaviour, IHitBox
                 //wait till over a percentage
                 
             } else {
-
-                if(jumpTimer.getCanoncial() > 0.2f) { //NOTE(ol): Have 0.2 seconds to do a double jump
-                    if(Input.GetButtonDown("Jump") && !animator.GetBool("DoubleJump") && !animator.GetCurrentAnimatorStateInfo(0).IsName("double_jump") && animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_jump") ) {
-                        ForceToAddStruct force = new ForceToAddStruct(0.2f, jumpAccel*Vector2.up);
-                        rocketPS.Play();
-                        forceUpdator.AddForce(force);
-                        animator.SetTrigger("DoubleJump");
-                        rocketSound.Play();
-                    }
-                } else if(!Input.GetButton("Jump") && jumpTimer.tAt > timeToAffectJump) {
+                if(!Input.GetButton("Jump") && jumpTimer.tAt > timeToAffectJump) {
                     jumpTimer.turnOff();
                 }
                  
@@ -971,6 +968,16 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             }
             
         } 
+
+        if(!didDoubleJump && !jumpTimer.isOn() && Input.GetButtonDown("Jump") && !animator.GetBool("DoubleJump") && !animator.GetCurrentAnimatorStateInfo(0).IsName("double_jump") && animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_falling") ) {
+            rigidBody.AddForce(doubleJumpAccel*Vector2.up, ForceMode2D.Impulse);
+            // ForceToAddStruct force = new ForceToAddStruct(0.1f, doubleJumpAccel*Vector2.up);
+            rocketPS.Play();
+            // forceUpdator.AddForce(force);
+            animator.SetTrigger("DoubleJump");
+            rocketSound.Play();
+            didDoubleJump = true;
+        }
         
         
         Vector2 f = forceUpdator.update();

@@ -463,6 +463,22 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         }
     }
 
+    Vector2 GetAttackDamage() {
+        float min = 15;
+        float max = 20;
+        float luck = Random.Range(0.0f, 1.0f);//xpManager.luck;
+
+        // Debug.Log("luck" + luck);
+        if(luck < 0.3f) {
+            min = -1;
+            max = -1;
+
+        }
+
+        Vector2 result = new Vector2(min, max);
+        return result;
+    }
+
     public class DirectionElm {
         public bool direction;
         public Ai_SubState aiState;
@@ -535,10 +551,11 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         Vector2 diffVec = diffVecForAttack;
         GameObject attackObj = Instantiate(genericAttackObject, transform);
         
+        Vector2 attackDamage = GetAttackDamage();
         Vector2 startPos = new Vector2(1, 0);
         Vector2 directionOfAttack = Mathf.Sign(diffVec.x)*Vector2.right;
         AttackObjectCreator.initAttackObject(attackObj, startPos + 4*directionOfAttack, startPos + 4*directionOfAttack, 
-                                             EnemyType.ENEMY_EVIL, 0.5f, 12, 16);
+                                             EnemyType.ENEMY_EVIL, 0.5f, attackDamage.x, attackDamage.y);
         
     }
     
@@ -547,10 +564,10 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         Vector2 diffVec = diffVecForAttack;
         diffVec.Normalize();
         GameObject attackObj = Instantiate(genericAttackObject, transform);
-        
+        Vector2 attackDamage = GetAttackDamage();
         Vector2 startPos = new Vector2(0, 0);
         AttackObjectCreator.initAttackObject(attackObj, startPos + 4*diffVec, startPos + 4*diffVec, 
-                                             EnemyType.ENEMY_EVIL, 0.5f, 12, 16);
+                                             EnemyType.ENEMY_EVIL, 0.5f, attackDamage.x, attackDamage.y);
         
     }
     
@@ -580,8 +597,9 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         Vector2 startPos = new Vector2(1, 0) + 4*directionOfAttack;
         Vector2 endPos = startPos + new Vector2(0, -2);
         
+        Vector2 attackDamage = GetAttackDamage();
         AttackObjectCreator.initAttackObject(attackObj, startPos, endPos, 
-                                             EnemyType.ENEMY_EVIL,0.5f, 22, 36);
+                                             EnemyType.ENEMY_EVIL,0.5f, attackDamage.x, attackDamage.y);
         
         sentinelAttack.pitch = (float)Random.Range(0.9f, 1.15f);
         
