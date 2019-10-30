@@ -8,11 +8,13 @@ using EasyGameManager;
 
 public class ActivateQuote : MonoBehaviour
 {
-	public Animator quoteAnimator;
+	
     public AudioSource soundSource;
-    public GameObject uiImage;
+    // public GameObject uiImage;
     public string[] dialog;
-    public TextWriter writer;
+
+    private Animator quoteAnimator;
+    private TextWriter writer;
     private bool fadeIn;
 
     public bool unfreezePlayer;
@@ -58,6 +60,11 @@ public class ActivateQuote : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        MySceneManager myManager = Camera.main.GetComponent<MySceneManager>();
+
+        quoteAnimator = myManager.quoteAnimator;
+        writer = myManager.textWriter;
+
         fadeTimer = new Timer(0.5f);
         fadeTimer.turnOff();
         sp.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);

@@ -1,9 +1,10 @@
 fileFormatVersion: 2
-guid: b0dbe8a27f6b1884e8ce7b99d7b3db79
+guid: 2adc8b8b989ed2843b04fa3d2fe09c63
 TextureImporter:
   fileIDToRecycleName:
-    21300000: foreground 1.1_0
-    21300002: foreground 1.1_1
+    21300000: platformms_0
+    21300002: platformms_1
+    21300004: platformms_2
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -62,7 +63,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -73,7 +74,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   - serializedVersion: 2
     buildTarget: Standalone
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -86,13 +87,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: foreground 1.1_0
+      name: platformms_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 2248
-        height: 1858
+        x: 105
+        y: 1183
+        width: 1616
+        height: 985
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -100,19 +101,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 12855e9840bd98a42ac07bc1b44450a6
+      spriteID: 7b98f931ba68691468aedd1bec811015
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: foreground 1.1_1
+      name: platformms_1
       rect:
         serializedVersion: 2
-        x: 5310
-        y: 0
-        width: 1442
-        height: 1332
+        x: 2239
+        y: 1067
+        width: 2001
+        height: 1272
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -120,7 +121,27 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7612e82e28462794c83bd33824861873
+      spriteID: c6803d5335b0b4e41aff84afffb84a9c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: platformms_2
+      rect:
+        serializedVersion: 2
+        x: 1105
+        y: 70
+        width: 2116
+        height: 931
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2418bba29bc8274abc1ba5c8466bfc7
       vertices: []
       indices: 
       edges: []
@@ -128,7 +149,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: a03f4ad6263d3a74cabb43838f59cb10
+    spriteID: 156e321d73622c847997b9eb33484ad6
     vertices: []
     indices: 
     edges: []

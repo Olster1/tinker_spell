@@ -8,14 +8,17 @@ using ConfigControls_namespace;
 
 public class NextSceneTrigger : MonoBehaviour
 {
-	public Animator animator;
+	
 	public LevelStateId levelToLoad;
-	public SceneStateManager manager;
+
     public Vector2 autoMoveDirection;
     public bool withText;
     public string textToShow;
-    public Text textUI;
-    public PlayerMovement playerMovement;
+
+    private SceneStateManager manager;
+    private Animator animator;
+    private Text textUI;
+    private PlayerMovement playerMovement;
 
     public GameObject indicatorPrefab;
 
@@ -25,6 +28,13 @@ public class NextSceneTrigger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+      MySceneManager myManager = Camera.main.GetComponent<MySceneManager>();
+
+      manager = myManager.sceneStateManager;
+      animator = myManager.sceneAnimator;
+      textUI = myManager.textUI;
+      playerMovement = myManager.playerMovement;
+
         if(!isAutomatic) {
             indicator = Instantiate(indicatorPrefab, transform.position, Quaternion.identity).GetComponent<InteractWithIndicate>();
             indicator.spRender.flipX = autoMoveDirection.x < 0;

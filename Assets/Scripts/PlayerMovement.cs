@@ -27,6 +27,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     private Animator animator;
     public Image redHurtImage;
 
+    private ZoomTrigger currentZoomTrigger;
+
     private float timeInAir;
 
     public AudioSource rocketSound;
@@ -56,6 +58,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
     public float flipMargin;
     
     private Timer hurtPulseTimer;
+
+    private ForceToAddStruct doubleJumpForce;
 
     public EarthMoveValidator earthMoveValidator;
     
@@ -136,6 +140,8 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         animator = gameObject.GetComponent<Animator>();
         boxCollider = gameObject.GetComponent<BoxCollider2D>();
 
+        currentZoomTrigger = null;
+
         beginParentTransform = transform.parent;
 
         isGrounded = true;
@@ -200,6 +206,12 @@ public class PlayerMovement : MonoBehaviour, IHitBox
         GameManager.updateHealth = true;
     }
     
+    public void SetZoomTrigger(ZoomTrigger zoomTrigger) {
+        if(currentZoomTrigger != null) {
+            currentZoomTrigger.StopZoom();
+        }
+        currentZoomTrigger = zoomTrigger;
+    }
 
     private void LoadSpritesAndAnimationsFromBundle(string name, bool hasController = false) {
         MyAssetBundle a = assetManager.LoadBundle(name);
@@ -969,15 +981,20 @@ public class PlayerMovement : MonoBehaviour, IHitBox
             
         } 
 
-        if(!didDoubleJump && !jumpTimer.isOn() && Input.GetButtonDown("Jump") && !animator.GetBool("DoubleJump") && !animator.GetCurrentAnimatorStateInfo(0).IsName("double_jump") && animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_falling") ) {
-            rigidBody.AddForce(doubleJumpAccel*Vector2.up, ForceMode2D.Impulse);
-            // ForceToAddStruct force = new ForceToAddStruct(0.1f, doubleJumpAccel*Vector2.up);
+        if(!didDoubleJump && Input.GetButtonDown("Jump") && !animator.GetBool("DoubleJump") && !animator.GetCurrentAnimatorStateInfo(0).IsName("double_jump") && (animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_falling") || animator.GetCurrentAnimatorStateInfo(0).IsName("tinker_jump") || animator.GetCurrentAnimatorStateInfo(0).IsName("landing_small"))) {
+            // rigidBody.AddForce(doubleJumpAccel*Vector2.up, ForceMode2D.Impulse);
+            
+            doubleJumpForce = new ForceToAddStruct(0.3f, doubleJumpAccel*Vector2.up, ForceType.FORCE_CONSTANT);
             rocketPS.Play();
-            // forceUpdator.AddForce(force);
+            forceUpdator.AddForce(doubleJumpForce);
             animator.SetTrigger("DoubleJump");
             rocketSound.Play();
-            didDoubleJump = true;
+            // didDoubleJump = true;
         }
+
+        if(doubleJumpForce != null && !Input.GetButton("Jump")) {
+            doubleJumpForce.EndForce();
+        } 
         
         
         Vector2 f = forceUpdator.update();

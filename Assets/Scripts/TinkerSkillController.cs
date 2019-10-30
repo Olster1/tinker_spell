@@ -43,7 +43,7 @@ public class TinkerSkillController : MonoBehaviour
 
 	public Row[] sprites = new Row[4];
     public Row[] filledSprites = new Row[4];
-    public SceneStateManager sceneManager;
+    private SceneStateManager sceneManager;
 
 	private ExperienceManager xpManager;
     private LevelStateId lastLevelToLoad;
@@ -54,6 +54,7 @@ public class TinkerSkillController : MonoBehaviour
         xCoord = 0;
         yCoord = 0;
 
+        sceneManager = Camera.main.GetComponent<MySceneManager>().sceneStateManager;
         xpManager = Camera.main.GetComponent<ExperienceManager>();
 
         for(int y = 0; y < 4; ++y) {

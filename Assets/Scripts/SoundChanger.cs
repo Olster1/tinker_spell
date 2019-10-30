@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class SoundChanger : MonoBehaviour
 {
-	public SoundMixer mixer;
+	private SoundMixer mixer;
 	public SoundMixer.MusicId idToSet;
   public bool onlyOnce;
   private bool done;
     // Start is called before the first frame update
     void Start()
     {
-        
+        mixer = Camera.main.GetComponent<SoundMixer>();
     }
 
     // Update is called once per frame

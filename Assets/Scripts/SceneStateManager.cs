@@ -31,12 +31,14 @@ public class LevelState {
     public LevelStateId id;
 
     public GameObject levelObject;
-    public GameObject spawnPointObj;
-    public GameObject cameraSpawnPoint;
     public bool turnSkyOff;
     public bool yStuck;
     public bool spellLevel;
+
+    [HideInInspector] public GameObject loadedLevel;
+
 }
+
 
 
 
@@ -68,6 +70,8 @@ public class SceneStateManager : MonoBehaviour
 
     public EarthMoveValidator earthValidator;
 
+    public GameObject lastGameObject;
+
     // public CheckGrounded playerGroundedScript;
     [HideInInspector] public bool useSpawnPoint;
 
@@ -84,8 +88,8 @@ public class SceneStateManager : MonoBehaviour
             LevelState s = levelInputs[i];
             levels.Add(s.id, s);
 
-            Debug.Log(s.id);
-            Debug.Log(levels[s.id].id);
+            // Debug.Log(s.id);
+            // Debug.Log(levels[s.id].id);
 
         }
 
@@ -128,10 +132,6 @@ public class SceneStateManager : MonoBehaviour
     }
 
     void ResetFromFall() {
-        // GameObject spawnPoint = spawnPointObjs[(int)stateToLoad];
-        // ResetFromSpawnPoint(spawnPoint);
-        // playerMovement.autoMoveTimer.turnOn();
-        // playerMovement.autoMoveTimer = false;
         playerMovement.ResetPositionFromFall();   
     }
 
@@ -140,20 +140,25 @@ public class SceneStateManager : MonoBehaviour
         return result;
     }
 
-    void ResetFromSpawnPoint(GameObject spawnPoint) {
-        player.transform.position = spawnPoint.transform.position;
+    void ResetFromSpawnPoint(Transform spawnPoint, GameObject levelObj) {
+        player.transform.position = spawnPoint.position;
         earthValidator.ResetColliders();
 
         Vector3 spellOffset = new Vector3(0, 1, 0);
-        spell.transform.position = spawnPoint.transform.position + spellOffset;
+        spell.transform.position = spawnPoint.position + spellOffset;
 
-        GameObject camSpawnP = levels[stateToLoad].cameraSpawnPoint;
-        if(camSpawnP) {
-            Vector3 camSpawnPos = camSpawnP.transform.position;
+        string nameToFind = stateToLoad.ToString() + "_CAMERA_SPAWN";
+        Debug.Log(nameToFind);
+        Transform camSpawnP = levelObj.transform.Find(nameToFind);
+        Assert.IsTrue(camSpawnP != null);
+        
+        if(camSpawnP != null) {
+            Vector3 camSpawnPos = camSpawnP.position;
+            Debug.Log(camSpawnPos);
             Vector3 camPos = new Vector3(camSpawnPos.x, camSpawnPos.y, -10);
             cam.transform.position = camPos;
         } else {
-            cam.transform.position = spawnPoint.transform.position;
+            cam.transform.position = spawnPoint.position;
         }
     }
 
@@ -177,23 +182,45 @@ public class SceneStateManager : MonoBehaviour
 
     void ChangeScene() {
         //turn off the last scenes
-        for(int i = 0; i < levelInputs.Length; ++i) {
-            GameObject obj = levelInputs[i].levelObject;
-            if(obj != null && levelInputs[i].id != stateToLoad) {
-                obj.SetActive(false);
-            }
-        }
+        // for(int i = 0; i < levelInputs.Length; ++i) {
+        //     GameObject obj = levelInputs[i].levelObject;
+        //     if(obj != null && levelInputs[i].id != stateToLoad) {
+        //         obj.SetActive(false);
+        //     }
+        // }
 
         //turn on new scene
         LevelState lvlState = levels[stateToLoad];
-        GameObject levelObj = lvlState.levelObject;
+        GameObject prefab = lvlState.levelObject;
+        GameObject levelObj = lvlState.loadedLevel;
+
+
+        if(levelObj == null) {
+          lvlState.loadedLevel = levelObj = Instantiate(prefab);
+
+          if(stateToLoad == LevelStateId.LEVEL_TINKER_LEVEL_UP) {
+            levelObj.transform.parent = transform.parent;
+          }
+        }
+
+        if(lastGameObject != null) {
+          lastGameObject.SetActive(false);
+        }
+
+        lastGameObject = levelObj;
+
         if(levelObj != null) {
             levelObj.SetActive(true);
         }
             
-        GameObject spawnPoint = lvlState.spawnPointObj;
-
-
+        Transform spawnPoint = null;
+        if(levelObj) {
+            string nameToFind = stateToLoad.ToString() + "_PLAYER_SPAWN";//
+            Debug.Log(nameToFind);
+            spawnPoint = levelObj.transform.Find(nameToFind);   
+            Assert.IsTrue(spawnPoint != null); 
+        }
+        
         if(spawnPoint == null) {
             // player.GetComponent<PlayerMovement>().canControlPlayer = false;
             spell.SetActive(false);
@@ -253,7 +280,7 @@ public class SceneStateManager : MonoBehaviour
 
         if(spawnPoint != null && useSpawnPoint) {
             camBehaviour.StopFollowingEntity();
-            ResetFromSpawnPoint(spawnPoint);
+            ResetFromSpawnPoint(spawnPoint, levelObj);
         } else {
             // camBehaviour.StopFollowingEntity();
             // camBehaviour.FollowEntity();

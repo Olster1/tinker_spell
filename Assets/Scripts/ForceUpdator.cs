@@ -6,14 +6,32 @@ using Timer_namespace;
 
 namespace EasyForceUpdator {
 
+	public enum ForceType {
+		FORCE_CONSTANT,
+		FORCE_DECREASE,
+		FORCE_INCREASE,
+	}
+
 	public class ForceToAddStruct {
 	    public Timer timer;
 	    public Vector2 force;
+	    public ForceType type;
 
-	    public ForceToAddStruct(float time, Vector2 force) {
+	    public bool finished;
+
+	    public ForceToAddStruct(float time, Vector2 force, ForceType type = ForceType.FORCE_DECREASE) {
 	        timer = new Timer(time);
 	        timer.turnOn();
 	        this.force = force;
+	        this.type = type;
+	        finished = false;
+
+	    }
+
+	    public void EndForce() {
+	    	this.force = Vector2.zero;
+	    	timer.tAt = timer.period;
+	    	finished = true;
 	    }
 
 	}
@@ -38,9 +56,18 @@ namespace EasyForceUpdator {
 	    	    ForceToAddStruct s = forcesToAdd[i];
 	    	    Assert.IsTrue(s != null);
     	        bool fin = s.timer.updateTimer(Time.fixedDeltaTime);
-    	        float canVal = 1.0f - s.timer.getCanoncial();
 
-    	        forceToAdd += canVal*s.force;
+    	        float factor = 1.0f;
+    	        if(s.type == ForceType.FORCE_DECREASE) {
+    	        	factor = 1.0f - s.timer.getCanoncial();	
+    	        } else if (s.type == ForceType.FORCE_INCREASE) {
+    	        	factor = s.timer.getCanoncial() + 0.3f;	
+    	        } else {
+    	        	// Assert.IsTrue(false); //NOTE(ol): Shouldnt be here!
+    	        }
+    	        
+
+    	        forceToAdd += factor*s.force;
 
     	        if(fin) {
     	            forcesToAdd.RemoveAt(i);

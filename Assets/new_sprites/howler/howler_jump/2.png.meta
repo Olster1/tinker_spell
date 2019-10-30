@@ -1,9 +1,7 @@
 fileFormatVersion: 2
-guid: b0dbe8a27f6b1884e8ce7b99d7b3db79
+guid: 2ab996dc15fa5264e89ad58d3dc162fe
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: foreground 1.1_0
-    21300002: foreground 1.1_1
+  fileIDToRecycleName: {}
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -42,7 +40,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -62,7 +60,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -73,7 +71,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   - serializedVersion: 2
     buildTarget: Standalone
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -84,51 +82,11 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: foreground 1.1_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 2248
-        height: 1858
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 12855e9840bd98a42ac07bc1b44450a6
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: foreground 1.1_1
-      rect:
-        serializedVersion: 2
-        x: 5310
-        y: 0
-        width: 1442
-        height: 1332
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7612e82e28462794c83bd33824861873
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: a03f4ad6263d3a74cabb43838f59cb10
+    spriteID: b733c8b4afd0d144bbd2900b87971e67
     vertices: []
     indices: 
     edges: []

@@ -8,13 +8,15 @@ public class backgroundParralax : MonoBehaviour
 	public float parralaxScale;				
 
 	private Transform cam;	
-	private Vector3 originalPos;
+	public Vector3 originalPos;
+
+	public Vector3 newT;
 
 	public bool useParralax;
 	private bool lastFrameParralax;
+
 	void Awake ()
 	{
-		// Setting up the reference shortcut.
 		cam = Camera.main.transform;
 	}
 
@@ -23,6 +25,9 @@ public class backgroundParralax : MonoBehaviour
 		useParralax = true;
 		originalPos = transform.position;
 		lastFrameParralax = useParralax;
+		newT = transform.InverseTransformPoint(transform.position);
+
+
 	}
 
 
@@ -31,17 +36,23 @@ public class backgroundParralax : MonoBehaviour
 	}
 	void Update ()
 	{
-		if(lastFrameParralax != useParralax && useParralax) {
-			float scaleFactor = (1.0f / 10.0f)*parralaxScale;
+		// if(lastFrameParralax != useParralax && useParralax) {
+		// 	float scaleFactor = (1.0f / 10.0f)*parralaxScale;
 
-			originalPos = (transform.position - scaleFactor*cam.position) / (1.0f - scaleFactor);
-		}
-		if(useParralax) {
-			Vector2 newPos = new Vector2(originalPos.x, originalPos.y) + calculateParralax(originalPos);
-			transform.position = new Vector3(newPos.x, newPos.y, originalPos.z);
-		} 
+		// 	originalPos = (transform.position - scaleFactor*cam.position) / (1.0f - scaleFactor);
 
-		lastFrameParralax = useParralax;
+		// 	Vector3 p = transform.position;
+		// 	transform.position = originalPos;
+		// 	newT = transform.localPosition;
+
+		// }
+		// if(useParralax) {
+		// 	Vector2 newPos = new Vector2(originalPos.x, originalPos.y) + calculateParralax(originalPos);
+		// 	transform.position = new Vector3(newPos.x, newPos.y, 0);
+
+		// } 
+
+		// lastFrameParralax = useParralax;
 	}
 
 }
