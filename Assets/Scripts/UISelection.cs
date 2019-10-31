@@ -82,18 +82,13 @@ public class UISelection : MonoBehaviour
     public void Display(UICurrentSelection s_, bool control, Transform parentT) {
     	int s = (int)s_;
     	if(isActive) {
-            Debug.Log("Is Active already");
+            // Debug.Log("Is Active already");
 		} else {
 			for(int i = 0; i < glowSprites.Length; ++i) {
 				glowSprites[i].enabled = false;
 			}
 			isActive = true;
             gradientBlackBackground.SetTrigger("fadeIn");
-			// anim.SetTrigger("Show");
-
-            float height = (Camera.main.orthographicSize / sceneManager.defaultOrthoSize);
-            transform.localScale = Vector3.one * height;
-            backingGradient.localScale = backingOriginalScale * height;
 		}
 
 		currentSelection = s_;
@@ -101,7 +96,7 @@ public class UISelection : MonoBehaviour
 
         if(parentT != null) {
             transform.parent = parentT;  
-            transform.localPosition = new Vector3(0, 0, 0);  
+            transform.localPosition = new Vector3(0, 0, transform.localPosition.z);  
         }
         
 
@@ -126,7 +121,7 @@ public class UISelection : MonoBehaviour
     	isActive = false;
         controlling = false;
         transform.parent = parentT;
-        transform.localPosition = new Vector3(0, 0, 0);
+        transform.localPosition = new Vector3(0, 0, transform.localPosition.z);
         gradientBlackBackground.SetTrigger("fadeOut");
     	// anim.SetTrigger("Hide");
     }
@@ -151,18 +146,22 @@ public class UISelection : MonoBehaviour
     void Update()
     {
 
-        if(Input.GetButtonDown("Submit")) {
-            if(sceneManager.IsInGame() && NotTransitioning()) {
-                if(!menuIsOn) { 
-                    menuIsOn = true;
-                    uiHud.SetActive(false);
+        bool inGame = sceneManager.IsInGame();
 
-                    Debug.Log(lastMenuState);
-                    blurPostProcess.StartBlur(blurInterfaces[(int)lastMenuState], 0);
-                }
-            } else {
+        if(Input.GetButtonDown("Submit")) {
+            if(inGame) {
+                if(NotTransitioning()) {
+                    if(!menuIsOn) { 
+                        menuIsOn = true;
+                        uiHud.SetActive(false);
+
+                        blurPostProcess.StartBlur(blurInterfaces[(int)lastMenuState], 0);
+                    }
+                } 
+            } else if(sceneManager.IsInGameMenu()) {
                 ExitCurrentJournal(true);
             }
+            
         }
 
         if(controlling) {
@@ -233,25 +232,27 @@ public class UISelection : MonoBehaviour
         	}
 
         	if(Input.GetButtonDown("Jump") && currentSelection != (UICurrentSelection)yCoord) {
-        		EndControlling();
+                if((UICurrentSelection)yCoord != UICurrentSelection.UI_INVETORY) { //NOTE(ol): hasnt been set yet
+            		EndControlling();
 
-        		ExitCurrentJournal(false);
+            		ExitCurrentJournal(false);
 
-        		if((UICurrentSelection)yCoord == UICurrentSelection.UI_BEASTERY) {
-        			beastJournal.EnterMenu();
-                    lastMenuState = UICurrentSelection.UI_BEASTERY;
-        		} else if((UICurrentSelection)yCoord == UICurrentSelection.UI_SPELL_SKILL) {
-        			spellSkillery.EnterMenu();
-                    lastMenuState = UICurrentSelection.UI_SPELL_SKILL;
-        		} else if((UICurrentSelection)yCoord == UICurrentSelection.UI_QUESTS) {
-                    questLog.EnterMenu();
-                    lastMenuState = UICurrentSelection.UI_QUESTS;
-                } else if((UICurrentSelection)yCoord == UICurrentSelection.UI_MAP) {
-                    miniMap.EnterMenu();
-                    lastMenuState = UICurrentSelection.UI_MAP;
+            		if((UICurrentSelection)yCoord == UICurrentSelection.UI_BEASTERY) {
+            			beastJournal.EnterMenu();
+                        lastMenuState = UICurrentSelection.UI_BEASTERY;
+            		} else if((UICurrentSelection)yCoord == UICurrentSelection.UI_SPELL_SKILL) {
+            			spellSkillery.EnterMenu();
+                        lastMenuState = UICurrentSelection.UI_SPELL_SKILL;
+            		} else if((UICurrentSelection)yCoord == UICurrentSelection.UI_QUESTS) {
+                        questLog.EnterMenu();
+                        lastMenuState = UICurrentSelection.UI_QUESTS;
+                    } else if((UICurrentSelection)yCoord == UICurrentSelection.UI_MAP) {
+                        miniMap.EnterMenu();
+                        lastMenuState = UICurrentSelection.UI_MAP;
+                    }
+            		
+            		currentSelection = (UICurrentSelection)yCoord;
                 }
-        		
-        		currentSelection = (UICurrentSelection)yCoord;
         	}
 
 

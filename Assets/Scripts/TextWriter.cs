@@ -21,6 +21,8 @@ public class TextWriter : MonoBehaviour
 	public Animator dialogEventAnimator;
 	public Animator dialogAcceptButton;
 	public Animator dialogDeclineButton;
+
+	public GameObject[] imageObjs;
 	
 	private Timer fadeOutTimer;
 	public bool isOn;
@@ -89,6 +91,31 @@ public class TextWriter : MonoBehaviour
         	audioSrc.clip = clips[stringAt];
         	audioSrc.Play();
         }
+	}
+
+	public void SetRightQuoteImage(QuoteImage quoteType) {
+		if(quoteType == QuoteImage.TINKER_HEAD) {
+		    imageObjs[0].SetActive(true);
+		    imageObjs[1].SetActive(false);
+		    imageObjs[2].SetActive(false);
+		    imageObjs[3].SetActive(false);
+		} else if(quoteType == QuoteImage.TREE_DIETY_HEAD) {
+		    imageObjs[1].SetActive(true);
+		    imageObjs[0].SetActive(false);
+		    imageObjs[2].SetActive(false);
+		    imageObjs[3].SetActive(false);
+		} else if(quoteType == QuoteImage.SPELL_HEAD) {
+		    imageObjs[2].SetActive(true);
+		    imageObjs[1].SetActive(false);
+		    imageObjs[0].SetActive(false);
+		    imageObjs[3].SetActive(false);
+		} else if(quoteType == QuoteImage.GOBLIN_HEAD) {
+		    imageObjs[2].SetActive(false);
+		    imageObjs[1].SetActive(false);
+		    imageObjs[0].SetActive(false);
+		    imageObjs[3].SetActive(true);
+		}
+		
 	}
 
 	public void CancelFontWriting() {

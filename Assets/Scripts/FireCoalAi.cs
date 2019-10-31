@@ -33,6 +33,7 @@ public class FireCoalAi : MonoBehaviour, IHitBox
     private HealthBar healthBar;
     private ItemEmitter itemEmitter;
     private BeastryJournal beastJournal;
+    private bool dead;
     // Start is called before the first frame update
     void Start()
     {
@@ -56,11 +57,12 @@ public class FireCoalAi : MonoBehaviour, IHitBox
         
         spawnTimer = new Timer(4.0f);
         spawnTimer.turnOff();
+
+        dead = false;
     }
     
     public void wasHit(int damage, string type, EnemyType enemyType, Vector2 position) {
-        // bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
-        if (enemyType == EnemyType.ENEMY_GOOD) 
+        if (enemyType == EnemyType.ENEMY_GOOD && !dead) 
         {
             GameObject damageNumObj = Instantiate(damageNumbersObject,  transform);
             DamageNumber damageNum = damageNumObj.GetComponent<DamageNumber>();
@@ -74,46 +76,15 @@ public class FireCoalAi : MonoBehaviour, IHitBox
 
             beastJournal.FoundBeast(BeastId.FIRE_COAL);
 
-            // this.redHurtTimer.turnOn();
-            
-            // Time.timeScale = 0.0f;
-            // playerMovement.globalPauseTimer.turnOn();
-            
-            // rockHitSound.Play();
-            
-            // float healthAsPercent = ((float)health / (float)startHealth);
-            // healthAsPercent = Mathf.Max(0, healthAsPercent);
-            // Vector3 tempScale = healthInnerBar.transform.localScale;
-            // tempScale.x = startScale * healthAsPercent;
-            // healthInnerBar.transform.localScale = tempScale;
-            // Color originalColor = healthBarSpriteRenderer.color;
-            // if(healthAsPercent < 0.6f && healthAsPercent > 0.3f) {
-            //  originalColor = new Vector4(1, 1, 0, 1);
-            // } else if(healthAsPercent < 0.3f) {
-            //  originalColor = Color.red;
-            // }
-            
-            // healthBarSpriteRenderer.color = originalColor;
-            
-            //Instantiate(hitParticleSystem);
             
             if (this.health < 0)
             {
-                // thisAnimator.SetTrigger("isDead");
-                //  thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_die");
-                // this.deathTimer = new Timer_namespace.Timer(1.0f);
-                // this.deathTimer.turnOn();
-                // isDying = true;
-                // if(isSentinel || isRangeGollum) {
-                
-                //     fadeInTimer.turnOn();
-                // }
+                dead = true;
                 if(!fadeOutTimer.isOn()) {
            		 fadeOutTimer.turnOn();
                  isOut = true;
                  attackObj.SetActive(false);
                  gameObject.GetComponent<ParticleSystem>().Stop();
-                 thisCollider.enabled = false;
                  healthBar.Hide();
                  itemEmitter.emitAmber(AmberType.AMBER_HEALTH, 4, transform.position);
                 }
@@ -147,6 +118,7 @@ public class FireCoalAi : MonoBehaviour, IHitBox
                 healthBar.ResetHealthBar();
                 healthBar.Show();
                 thisCollider.enabled = true;
+                dead = false;
             }
         } else {
         	Vector2 moveForce = new Vector2();

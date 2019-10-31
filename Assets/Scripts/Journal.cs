@@ -107,10 +107,7 @@ public class Journal : MonoBehaviour, IMenuItemInterface, IBlurInterface
 
       currentPage = enterTransform = listOfQuests;
 
-      float height = (Camera.main.orthographicSize / sceneManager.defaultOrthoSize);
-      currentPage.localScale = Vector3.one * height;
-      singleQuest.localScale = Vector3.one * height;
-      hiddenOffset = height*sceneManager.defaultSafeZone;
+      hiddenOffset = sceneManager.defaultSafeZone;
 
 
       if(fromWorld) {

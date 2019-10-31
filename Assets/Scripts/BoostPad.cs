@@ -5,7 +5,7 @@ using UnityEngine;
 public class BoostPad : MonoBehaviour
 {
 	public Vector2 force;
-	public PlayerMovement playerMove;
+	private PlayerMovement playerMove;
 	[HideInInspector] public Vector2 unitVec;
 
     // Start is called before the first frame update
@@ -14,6 +14,8 @@ public class BoostPad : MonoBehaviour
         float rot = transform.rotation.z;
         unitVec = new Vector2(Mathf.Cos(rot), Mathf.Sin(rot));
         unitVec.Normalize();
+
+        playerMove = Camera.main.GetComponent<MySceneManager>().playerMovement;
     }
 
     // Update is called once per frame

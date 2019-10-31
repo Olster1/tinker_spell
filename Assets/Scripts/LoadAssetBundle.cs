@@ -47,9 +47,6 @@ public class MyAssetBundleManager: MonoBehaviour
 		//@speed
 		for(int i = 0; i < a.objs.Length; ++i) {
 			Object o = a.objs[i];
-			// if(type.GetType().Equals(typeof(UnityEngine.RuntimeAnimatorController).GetType())) {
-			// 	Debug.Log("HRY GO");
-			// }
 
 			if(o.GetType().Equals(type) || o.GetType().BaseType.Equals(type)) {
 				Debug.Log("HRY" + o.GetType());
@@ -58,6 +55,13 @@ public class MyAssetBundleManager: MonoBehaviour
 			}
 		}
 		return result;
+	}
+
+	public void EmptyAllAssetBundles() {
+		foreach(KeyValuePair<string, MyAssetBundle> bundle in assetBundles)
+		{
+		    bundle.Value.bundle.Unload(true);
+		}
 	}
 
 

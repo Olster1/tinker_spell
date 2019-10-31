@@ -6,11 +6,20 @@ using UnityEngine.Assertions;
 using Timer_namespace;
 using EasyGameManager;
 
+
+
+public enum QuoteImage {
+    TINKER_HEAD,
+    SPELL_HEAD,
+    TREE_DIETY_HEAD,
+    GOBLIN_HEAD,
+}
+
+    
 public class ActivateQuote : MonoBehaviour
 {
 	
     public AudioSource soundSource;
-    // public GameObject uiImage;
     public string[] dialog;
 
     private Animator quoteAnimator;
@@ -22,12 +31,9 @@ public class ActivateQuote : MonoBehaviour
     public bool setManual;
     private Journal journal;
 
-    // public bool completeJournalItem;
     public bool hasJournalItem;
     public string journalItemName;
     public string journalItemSynopsis;
-
-    public GameObject[] imageObjs;
 
     public GameObject toActivate;
     public GameObject toDeactivate;
@@ -35,13 +41,6 @@ public class ActivateQuote : MonoBehaviour
     public DialogQuestionEvent eventToCall;
 
     public AudioClip[] clips;
-
-    public enum QuoteImage {
-        TINKER_HEAD,
-        SPELL_HEAD,
-        TREE_DIETY_HEAD,
-        GOBLIN_HEAD,
-    }
 
     public SpriteRenderer sp;
     private Timer fadeTimer;
@@ -57,7 +56,6 @@ public class ActivateQuote : MonoBehaviour
 
     public BoxCollider2D boxCollider;
     
-    // Start is called before the first frame update
     void Start()
     {
         MySceneManager myManager = Camera.main.GetComponent<MySceneManager>();
@@ -82,10 +80,6 @@ public class ActivateQuote : MonoBehaviour
         }
     }
 
-    void updateTime() {
-        
-    }
-    // Update is called once per frame
     void Update()
     {
         if(fuelCellEffected) {
@@ -130,6 +124,7 @@ public class ActivateQuote : MonoBehaviour
             if(!writer.showText) {
                 if (other.gameObject.tag == "Player" && (Input.GetButtonDown("Fire4") || (automatic && !played && !firstPlay))) {
                     Activate();
+                    Debug.Log("ACTIVATING");
                 }
 
                 if(!writer.showText && !fadeIn && !fadeTimer.isOn()) {
@@ -149,34 +144,12 @@ public class ActivateQuote : MonoBehaviour
             writer.clips = clips;
             
             writer.currentQuote = this;
-            if(quoteType == QuoteImage.TINKER_HEAD) {
-                imageObjs[0].SetActive(true);
-                imageObjs[1].SetActive(false);
-                imageObjs[2].SetActive(false);
-                imageObjs[3].SetActive(false);
-            } else if(quoteType == QuoteImage.TREE_DIETY_HEAD) {
-                imageObjs[1].SetActive(true);
-                imageObjs[0].SetActive(false);
-                imageObjs[2].SetActive(false);
-                imageObjs[3].SetActive(false);
-            } else if(quoteType == QuoteImage.SPELL_HEAD) {
-                imageObjs[2].SetActive(true);
-                imageObjs[1].SetActive(false);
-                imageObjs[0].SetActive(false);
-                imageObjs[3].SetActive(false);
-            } else if(quoteType == QuoteImage.GOBLIN_HEAD) {
-                imageObjs[2].SetActive(false);
-                imageObjs[1].SetActive(false);
-                imageObjs[0].SetActive(false);
-                imageObjs[3].SetActive(true);
-            }
-            
-            // interact.SetTrigger("Out");
+
+            writer.SetRightQuoteImage(quoteType);
+
             fadeTimer.turnOn();
             fadeIn = false;
 
-            // soundSource.Play();
-            // uiImage.SetActive(false);
             return true;
         } else {
             return false;            
@@ -186,8 +159,8 @@ public class ActivateQuote : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(!setManual) {
+            
             if (other.gameObject.tag == "Player" && !writer.showText) {
-                // interact.SetTrigger("In");
                 fadeTimer.turnOn();
                 fadeIn = true;
             }
@@ -196,12 +169,8 @@ public class ActivateQuote : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other) {
         if (other.gameObject.tag == "Player" && !setManual) {
-            // interact.SetTrigger("Out");
             fadeTimer.turnOn();
             fadeIn = false;
-        	// quoteAnimator.SetTrigger("OffscreenOut");
-         //    soundSource.Stop();
-         //    uiImage.SetActive(true);
         }
     }
 }

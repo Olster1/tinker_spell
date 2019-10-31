@@ -9,7 +9,7 @@ public class SoundChanger : MonoBehaviour
   public bool onlyOnce;
   private bool done;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         mixer = Camera.main.GetComponent<SoundMixer>();
     }

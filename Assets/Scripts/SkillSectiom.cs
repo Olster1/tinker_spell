@@ -29,7 +29,6 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface, IMenuItemInterface
             if(timer.isOn()) {
                 bool b = timer.updateTimer(dt);
                 float min = t.localScale.x;//bigger ? startScale : startScale + 0.2f;
-                Debug.Log(min);
                 float max = bigger ? startScale + 0.2f : startScale;
                 float f = timer.getCanoncial();
                 t.localScale = new Vector3(Mathf.Lerp(min, max, 0.1f), Mathf.Lerp(min, max, 0.1f), 1);
@@ -138,9 +137,7 @@ public class SkillSectiom : MonoBehaviour, IBlurInterface, IMenuItemInterface
 
     public void Activate(bool comingFromWorld) {
 
-        float height = (Camera.main.orthographicSize / sceneManager.defaultOrthoSize);
-        currentPage.localScale = Vector3.one * height;
-        hiddenOffset = height*sceneManager.defaultSafeZone;
+        hiddenOffset = sceneManager.defaultSafeZone;
 
         if(comingFromWorld) {
             blurSprite.enabled = true;

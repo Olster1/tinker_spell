@@ -7,7 +7,7 @@ using Timer_namespace;
 public class AreaTextTrigger : MonoBehaviour
 {
 	private Timer timer;
-	public Text text;
+	private Text text;
 	public string placeStr;
     public bool showOnce;
     public bool showed;
@@ -15,6 +15,8 @@ public class AreaTextTrigger : MonoBehaviour
     void Start()
     {
         timer = new Timer(1.5f);
+
+        text = Camera.main.GetComponent<MySceneManager>().areaText;
     }
 
     // Update is called once per frame

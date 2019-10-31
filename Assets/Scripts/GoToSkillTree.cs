@@ -37,7 +37,7 @@ public class GoToSkillTree : MonoBehaviour
     	// Assert.IsTrue(false);
     	GameObject gm = other.gameObject;
         Assert.IsTrue(skillSection != null);
-    	if(Input.GetButtonDown("Fire1") && gm.name == "Player" && !skillSection.controller.isActive) {
+    	if(Input.GetButtonDown("Fire4") && gm.name == "Player" && !skillSection.controller.isActive) {
             skillSection.GoToTinkerLevelUp();
 
         }

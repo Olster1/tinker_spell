@@ -8,7 +8,7 @@ using UnityEngine.Assertions;
 using UnityEditor;
 public class RockGullumAI : MonoBehaviour, IHitBox
 {
-    public GameObject playerToFollow;
+    private GameObject playerToFollow;
     public GameObject hitPs;
     private Transform playerTransform;
     private Transform thisTransform;
@@ -91,11 +91,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     private HealthBar healthBar;
 
     private Animator camAnimator;
-
-    // public GameObject healthBar;
-    // private GameObject healthInnerBar;
-    // private SpriteRenderer healthBarSpriteRenderer;
-    // private float startScale;
 
     private int physicsLayerMask;
     private Timer timerForPatrol;
@@ -186,8 +181,11 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     void Start()
     {
         DebugEntityManager entManager = Camera.main.GetComponent<DebugEntityManager>();
+        Assert.IsTrue(entManager != null);
         itemEmitter = Camera.main.GetComponent<ItemEmitter>();
         camAnimator = Camera.main.GetComponent<Animator>();
+
+        playerToFollow = Camera.main.GetComponent<MySceneManager>().playerMovement.gameObject;
 
         xpManager = Camera.main.GetComponent<ExperienceManager>();
         beastJournal = Camera.main.GetComponent<BeastryJournal>();
@@ -201,6 +199,10 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         thisRigidbody = gameObject.GetComponent<Rigidbody2D>();
         thisAnimator = gameObject.GetComponent<Animator>();
         spRenderer= gameObject.GetComponent<SpriteRenderer>();
+
+        
+
+        Assert.IsTrue(thisAnimator != null);
 
         //NOTE: Just making sure this are set to zero
         for(int iTime = 0; iTime < aiTimeStamps.Length; ++iTime) {
@@ -238,18 +240,8 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         timerForPatrol = new Timer(walkTimer.period);
         timerForPatrol.turnOff();
         
-        //////
-        // healthInnerBar = healthBar.transform.Find("health_bar").gameObject;
-        // //for color
-        // healthBarSpriteRenderer = healthInnerBar.GetComponent<SpriteRenderer>();
-        // //
-        // startColor = healthBarSpriteRenderer.color;
         
-        // startScale = healthInnerBar.transform.localScale.x;
-
-        /////
-        
-        physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);// | Physics2D.GetLayerCollisionMask(LayerMask.NameToLayer("EnemyAiCollision"));
+        physicsLayerMask = Physics2D.GetLayerCollisionMask(gameObject.layer);
         
         forceUpdator = new ForceUpdator();
         
@@ -257,86 +249,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     }
     
     public void flipGollumSprite() {
-        // if (thisRigidbody.velocity.x > 0)
-        // {
-        //     spRenderer.flipX = true;
-        // }
-        
-        // if (thisRigidbody.velocity.x < 0)
-        // {
-        //     spRenderer.flipX = false;
-        // }
     }
-    
-    // public List<LagGoodie> lagGoodies;
-    
-    // public class LagGoodie {
-    //     Timer timer;
-    //     AmberType type;
-    //     float angle;
-        
-    //     public LagGoodie(AmberType type, float lagTime, float angle) {
-    //         this.type = type;
-    //         timer = new Timer(lagTime);
-    //         timer.turnOn();
-    //         this.angle = angle;
-    //     }
-        
-    //     public bool update(RockGullumAI ai) {
-    //         bool result = false;
-    //         if(timer.isOn()) {
-    //             bool finished = timer.updateTimer(Time.deltaTime);
-    //             if(finished) {
-    //                 ai.CreateGoodie(type, angle);
-    //                 result = true;
-    //                 timer.turnOff();        
-    //             }
-    //         }
-    //         return result;
-    //     }
-    // }
-    
-    // private void CreateGoodie(AmberType type, float angle = 0.0f) {
-        
-    //     GameObject objAmber = Instantiate(amber, transform.position,  Quaternion.identity);
-    //     Rigidbody2D amberRb = objAmber.GetComponent<Rigidbody2D>();
-    //     CollectAmber amberCollect = objAmber.transform.GetChild(0).gameObject.GetComponent<CollectAmber>();
-    //     amberCollect.type = (AmberType)type;
-        
-        
-        
-    //     if(type == AmberType.AMBER_HEALTH || type == AmberType.AMBER_MANA) {
-    //         float randScale = Random.Range(0.7f, 1.3f);
-    //         objAmber.transform.localScale = new Vector3(randScale, randScale, 1);
-    //         objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 3;
-    //     } else if (type == AmberType.AMBER_SENTINEL_HEAD) {
-    //         objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 4;
-    //         if(quote != null) {
-    //             amberCollect.SetQuoteOnCollect(quote);
-    //         }
-    //     } else {
-    //         objAmber.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = 0;
-    //     }
-    //     float randomAngle = angle;
-    //     if(angle == 0.0f) {
-    //         randomAngle = Mathf.Lerp(0.25f*Mathf.PI, 0.75f*Mathf.PI, Random.Range(0.0f, 1.0f));
-    //     }
-    //     Vector2 newForce = new Vector3(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle));
-    //     amberRb.bodyType = RigidbodyType2D.Dynamic;
-    //     float lerpVal = Mathf.Lerp(52000, 60000, Random.Range(0.0f, 1.0f));
-    //     amberRb.AddForce(lerpVal*newForce);
-    // }
-    
-    // private void emitAmber(AmberType type, int number, float angle = 0.0f, float lagTime = 0.0f) {
-    //     for(int i = 0; i < number; ++i) {
-    //         if(lagTime > 0.0f) {
-    //             lagGoodies.Add(new LagGoodie(type, lagTime, angle));
-    //         } else {
-    //             CreateGoodie(type);
-    //         }
-            
-    //     }
-    // }
     
     private void releaseGoodies() {
         itemEmitter.emitAmber(AmberType.AMBER_AMBER, Random.Range(4, 4 + (int)(xpManager.luck*10)), transform.position);
@@ -355,11 +268,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
 
         healthBar.ResetHealthBar();
 
-        // Vector3 tempScale = healthInnerBar.transform.localScale;
-        // tempScale.x = startScale;
-        // healthInnerBar.transform.localScale = tempScale;
-        // healthBarSpriteRenderer.color = startColor;
-
         respawnTimer.period = (float)Random.Range(3.0f, 10.0f);
         aiState = Ai_State.AI_PATROL;
         walkTimer.turnOn();
@@ -372,18 +280,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     
     public void BeginFadeInTimer() {
         fadeInTimer.turnOn();
-        // health = startHealth;
-        // thisTransform.position = startP;
-        // isDying = false;
-        // Vector3 tempScale = healthInnerBar.transform.localScale;
-        // tempScale.x = startScale;
-        // healthInnerBar.transform.localScale = tempScale;
-        // healthBarSpriteRenderer.color = startColor;
-        
-        //releaseGoodies();
-        
-        // Destroy(gameObject);
-        //Dead();
         
     }
     
@@ -420,28 +316,9 @@ public class RockGullumAI : MonoBehaviour, IHitBox
             
             Instantiate(attackSwipe, transform);
             
-            // Time.timeScale = 0.0f;
-            // playerMovement.globalPauseTimer.turnOn();
-            
             rockHitSound.Play();
 
             healthBar.UpdateHealthBar(health, startHealth);
-            
-            // float healthAsPercent = ((float)health / (float)startHealth);
-            // healthAsPercent = Mathf.Max(0, healthAsPercent);
-            // Vector3 tempScale = healthInnerBar.transform.localScale;
-            // tempScale.x = startScale * healthAsPercent;
-            // healthInnerBar.transform.localScale = tempScale;
-            // Color originalColor = healthBarSpriteRenderer.color;
-            // if(healthAsPercent < 0.6f && healthAsPercent > 0.3f) {
-            //     originalColor = new Vector4(1, 1, 0, 1);
-            // } else if(healthAsPercent < 0.3f) {
-            //     originalColor = Color.red;
-            // }
-            
-            // healthBarSpriteRenderer.color = originalColor;
-            
-            //Instantiate(hitParticleSystem);
             
             if (this.health < 0)
             {
@@ -543,7 +420,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         diffVec.Normalize();
         ForceToAddStruct force = new ForceToAddStruct(0.2f, attackForce * diffVec);
         forceUpdator.AddForce(force);
-        // Debug.Log("applying attack force");
     }
     
     
@@ -627,14 +503,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     
     private void Update()
     {
-        // for(int i = 0; i < lagGoodies.Count; ) {
-        //     bool rem = lagGoodies[i].update(this);
-        //     if(rem) {
-        //         lagGoodies.RemoveAt(i);
-        //     } else {
-        //         i++;
-        //     }
-        // }
 
         if(respawnTimer.isOn()) {
             bool finished = respawnTimer.updateTimer(Time.deltaTime);
@@ -685,13 +553,10 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                     Debug.Log("fadeInTimer working");
                 }
                 spRenderer.color = Color.clear;
-                // thisRigidbody.detectCollisions = true;
-                // thisCollider.enabled = true;
                 fadeInTimer.turnOff();
                 releaseGoodies();
                 Dead();
                 camAnimator.SetTrigger("shake1");
-                // Destroy(gameObject);
             }
             
         }
@@ -701,58 +566,12 @@ public class RockGullumAI : MonoBehaviour, IHitBox
         {
             Vector2 diffVec = playerTransform.position - thisTransform.position;
             
-            // if(Mathf.Abs(diffVec.x) < partolDistance.x && Mathf.Abs(diffVec.y) < partolDistance.y) {
-            //     newPos.x = Mathf.Sign(diffVec.x)*4;
-            //     healthBar.transform.localPosition = newPos;    
-            // }
-            
             
             bool isAttacking = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_attack");
-            //Debug.Log(isAttacking);
             bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
-            // bool isDying = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_die");
             
                 
             thisAnimator.SetFloat("WalkSpeed", thisRigidbody.velocity.x);
-            
-            // bool isInTurnAround = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rock_gollum_turn_around");
-            // bool isWalking = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("rockGollumWalk");
-            
-            // //Debug.Log("last frame flip " + lastframFlip);
-            // if(isWalking) {
-            //     if (thisRigidbody.velocity.x > 0.3)
-            //     {
-            //         spRenderer.flipX = true;
-            //     }
-                
-            //     if (thisRigidbody.velocity.x < -0.3)
-            //     {
-            //         spRenderer.flipX = false;
-            //     }
-            // }
-            
-
-            
-            
-            
-            
-            // if (isDying) {
-            //     // bool finished = deathTimer.updateTimer(Time.deltaTime);
-            //     // float canVal = deathTimer.getCanoncial();
-            //     // float alphaVal = Mathf.Lerp(1, 0, canVal);
-            //     // spRenderer.color = new Vector4(spRenderer.color.r, spRenderer.color.g, spRenderer.color.b, alphaVal);
-            //     // thisRigidbody.detectCollisions = false;
-            //     // thisCollider.enabled = false;
-            
-            //     AnimatorStateInfo info = thisAnimator.GetCurrentAnimatorStateInfo(0);
-            //     bool isDeadTriggered = thisAnimator.GetBool("isDead");
-            //     bool isInDieState = info.IsName("rock_gollum_die") || isDeadTriggered;
-            //     if (!isInDieState) {
-            //         // deathTimer.turnOff();
-            
-            //         // spRenderer.color = startTint;
-            //     }
-            // }
             
         }
         
@@ -779,8 +598,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
     }
 
     void DoTurnAround(bool lookLeft) {
-        // Debug.Log("turn_around");
-        // if(lookLeft != spRenderer.flipX)
          {
             if(isSentinel || isRangeGollum || isHowler) {
                 spRenderer.flipX = lookLeft;
@@ -825,10 +642,7 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                 inTurnAround = false;
             }
         }
-        // if(isSentinel) {
-        //     Debug.Log("?????");
-        // }
-        
+
         if(!(dead || spawnFadeTimer.isOn() || fadeInTimer.isOn() || respawnTimer.isOn())) {
             bool isHit = thisAnimator.GetCurrentAnimatorStateInfo(0).IsName("RockGollumHit");
 
@@ -917,14 +731,6 @@ public class RockGullumAI : MonoBehaviour, IHitBox
                                 DoTurnAround(subAiState != Ai_SubState.AI_SUB_LEFT);
 
                             }
-                            // if(lastState != subAiState && (subAiState == Ai_SubState.AI_SUB_RIGHT || subAiState == Ai_SubState.AI_SUB_LEFT)) {
-                            //     if(lastState == Ai_SubState.AI_SUB_IDLE && ((subAiState == Ai_SubState.AI_SUB_RIGHT && spRenderer.flipX) || (subAiState == Ai_SubState.AI_SUB_LEFT && !spRenderer.flipX))) {
-
-                            //     } else {
-                            //         Assert.IsTrue(subAiState != Ai_SubState.AI_SUB_IDLE);
-                            //         DoTurnAround(subAiState != Ai_SubState.AI_SUB_LEFT);
-                            //     }
-                            // }
                         }
                         Vector2 colSize = thisCollider.size;
                         Vector3 colOffset = thisCollider.offset;

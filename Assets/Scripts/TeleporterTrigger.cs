@@ -10,24 +10,27 @@ public class TeleporterTrigger : MonoBehaviour
 	private Timer timer;
 	private bool shown;
 	public string sceneNameToLoad;
-	public PlayerMovement player;
-	public Image fadePanel;
+	private PlayerMovement player;
+	private Image fadePanel;
     private MyAssetBundleManager assetManager;
-	
+
     // Start is called before the first frame update
     void Start()
     {
+         // //Loading the animation spiral
+        assetManager = Camera.main.GetComponent<MyAssetBundleManager>();
+        MyAssetBundle a = assetManager.LoadBundle("AssetBundles/teleporter_spiral_animation");
+        Object[] controller = assetManager.GetAssetsOfType(a, typeof(UnityEngine.RuntimeAnimatorController));  
+        gameObject.GetComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)controller[0];
+        // ////
+
+        MySceneManager myManager = Camera.main.GetComponent<MySceneManager>();
+        player = myManager.playerMovement;
+        fadePanel = myManager.fadePanel;
         timer = new Timer(1.4f);
         timer.turnOff();
 
-        //Loading the animation spiral
-        assetManager = Camera.main.GetComponent<MyAssetBundleManager>();
-        MyAssetBundle a = assetManager.LoadBundle("AssetBundles/teleporter_spiral_animation");
-        // assetManager.LoadAllAssetsOfType(a, typeof(Sprite));
-        // assetManager.LoadAllAssetsOfType(a, typeof(Animation));
-        Object[] controller = assetManager.GetAssetsOfType(a, typeof(UnityEngine.RuntimeAnimatorController));  
-        gameObject.GetComponent<Animator>().runtimeAnimatorController = (RuntimeAnimatorController)controller[0];
-        ////
+        gameObject.SetActive(false); //set inactive until it gets woken up again by tinker
     }
 
     // Update is called once per frame
@@ -38,6 +41,7 @@ public class TeleporterTrigger : MonoBehaviour
         	bool b = timer.updateTimer(Time.deltaTime);
         	fadePanel.color = new Color(0, 0, 0, timer.getCanoncial());
         	if(b) {
+                assetManager.EmptyAllAssetBundles();
         		SceneManager.LoadScene(sceneNameToLoad);
         	}
         }
@@ -47,7 +51,7 @@ public class TeleporterTrigger : MonoBehaviour
     }
 
      public void OnTriggerStay2D(Collider2D other) {
-		if (other.gameObject.name == "Player" && Input.GetButtonDown("Fire1")) {
+		if (other.gameObject.name == "Player" && Input.GetButtonDown("Fire4")) {
 			
      		timer.turnOn();
 		}

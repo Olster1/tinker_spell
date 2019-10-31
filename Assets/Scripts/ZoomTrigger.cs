@@ -46,11 +46,9 @@ public class ZoomTrigger : MonoBehaviour
 
      public void OnTriggerEnter2D(Collider2D other) {
      	string name = other.gameObject.name;
-     	Debug.Log(other.gameObject.GetInstanceID()); 
 		if (name == "Player" && !zoomTimer) {
 			zoomTimer = true;
 			if(name == "Player") {
-				Debug.Log(gameObject.name);
 				other.gameObject.GetComponent<PlayerMovement>().SetZoomTrigger(this);	
 			} else {
 				Assert.IsTrue(false); //NOTE(ol); not implemented

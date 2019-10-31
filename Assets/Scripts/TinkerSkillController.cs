@@ -105,7 +105,6 @@ public class TinkerSkillController : MonoBehaviour
         isActive = false;
         sceneManager.useSpawnPoint = false;
         soundMixer.SetSound(lastSoundId);
-        Debug.Log(lastLevelToLoad);
         sceneManager.ChangeSceneWithIdFade(lastLevelToLoad);
     }
 
@@ -383,7 +382,6 @@ public class TinkerSkillController : MonoBehaviour
 
         if(Input.GetButtonDown("Fire1") && isActive) {
             ExitLevelUp();
-            Debug.Log("exiting");
         }
     }
 

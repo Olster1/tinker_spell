@@ -210,11 +210,7 @@ public class BeastryJournal : MonoBehaviour, IBlurInterface, IMenuItemInterface
 
         currentPage = pages[0];
 
-        float height = (Camera.main.orthographicSize / sceneManager.defaultOrthoSize);
-        closeupBeastPage.localScale = Vector3.one * height;
-        pages[0].localScale = Vector3.one * height;
-
-        hiddenOffset = height*sceneManager.defaultSafeZone;
+        hiddenOffset = sceneManager.defaultSafeZone;
         
         if(comingFromWorld) {
              sideBarMenuSelection.Display(UICurrentSelection.UI_BEASTERY, false, currentPage);

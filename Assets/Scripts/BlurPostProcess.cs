@@ -31,27 +31,7 @@ public class BlurPostProcess : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // if(timer.isOn()) {
-        // 	bool f = timer.updateTimer(Time.deltaTime);
-        // 	float c = timer.getCanoncial();
-
-        // 	if(c < 0.2f) {
-        // 		iterations = 1;
-        // 	} else if(c < 0.4f) {
-        // 		iterations = 2;
-        // 	} else if(c < 0.6f) {
-        // 		iterations = 3;
-        // 	} else if(c < 0.8f) {
-        // 		iterations = 4;
-        // 	} else if(c < 1.0f) {
-        // 		iterations = 5;
-        // 	} 
-
-        // 	if(f) {
-        // 		renderToImage = true;
-        // 		timer.turnOff();
-        // 	}
-        // }
+        
     }
 
 

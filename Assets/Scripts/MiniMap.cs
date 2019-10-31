@@ -47,6 +47,8 @@ public class MiniMap : MonoBehaviour, IMenuItemInterface, IBlurInterface
 
 	private Vector3 mapOffset;
 
+  private float xOffset;
+
 
 	public Sprite[] maps = new Sprite[(int)MiniMapType.	MINI_MAP_COUNT];
     // Start is called before the first frame update
@@ -56,6 +58,7 @@ public class MiniMap : MonoBehaviour, IMenuItemInterface, IBlurInterface
         slideTimer.turnOff();
         isActive = false;
         zoomSpeed = 2;
+        xOffset = 3;
     }
 
     public void GetFocus() {
@@ -66,9 +69,7 @@ public class MiniMap : MonoBehaviour, IMenuItemInterface, IBlurInterface
 
     public void Activate(bool fromWorld) {
 
-      float height = (Camera.main.orthographicSize / sceneManager.defaultOrthoSize);
-      mapTransform.localScale = Vector3.one * height;
-      hiddenOffset = height*sceneManager.defaultSafeZone;
+      hiddenOffset = sceneManager.defaultSafeZone;
 
     	if(fromWorld) {
 		    blurSprite.enabled = true;
@@ -131,7 +132,7 @@ public class MiniMap : MonoBehaviour, IMenuItemInterface, IBlurInterface
         if(slideTimer.isOn()) {
             bool finished = slideTimer.updateTimer(Time.unscaledDeltaTime);
             if(enterTransform != null) {
-                Vector3 pos = Vector3.Lerp(new Vector3(-hiddenOffset, 0, enterTransform.localPosition.z), new Vector3(0, 0, enterTransform.localPosition.z), Mathf.Sin(slideTimer.getCanoncial()*0.5f*Mathf.PI));
+                Vector3 pos = Vector3.Lerp(new Vector3(-hiddenOffset, 0, enterTransform.localPosition.z), new Vector3(xOffset, 0, enterTransform.localPosition.z), Mathf.Sin(slideTimer.getCanoncial()*0.5f*Mathf.PI));
                 enterTransform.localPosition = pos;
             } 
 

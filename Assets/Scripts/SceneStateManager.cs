@@ -86,10 +86,15 @@ public class SceneStateManager : MonoBehaviour
 
         for(int i = 0; i < levelInputs.Length; ++i) {
             LevelState s = levelInputs[i];
-            levels.Add(s.id, s);
 
-            // Debug.Log(s.id);
-            // Debug.Log(levels[s.id].id);
+            if(s.id == LevelStateId.LEVEL_TINKER_LEVEL_UP) {
+              s.loadedLevel = transform.parent.Find("TinkerLevelUp").gameObject;
+              Assert.IsTrue(s.loadedLevel != null);
+              s.loadedLevel.SetActive(false);
+
+            }
+
+            levels.Add(s.id, s);
 
         }
 
@@ -136,8 +141,24 @@ public class SceneStateManager : MonoBehaviour
     }
 
     public bool IsInGame() {
-        bool result = !(stateToLoad == LevelStateId.LEVEL_QUESTS || stateToLoad == LevelStateId.LEVEL_JOURNAL || stateToLoad == LevelStateId.LEVEL_SKILL_TILES || stateToLoad == LevelStateId.LEVEL_TINKER_LEVEL_UP || stateToLoad == LevelStateId.LEVEL_MINI_MAP || stateToLoad == LevelStateId.LEVEL_INSTRUCTION_CARD);
+        bool result = !(
+            stateToLoad == LevelStateId.LEVEL_QUESTS ||
+            stateToLoad == LevelStateId.LEVEL_JOURNAL || 
+            stateToLoad == LevelStateId.LEVEL_SKILL_TILES || 
+            stateToLoad == LevelStateId.LEVEL_TINKER_LEVEL_UP || 
+            stateToLoad == LevelStateId.LEVEL_MINI_MAP || 
+            stateToLoad == LevelStateId.LEVEL_INSTRUCTION_CARD);
         return result;
+    }
+
+    public bool IsInGameMenu() {
+        bool result = (
+            stateToLoad == LevelStateId.LEVEL_QUESTS ||
+            stateToLoad == LevelStateId.LEVEL_JOURNAL || 
+            stateToLoad == LevelStateId.LEVEL_SKILL_TILES || 
+            stateToLoad == LevelStateId.LEVEL_MINI_MAP); 
+        return result;
+
     }
 
     void ResetFromSpawnPoint(Transform spawnPoint, GameObject levelObj) {
@@ -148,13 +169,13 @@ public class SceneStateManager : MonoBehaviour
         spell.transform.position = spawnPoint.position + spellOffset;
 
         string nameToFind = stateToLoad.ToString() + "_CAMERA_SPAWN";
-        Debug.Log(nameToFind);
+        // Debug.Log(nameToFind);
         Transform camSpawnP = levelObj.transform.Find(nameToFind);
         Assert.IsTrue(camSpawnP != null);
         
         if(camSpawnP != null) {
             Vector3 camSpawnPos = camSpawnP.position;
-            Debug.Log(camSpawnPos);
+            // Debug.Log(camSpawnPos);
             Vector3 camPos = new Vector3(camSpawnPos.x, camSpawnPos.y, -10);
             cam.transform.position = camPos;
         } else {
@@ -195,12 +216,8 @@ public class SceneStateManager : MonoBehaviour
         GameObject levelObj = lvlState.loadedLevel;
 
 
-        if(levelObj == null) {
+        if(levelObj == null && prefab != null) {
           lvlState.loadedLevel = levelObj = Instantiate(prefab);
-
-          if(stateToLoad == LevelStateId.LEVEL_TINKER_LEVEL_UP) {
-            levelObj.transform.parent = transform.parent;
-          }
         }
 
         if(lastGameObject != null) {
@@ -216,9 +233,8 @@ public class SceneStateManager : MonoBehaviour
         Transform spawnPoint = null;
         if(levelObj) {
             string nameToFind = stateToLoad.ToString() + "_PLAYER_SPAWN";//
-            Debug.Log(nameToFind);
+            // Debug.Log(nameToFind);
             spawnPoint = levelObj.transform.Find(nameToFind);   
-            Assert.IsTrue(spawnPoint != null); 
         }
         
         if(spawnPoint == null) {
